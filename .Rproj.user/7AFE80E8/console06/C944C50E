@@ -1,0 +1,14 @@
+[0m[0KMicrosoft Windows [Version 10.0.17134.345][0K[?25l
+(c) 2018 Microsoft Corporation. All rights reserved.[0K
+[0K
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git i[0K[?25hn[0Ki[0Kt[0K]0;  - git  init[?25l
+[0K[?25h]0; Initialized empty Git repository in E:/Foster/foster/.git/[0K[?25l
+[0K
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Kn[0Ki[0K[?25lE:\Foster\foster>git con[0K[?25hf[0Ki[0Kg[0K[29G[?25lE:\Foster\foster>git config -[0K[?25h-[0Kg[0Kl[0Ko[0Kb[0Ka[0Kl[0K[38G[?25lE:\Foster\foster>git config --global u[0K[?25hs[0Ke[0Kr[0K.[0Ke[0Km[0Ka[0Ki[0Kl[0K[49G[?25lE:\Foster\foster>git config --global user.email "[0K[?25hm[0Ka[0Kr[0Kt[0Ki[0Kn[0Kq[0Ku[0Ke[0Ki[0Kn[0Kn[0Ke[0Kc[0K@[0Kg[0Km[0Ka[0Ki[0Kl[0K.[0Kc[0Ko[0Km[0K"[0K]0;  - git  config --global user.email "martinqueinnec@gmail.com"[?25l
+[0K[?25h]0; [?25l
+E:\Foster\foster>[0K[1A[?25h[?25l
+[18G[?25h[?25lE:\Foster\foster>g[0K[?25hi[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Kn[0Kg[0Ki[0Kg[0K[29G[28G[?25lE:\Foster\foster>git congi[0K[?25h[?25lE:\Foster\foster>git cong[0K[?25h[?25lE:\Foster\foster>git con[0K[?25hf[0Ki[0Kg[0K[29G[?25lE:\Foster\foster>git config -[0K[?25h-[0Kg[0Kl[0Ko[0Kb[0Ka[0Kl[0K[38G[?25lE:\Foster\foster>git config --global u[0K[?25hs[0Ke[0Kr[0K.[0Kn[0Ka[0Km[0Ke[0K[48G[?25lE:\Foster\foster>git config --global user.name "[0K[?25hm[0Kq[0Ku[0Ke[0Ki[0Kn[0Kn[0Ke[0Kc[0K"[0K[?25l
+[0K[?25h]0;  - git  config --global user.name "mqueinnec"]0; [?25l
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git r[0K[?25he[0Km[0Ko[0Kt[0Ke[0K[29G[?25lE:\Foster\foster>git remote a[0K[?25hd[0Kd[0K[33G[?25lE:\Foster\foster>git remote add o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[40G[?25lE:\Foster\foster>git remote add origin h[0K[?25ht[0Kt[0Kp[0Ks[0K:[0K/[0K/[0Kgi[0Kt[0Kh[0Ku[0Kb[0K.[0Kc[0Ko[0Km[0K/[0Km[0Kq[0Ku[0Ke[0Ki[0Kn[0Kn[0Ke[0Kc[0K/[0Kf[0Ko[0Ks[0Kt[0Ke[0Kr[0K.[0Kg[0Ki[0Kt[0K]0;  - git  remote add origin https://github.com/mqueinnec/foster.git[?25l
+[0K[?25h]0; [?25l
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h
