@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1542732944333.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "452E15B8",
+    "lastKnownWriteTime" : 1542733396,
+    "last_content_update" : 1542733396524,
+    "path" : "E:/Foster/foster/R/calcIndices.R",
+    "project_path" : "R/calcIndices.R",
+    "properties" : {
+        "cursorPosition" : "7,26",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
