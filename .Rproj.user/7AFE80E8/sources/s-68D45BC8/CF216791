@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1542747360104.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2104360688",
+    "id" : "CF216791",
+    "lastKnownWriteTime" : 1542749554,
+    "last_content_update" : 1542749554274,
+    "path" : "E:/Foster/foster/R/TemporalMetrics.R",
+    "project_path" : "R/TemporalMetrics.R",
+    "properties" : {
+        "cursorPosition" : "25,47",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1542749580013.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2575704023",
+    "id" : "E17DEEDD",
+    "lastKnownWriteTime" : 1542386234,
+    "last_content_update" : 1542386234,
+    "path" : "E:/BC_wildfires/Imputation/dataPreProcessing.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "11,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

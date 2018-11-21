@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1542754001244.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "CBC25244",
+    "lastKnownWriteTime" : 1542821588,
+    "last_content_update" : 1542821588632,
+    "path" : "E:/BC_wildfires/Imputation/run_all.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "40,0",
+        "scrollLine" : "24"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -222,4 +222,48 @@ Total 19 (delta 3), reused 0 (delta 0)[0K
 [0K[?25hBranch 'master' set up to track remote branch 'master' from 'origin'.[0K[?25l
 [0K[?25h]0; [?25l
 E:\Foster\foster>[0K[?25hh[0Ke[0Kl[0Kp[0K([0K[?25lE:\Foster\foster>help[0K[?25h[?25lE:\Foster\foster>hel[0K[?25h[?25lE:\Foster\foster>he[0K[?25h[?25lE:\Foster\foster>h[0K[?25h[?25lE:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/INDEX.[0K[?25l
+The file will have its original line endings in your working directory[0K
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/CC5DA9F6.[0K[?25l
+The file will have its original line endings in your working directory[0K
+warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8.[0K
+The file will have its original line endings in your working directory[0K
+warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8-contents.[0K
+The file will have its original line endings in your working directory[0K
+[0K[?25h]0; [?25l
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git o[0K[?25h[?25lE:\Foster\foster>git[0K[22G[?25h[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m "[0K[?25hA[0Kd[0Kd[0K[37G[?25lE:\Foster\foster>git commit -m "Add d[0K[?25ho[0Kc[0Ku[0Km[0Ke[0Kn[0Kt[0Ka[0Kt[0Ki[0Ko[0Kn[0K[51G[?25lE:\Foster\foster>git commit -m "Add documentation f[0K[?25hi[0Kl[0Ke[0Ks[0K"[0K]0;  - git  commit -m "Add documentation files"[?25l
+[0K[?25h[master e48875a] Add documentation files[0K[?25l
+ 13 files changed, 259 insertions(+), 1 deletion(-)[0K
+ create mode 100644 .Rproj.user/7AFE80E8/sources/prop/CC5DA9F6[0K
+ create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8[0K
+ create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8-contents[0K
+ create mode 100644 man/GetSampleValues.Rd[0K
+ create mode 100644 man/MatchExtent.Rd[0K
+ create mode 100644 man/MatchResolution.Rd[0K
+ create mode 100644 man/TemporalMetrics.Rd[0K
+ create mode 100644 man/calcIndices.Rd[0K
+ create mode 100644 man/getSampleXY.Rd[0K
+[0K[?25h]0; [?25l
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Ks[0Kh[0K[27G[?25lE:\Foster\foster>git push -[0K[?25hu[0K[30G[?25lE:\Foster\foster>git push -u o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[37G[?25lE:\Foster\foster>git push -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  push -u origin master[?25l
+[0K[?25hEnumerating objects: 34, done.[0K[?25l
+Counting objects: 100% (34/34), done.[0K
+Delta compression using up to 24 threads[0K
+Compressing objects:  77% (17/22)[0K[35G[?25h[?25lCompressing objects: 100% (22/22), done.[0K
+Writing objects: 100% (22/22), 4.93 KiB | 560.00 KiB/s, done.[0K
+Total 22 (delta 9), reused 0 (delta 0)[0K
+[0K[?25hremote: Resolving deltas:  44% (4/9)[0K[40G[?25lremote: Resolving deltas:  55% (5/9)[0K[1G[?25hremote: Resolving deltas: 100% (9/9), completed with 7 local objects.[0K[?25l
+[0K[?25hTo https://github.com/mqueinnec/foster.git[0K[?25l
+   273aa81..e48875a  master -> master[0K
+[0K[?25hBranch 'master' set up to track remote branch 'master' from 'origin'.[0K[?25l
+[0K[?25h]0; [?25l
+E:\Foster\foster>[0K[?25hh[0Ke[0Kl[0Kp[0K([0Kg[0Ke[0Kt[0KS[0Ka[0Km[0Kp[0Kl[0Ke[0KC[0KY[0K)[0K]0;  - help (getSampleCY)[?25l
+[0K[?25h]0; This command is not supported by the help utility.  Try "(getSampleCY) /?".[0K[?25l
+[0K
+E:\Foster\foster>[0K[?25hhelp(getSampleCY)[0K[34G[33G[?25lE:\Foster\foster>help(getSampleY)[0K[32G[?25h[?25lE:\Foster\foster>help(getSampleXY)[0K[33G[?25h[?25lE:\Foster\foster>help(getSampleY)[0K[32G[?25h[?25lE:\Foster\foster>help(getSampleXY)[0K[33G[?25h[?25l
+[0K[?25hThis command is not supported by the help utility.  Try "(getSampleXY) /?".[0K[?25l
+[0K
+E:\Foster\foster>[0K[?25hhelp(getSampleXY)[0K[34G[?25lE:\Foster\foster>help(getSampleX)[0K[33G[?25h[?25lE:\Foster\foster>help(getSample)[0K[32G[?25h[?25lE:\Foster\foster>help(getSampl)[0K[31G[?25h[?25lE:\Foster\foster>help(getSamp)[0K[30G[?25h[?25lE:\Foster\foster>help(getSam)[0K[29G[?25h[?25lE:\Foster\foster>help(getSa)[0K[28G[?25h[?25lE:\Foster\foster>help(getS)[0K[27G[?25h[?25lE:\Foster\foster>help(get)[0K[26G[?25h[?25lE:\Foster\foster>help(ge)[0K[25G[?25h[?25lE:\Foster\foster>help(g)[0K[24G[?25h[?25lE:\Foster\foster>help()[0K[23G[?25h[?25lE:\Foster\foster>help(S)[0K[24G[?25h[?25lE:\Foster\foster>help(Sa)[0K[25G[?25h[?25lE:\Foster\foster>help(Sam)[0K[26G[?25h[?25lE:\Foster\foster>help(Samp)[0K[27G[?25h[?25lE:\Foster\foster>help(Sampl)[0K[28G[?25h[?25lE:\Foster\foster>help(Sample)[0K[29G[?25h]0;  - help (Sample)[?25l
+[0K[?25h]0; This command is not supported by the help utility.  Try "(Sample) /?".[0K[?25l
+[0K
+E:\Foster\foster>[0K[?25hh[0Ke[0Kl[0Kp[0K([0Kc[0Ka[0Kl[0Kc[0KI[0Kn[0K[?25lE:\Foster\foster>help(calcI[0K[?25h[?25lE:\Foster\foster>help(calc[0K[?25h[?25lE:\Foster\foster>help(cal[0K[?25h[?25lE:\Foster\foster>help(ca[0K[?25h[?25lE:\Foster\foster>help(c[0K[?25h[?25lE:\Foster\foster>help([0K[?25h[?25lE:\Foster\foster>help[0K[?25h[?25lE:\Foster\foster>hel[0K[?25h[?25lE:\Foster\foster>he[0K[?25h[?25lE:\Foster\foster>[0K[?25hc[0Ko[0Km[0Km[0Ki[0Kt[0K[?25lE:\Foster\foster>commi[0K[?25h[?25lE:\Foster\foster>comm[0K[?25hi[0Kt[0K[?25lE:\Foster\foster>commi[0K[?25h[?25lE:\Foster\foster>comm[0K[?25h[?25lE:\Foster\foster>com[0K[?25h[?25lE:\Foster\foster>co[0K[?25h[?25lE:\Foster\foster>c[0K[?25h[?25lE:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
 [0K[?25h

@@ -1,0 +1,291 @@
+#Loading Foster functions
+library(foster)
+
+tempDir <- "E:/BC_wildfires/Imputation/Temp/"
+outMetrics <- "E:/BC_wildfires/Imputation/temporalMetrics/"
+
+
+
+
+############## Setup directories #################
+
+sourceComposite <- "Y:/Martin_Queinnec/BC_Wildfires/AFRF_NTEMS/mosaicked/proxy_values/"
+sourceVLCE <- "Y:/Martin_Queinnec/BC_Wildfires/AFRF_NTEMS/mosaicked/VLCE/"
+
+################# 1. ABA Prep ####################
+sites <- c("GavinLake_main","KnifeCreek")
+years <- c(1986,1986)
+
+#sourceABA <- c("E:/BC_wildfires/AFRF/GavinLake/Attributes_main/GavinLake_main_",
+#                 "E:/BC_wildfires/AFRF/GavinLake/Attributes_WE/GavinLake_WE_",
+#                 "E:/BC_wildfires/AFRF/KnifeCreek/Attributes/KnifeCreek_",
+#                 "E:/BC_wildfires/Kamloops/Attributes/Kamloops_",
+#                 "E:/BC_wildfires/Okanagan/Attributes/Okanagan_")
+sourceABA <- c("E:/BC_wildfires/AFRF/GavinLake/Attributes_main/GavinLake_main_",
+               "E:/BC_wildfires/AFRF/KnifeCreek/Attributes/KnifeCreek_")
+
+#1) Get overall sample locations (need to merge ABA)
+
+ABA_names <- c("lor","ba","vol")
+
+
+#With more than one site, need to merge per attribute
+ABA <- list()
+for (a in 1:length(ABA_names)){
+  ABA_site <- list()
+  for (s in 1:length(sites)){
+    ABA_site[[s]] <- raster(paste0(sourceABA[s],ABA_names[a],".tif"))
+  }
+  ABA[[a]] <- do.call(raster::merge,c(list(tolerance=0),ABA_site))
+}
+
+ABA <- do.call(raster::stack,ABA)
+names(ABA) <- ABA_names
+
+samplesLoc <- getSampleXY()
+
+
+for (s in 1:length(sites)) {
+  site <- sites[s]
+  ABA <- raster::stack(paste0(sourceABA[s],"lor.tif"),
+                       paste0(sourceABA[s],"ba.tif"),
+                       paste0(sourceABA[s],"vol.tif"))
+  names(ABA) <- c("lor","ba","vol")
+
+  ref <- raster::crop(raster(paste0(sourceComposite,"Mosaic_SRef_UTM10S_1984_proxy_v2.dat")),ABA)
+  ref <- raster::crop(ref,extent(ABA))
+
+  ABA <- raster::resample(ABA,ref)
+
+  #Load VLCE for mask
+  vlce <- raster(paste0(sourceVLCE,"Mosaic_LC_Class_HMM_10S_",years[s],".dat"))
+  vlce <- raster::crop(vlce,ref)
+  vlce_class <- data.frame(vlce@data@attributes)
+  remove_class <- setdiff(vlce_class$ID,c(81,210,220,230))
+
+  ABA <- raster::mask(ABA_resample,vlce,maskvalue=remove_class)
+
+}
+
+  ################# 2. LTS (Landsat Time Series) Prep ####################
+  startYear = 1984
+  year <- seq(startYear,years[s],1)
+
+  #Calculating indices for each year. Stored in indicesList, where each element of indicesList is a list of an index
+  indicesList <- list()
+  for (y in 1:length(year)) {
+    print(sprintf("Calculating indices at %s for year %d",site,year[y]))
+    file <- paste0(sourceComposite,"Mosaic_SRef_UTM10S_",year[y],"_proxy_v2.dat")
+    r <- brick(file)
+    r_crop <- raster::crop(r,ref)
+    r_mask <- raster::mask(r_crop,ABA) #Calculate indices only where we have ALS metrics
+    indices <- calcIndices(r_mask,method = "TC",sat='Landsat5TM')
+
+    if (y==1) { #Initialize the lists of indices time series
+      for(n in 1:nlayers(indices)){
+        #eval(parse(text=paste0(names(subset(indices,n)),"<- list()")))
+        indicesList[[n]] <- list()
+      }
+    }
+
+    for(n in 1:nlayers(indices)){
+      indicesList[[n]][[y]] <- subset(indices,n)
+      eval(parse(text=paste0(names(subset(indices,n)),"[[y]] <- subset(indices,",n,")") ))
+    }
+  }
+
+
+
+
+################# 3. ABA SAMPLING LOC  ####################
+
+
+################# 4. ABA + LTS AT SAMPLES  ####################
+
+
+################# 5. MODELING + ACCURACY ASSESSMENT  ####################
+
+
+
+################# 6. IMPUTATION  ####################
+
+
+#sites <- c("GavinLake_main","GavinLake_WE","KnifeCreek","Kamloops","Okanagan")
+#years <- c(2008,2013,2013,2014,2014) #Year when ALS data was collected
+
+#sourceAttributes <- c("E:/BC_wildfires/AFRF/GavinLake/Attributes/","E:/BC_wildfires/AFRF/GavinLake/Attributes/","E:/BC_wildfires/AFRF/KnifeCreek/Attributes/",".",".")
+
+#We build a table containing variables (lor, ba, vol) and their predictors
+#(time series TC metrics, change metrics, topographic metrics)
+
+#All sites are combined and time series predictors are calculated until the ALS acquisition year
+
+sites <- c("GavinLake_main")
+years <- c(2008)
+
+sourceAttributes <- c("E:/BC_wildfires/AFRF/GavinLake/Attributes/")
+
+startYear <- 1984
+
+for(s in 1:length(sites)) {
+  site <- sites[s]
+  year <- seq(startYear,years[s],1)
+
+  #Load forest attributes
+  att <- stack(paste0(sourceAttributes[s],site,"_lor.tif"),paste0(sourceAttributes[s],site,"_ba.tif"),paste0(sourceAttributes[s],site,"_vol.tif"))
+  #5x5 Moving average of ALS cells before resampling
+  #att_avg <- calc(att, function(x) movingFun(x,n=5,fun="mean",type='around',circular=FALSE,na.rm = TRUE))
+
+  # Match resolution and extent of composite raster and metrics
+  ref <- raster(paste0(sourceComposite,"Mosaic_SRef_UTM10S_1984_proxy_v2.dat"))
+
+  #Project attibutes to proxy CRS
+  if (!compareCRS(att,ref)) {
+    to_crs <- crs(ref)
+    att <- projectRaster(att,crs=to_crs)
+  }
+
+  #We crop the ref to the ALS extent
+  ref_crop <- crop(ref,extent(att))
+
+  #Match resolution
+  att <- resample(att,ref_crop,method='ngb')
+
+  ##Load landcover
+  sourceVLCE <- "Y:/Martin_Queinnec/BC_Wildfires/AFRF_NTEMS/mosaicked/VLCE/"
+  vlce <- raster(paste0(sourceVLCE,"Mosaic_LC_Class_HMM_10S_",years[s],".dat"))
+
+  vlce_class <- data.frame(vlce@data@attributes)
+
+  remove_class <- setdiff(vlce_class$ID,c(81,210,220,230))
+
+  vlce <- resample(vlce,att,method='ngb')
+
+  vlce_mask <- mask(vlce,vlce,maskvalue=remove_class)
+
+  #Load change type
+  sourceChange <- "Y:/Martin_Queinnec/BC_Wildfires/AFRF_NTEMS/mosaicked/changes/"
+
+  ####################Calculate temporal metrics#########################
+
+  TCB <- list()
+  TCG <- list()
+  TCW <- list()
+
+  for (y in 1:length(year)) {
+    print(sprintf("Calculating indices at %s for year %d",site,year[y]))
+    file <- paste0(sourceComposite,"Mosaic_SRef_UTM10S_",year[y],"_proxy_v2.dat")
+    r <- brick(file)
+    r_crop <- raster::crop(r,extent(ref_crop))
+    r_mask <- raster::mask(r_crop,att) #Calculate indices only where we have ALS metrics
+    #r_mask <- raster::crop(r,extent(450000,451000,5500000,5501000)) #Crop input for faster example
+    indices <- calcIndices(r_mask,method = "TC",sat='Landsat5TM') ## Using calcIndices() from Foster
+
+    writeRaster(indices,filename=paste0(tempDir,site,"_indices_",year[y],".tif"))
+    #writeRaster(subset(indices,2),filename=paste0(tempDir,site,"_TCG_",year[y],".tif"))
+    #writeRaster(subset(indices,3),filename=paste0(tempDir,site,"_TCW_",year[y],".tif"))
+
+    TCB[[y]] <- subset(indices,1)
+    TCG[[y]] <- subset(indices,2)
+    TCW[[y]] <- subset(indices,3)
+
+  }
+
+  # filesTCB <- as.list(list.files(path=tempDir,pattern=paste0(site,"_TCB"),full.names=TRUE))
+  # filesTCG <- as.list(list.files(path=tempDir,pattern=paste0(site,"_TCG"),full.names=TRUE))
+  # filesTCW <- as.list(list.files(path=tempDir,pattern=paste0(site,"_TCW"),full.names=TRUE))
+  #
+  # TCB <- stack(filesTCB)
+  # TCG <- stack(filesTCG)
+  # TCW <- stack(filesTCW)
+
+  #If TC indices are stored in memory, use brick
+  TCB <- brick(TCB)
+  TCG <- brick(TCG)
+  TCW <- brick(TCW)
+
+  #Calculate temporal metrics and write to file
+  #It is much more efficient to use directly mean, median etc... than to provide a user build function ...
+  #Need to look more into that
+  #For example, running temporalMetrics with fun='median' takes 0.62 s while running it with another function
+  #that call for median takes 5.61 s
+
+  TemporalMetrics_funList(TCB,fun=c('mean','sd','IQR','slope'),output_dir = outMetrics,output_name = paste0(site,"_TCB.tif"))
+  TemporalMetrics_funList(TCG,fun=c('mean','sd','IQR','slope'),output_dir = outMetrics,output_name = paste0(site,"_TCG.tif"))
+  TemporalMetrics_funList(TCW,fun=c('mean','sd','IQR','slope'),output_dir = outMetrics,output_name = paste0(site,"_TCW.tif"))
+}
+
+#Merge temporal Metrics on the entire study area
+
+metrics <- c("TCB_mean","TCB_sd","TCG_mean","TCG_sd","TCW_mean","TCW_sd")
+
+fun = character()
+
+
+for(m in 1:length(metrics)) {
+  i = 1
+  for (s in sites) {
+    fun[i] <- paste0("raster('",outMetrics,s,"_",metrics[m],".tif')")
+    i = i +1
+  }
+  textFun = paste(fun,collapse = ",")
+  if(length(textFun) > 1) {
+    eval(parse(text=paste0("raster::merge(",textFun,",filename=paste0(outMetrics,'all_sites_',metrics[m],'.tif'))")))
+  }else{
+    eval(parse(text=paste0("raster::writeRaster(",textFun,",filename=paste0(outMetrics,'all_sites_',metrics[m],'.tif'))")))
+  }
+}
+
+
+allMetrics <- raster::stack(as.list(list.files('./temporalMetrics/',pattern="all_sites",full.names = T)))
+# Build the data frame used to train the RF model
+
+sourceTopo <- "Y:/Martin_Queinnec/BC_Wildfires/DEM/Mosaic/"
+
+dem <- raster(paste0(sourceTopo,"MosaicDEM_StudyArea.dat"))
+if (!compareCRS(dem,allMetrics[[1]])) {
+  to_crs <- crs(allMetrics[[1]])
+  dem <- projectRaster(dem,crs=to_crs)
+}
+dem <- resample(dem,allMetrics[[1]])
+
+slope <- raster(paste0(sourceTopo,"MosaicSlope_StudyArea.dat"))
+if (!compareCRS(slope,allMetrics[[1]])) {
+  to_crs <- crs(allMetrics[[1]])
+  slope <- projectRaster(slope,crs=to_crs)
+}
+slope <- resample(slope,allMetrics[[1]])
+
+tsri <- raster(paste0(sourceTopo,"MosaicTSRI_StudyArea.dat"))
+if (!compareCRS(tsri,allMetrics[[1]])) {
+  to_crs <- crs(allMetrics[[1]])
+  tsri <- projectRaster(tsri,crs=to_crs)
+}
+tsri <- resample(tsri,allMetrics[[1]])
+
+
+#Loading forest attributes at all sites
+
+
+#Merge all data
+allData <- stack(att,allMetrics,dem,slope,tsri)
+
+######## Create stratified random sample of points based on BA, lor and Vol ##############
+sampleLoc <- getSampleXY(att,n=100,mindist = 100)
+
+#Divide sample locations in training and testing sets
+trainingSet <- dplyr::sample_frac(sampleLoc@data,0.75)
+testingSet <- dplyr::setdiff(sampleLoc@data,trainingSet)
+
+#Combine training vars and preds in one dataframe
+trainData <- GetSampleValues(allData,trainingSet)
+trainData_df <- as.data.frame(trainData)
+
+testData <- GetSampleValues(allData,testingSet)
+testData_df <-as.data.frame(testData)
+
+################### Train a randomForest model on the trainingSet #######################
+trainData_lor <- trainData_df[,c(1,4:12)]
+testData <- testData_df[,c(4:12)]
+
+rf_lor <- randomForest(GavinLake_main_lor~.,trainData_lor,importance=TRUE)

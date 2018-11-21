@@ -5,17 +5,17 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "3755138298",
     "id" : "452E15B8",
-    "lastKnownWriteTime" : 1542733396,
-    "last_content_update" : 1542733396524,
+    "lastKnownWriteTime" : 1542742973,
+    "last_content_update" : 1542742973435,
     "path" : "E:/Foster/foster/R/calcIndices.R",
     "project_path" : "R/calcIndices.R",
     "properties" : {
-        "cursorPosition" : "7,26",
-        "scrollLine" : "0"
+        "cursorPosition" : "33,5",
+        "scrollLine" : "8"
     },
-    "relative_order" : 2,
+    "relative_order" : 1,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"
