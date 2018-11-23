@@ -9,6 +9,7 @@ GetSampleValues <- function(x, s) {
 
   values <- as.data.frame(x[cellFromXY(x, s)])
   values <- SpatialPointsDataFrame(coords = coordinates(s), data=values)
+  names(values) <- names(x)
   return(values)
 
 }
