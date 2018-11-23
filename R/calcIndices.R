@@ -22,7 +22,7 @@ calcIndices <- function(x,
 
   out <- x
 
-  if (raster::canProcessInMemory(out,3)) { #Can be processed in RAM
+  #if (raster::canProcessInMemory(out,3)) { #Can be processed in RAM
     #Calculate indices
     if (method=="TC") {
       out <- RStoolbox::tasseledCap(x,...)
@@ -32,9 +32,9 @@ calcIndices <- function(x,
     if(filename != "") {
       out <- raster::writeRaster(out,filename=filename,...)
     }
-  }else{ #Cannot be processed in RAM
+  #}else{ #Cannot be processed in RAM
     #Processing with chunks
-  }
+  #}
 
   return(out)
 }
