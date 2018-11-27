@@ -21,20 +21,24 @@ calcIndices <- function(x,
   if(!class(x)[1] == "RasterBrick" || !class(x)[1] == "RasterStack") x <- raster::stack(x)
 
   out <- x
-
+  out_temp <- list()
   #if (raster::canProcessInMemory(out,3)) { #Can be processed in RAM
-    #Calculate indices
-    if (method=="TC") {
-      out <- RStoolbox::tasseledCap(x,...)
+  for (m in 1:length(methods)){
+    if (methods[m] == "TC"){
+      out_temp[[m]] <- RStoolbox::tasseledCap(x, ...)
     }else{
-      out <- RStoolbox::spectralIndices(x,indices = method, ...)
+      out_temp[[m]] <- RStoolbox::spectralIndices(x,indices=methods[m], ...)
     }
-    if(filename != "") {
-      out <- raster::writeRaster(out,filename=filename,...)
-    }
+  }
+  out <- do.call(raster::stack,out_temp)
   #}else{ #Cannot be processed in RAM
-    #Processing with chunks
+  #Processing with chunks
   #}
+
+  #Calculate indices
+  if(filename != "") {
+    out <- raster::writeRaster(out,filename=filename,...)
+  }
 
   return(out)
 }
