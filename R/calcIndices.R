@@ -23,11 +23,11 @@ calcIndices <- function(x,
   out <- x
   out_temp <- list()
   #if (raster::canProcessInMemory(out,3)) { #Can be processed in RAM
-  for (m in 1:length(methods)){
-    if (methods[m] == "TC"){
+  for (m in 1:length(method)){
+    if (method[m] == "TC"){
       out_temp[[m]] <- RStoolbox::tasseledCap(x, ...)
     }else{
-      out_temp[[m]] <- RStoolbox::spectralIndices(x,indices=methods[m], ...)
+      out_temp[[m]] <- RStoolbox::spectralIndices(x,indices=method[m], ...)
     }
   }
   out <- do.call(raster::stack,out_temp)
