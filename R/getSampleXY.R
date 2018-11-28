@@ -8,13 +8,28 @@
 #'@param ... Further arguments passed to \code{RStoolbox::unsuperClass}, to control the kmeans algorithm
 #'@return A \code{SpatialPointsDataFrame} object containing sample locations
 
-getSampleXY <- function(x, layers = seq(1,nlayers(x),1),n, mindist = 500, nClasses = 10, ...) {
+getSampleXY <- function(x, layers = seq(1,nlayers(x),1),n, mindist = 500, nClasses = 10, no_cores = 1, ...) {
 
-  # stratify using knn
-  r_clustered <- RStoolbox::unsuperClass(img = x, nClasses = nClasses, norm = T)
+  print("Preparing Kmeans input")
+  #Select layers of x used to compute kmean
+  x_kmean <- x[[layers]]
+  #Parallel kmean using knor::Kmeans. Only one starting config?
+  #Preparing kmean input
+  km_dat <- raster::as.data.frame(x_kmean,xy=T,na.rm=T)
+  km_dat <- as.matrix(km_dat)
 
-  #convert to df
-  rr <- raster::as.data.frame(r_clustered$map, xy=T)
+  print(sprintf("Calculating %d clusters on %d cores",nClasses,no_cores))
+  km <- knor::Kmeans(km_dat[,!colnames(km_dat) %in% c("x","y")],centers = nClasses,nthread = no_cores)
+  print("Done")
+
+  rr <- data.frame(layer=km$cluster,km_dat[,c("x","y")])
+
+  # kmean using RStoolbox
+  # # stratify using knn
+  # r_clustered <- RStoolbox::unsuperClass(img = x, nClasses = nClasses, norm = T)
+  #
+  # #convert to df
+  # rr <- raster::as.data.frame(r_clustered$map, xy=T)
 
   #determine number of samples for each strata
   samples_count <- rr %>%
@@ -37,11 +52,14 @@ getSampleXY <- function(x, layers = seq(1,nlayers(x),1),n, mindist = 500, nClass
   rr_temp <- dplyr::filter(rr, layer == samples_count$layer[1])
   samples <- rr_temp[sample(nrow(rr_temp), 1), ]
 
+  print(sprintf("Selecting %d stratified samples based on mindist %d",n,mindist))
+
   #the rest of samples is selected one by one
   #for every new sample a distance is calculated to all existing samples
   #the new candidate sample is added if the distance is less than mindist
   for (strata in samples_count$layer) {
     count_runs <- 0
+    print(sprintf("Layer %d (%d samples to select)",strata,as.integer(samples_count[samples_count$layer==strata,"n_samples"])))
 
     #check if enough samples in strata
     while(nrow(dplyr::filter(samples, layer==strata)) <   dplyr::filter(samples_count, layer==strata)$n_samples) {
@@ -65,6 +83,9 @@ getSampleXY <- function(x, layers = seq(1,nlayers(x),1),n, mindist = 500, nClass
       }
     }
   }
-  samples <- SpatialPointsDataFrame(coords = dplyr::select(samples, x, y), data=samples)
+
+  print("Converting to spatial points data frame")
+  samples <- SpatialPointsDataFrame(coords = dplyr::select(samples, x, y), proj4string=crs(x),data=samples)
+  print("Done.")
   return(samples)
 }
