@@ -7,8 +7,8 @@
 GetSampleValues <- function(x, s) {
 
 
-  values <- as.data.frame(x[cellFromXY(x, s)])
-  values <- SpatialPointsDataFrame(coords = coordinates(s), data=values)
+  values <- as.data.frame(x[raster::cellFromXY(x, s)])
+  values <- sp::SpatialPointsDataFrame(coords = coordinates(s), proj4string=crs(x),data=values)
   names(values) <- names(x)
   return(values)
 
