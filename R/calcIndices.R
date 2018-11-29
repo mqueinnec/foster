@@ -13,6 +13,7 @@
 calcIndices <- function(x,
                         method="TC",
                         filename = '',
+                        sat=NULL,
                         coefs = list(L = 0.5, G = 2.5, L_evi = 1, C1 = 6, C2 = 7.5,
                                      s = 1, swir2ccc = NULL, swir2coc = NULL),
                         ...) {
