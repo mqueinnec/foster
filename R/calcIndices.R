@@ -113,8 +113,16 @@ calcIndices <- function(x,
       if(class(x)[1]=="SpatialPointsDataFrame") {
         cof <- .TCcoefs[[sat]]
         out_temp[[m]] <- as.matrix(x@data) %*% cof
+        out_temp[[m]] <- cbind(out_temp[[m]],
+                               tca=atan(out_temp[[m]][,"greenness"]/out_temp[[m]][,"brightness"]),
+                               tcd=((out_temp[[m]][,"greenness"])^2+(out_temp[[m]][,"brightness"])^2)^0.5)
       }else{
-        out_temp[[m]] <- RStoolbox::tasseledCap(x, ...)
+        out_temp[[m]] <- RStoolbox::tasseledCap(x, sat, ...)
+        tca <- atan(out_temp[[m]]$greenness/out_temp[[m]]$brightness)
+        names(tca) <- "TCA"
+        tcd <- (out_temp[[m]]$greenness^2+out_temp[[m]]$brightness^2)^0.5
+        names(tcd) <- "TCD"
+        out_temp[[m]] <- raster::stack(out_temp[[m]],tca,tcd)
       }
     }else{
       ind <- toupper(method[m])
