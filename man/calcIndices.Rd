@@ -4,7 +4,9 @@
 \alias{calcIndices}
 \title{calcIndices}
 \usage{
-calcIndices(x, method = "TC", filename = "", ...)
+calcIndices(x, method = "TC", filename = "", sat = NULL,
+  coefs = list(L = 0.5, G = 2.5, L_evi = 1, C1 = 6, C2 = 7.5, s = 1,
+  swir2ccc = NULL, swir2coc = NULL), ...)
 }
 \arguments{
 \item{x}{Composite raster composed of the spectral bands used to calculate the indices. X can be a path to raster or RasterBrick object}
