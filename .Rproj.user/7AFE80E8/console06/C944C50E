@@ -1,269 +1,10 @@
-[0m[0KMicrosoft Windows [Version 10.0.17134.345][0K[?25l
+[0m[0KMicrosoft Windows [Version 10.0.17134.471][0K[?25l
 (c) 2018 Microsoft Corporation. All rights reserved.[0K
 [0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git i[0K[?25hn[0Ki[0Kt[0K]0;  - git  init[?25l
-[0K[?25h]0; Initialized empty Git repository in E:/Foster/foster/.git/[0K[?25l
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Kn[0Ki[0K[?25lE:\Foster\foster>git con[0K[?25hf[0Ki[0Kg[0K[29G[?25lE:\Foster\foster>git config -[0K[?25h-[0Kg[0Kl[0Ko[0Kb[0Ka[0Kl[0K[38G[?25lE:\Foster\foster>git config --global u[0K[?25hs[0Ke[0Kr[0K.[0Ke[0Km[0Ka[0Ki[0Kl[0K[49G[?25lE:\Foster\foster>git config --global user.email "[0K[?25hm[0Ka[0Kr[0Kt[0Ki[0Kn[0Kq[0Ku[0Ke[0Ki[0Kn[0Kn[0Ke[0Kc[0K@[0Kg[0Km[0Ka[0Ki[0Kl[0K.[0Kc[0Ko[0Km[0K"[0K]0;  - git  config --global user.email "martinqueinnec@gmail.com"[?25l
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m U[0K[?25hp[0Kd[0Ka[0Kt[0Ke[0K[39G[?25lE:\Foster\foster>git commit -m Update A[0K[?25hl[0Kl[0K[43G[?25lE:\Foster\foster>git commit -m Update All -[0K[?25ha[0K[46G[?25l
+[0K[?25h]0;  - git  commit -m Update All -a fatal: Paths with -a does not make sense.[0K[?25l
 [0K[?25h]0; [?25l
-E:\Foster\foster>[0K[1A[?25h[?25l
-[18G[?25h[?25lE:\Foster\foster>g[0K[?25hi[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Kn[0Kg[0Ki[0Kg[0K[29G[28G[?25lE:\Foster\foster>git congi[0K[?25h[?25lE:\Foster\foster>git cong[0K[?25h[?25lE:\Foster\foster>git con[0K[?25hf[0Ki[0Kg[0K[29G[?25lE:\Foster\foster>git config -[0K[?25h-[0Kg[0Kl[0Ko[0Kb[0Ka[0Kl[0K[38G[?25lE:\Foster\foster>git config --global u[0K[?25hs[0Ke[0Kr[0K.[0Kn[0Ka[0Km[0Ke[0K[48G[?25lE:\Foster\foster>git config --global user.name "[0K[?25hm[0Kq[0Ku[0Ke[0Ki[0Kn[0Kn[0Ke[0Kc[0K"[0K[?25l
-[0K[?25h]0;  - git  config --global user.name "mqueinnec"]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git r[0K[?25he[0Km[0Ko[0Kt[0Ke[0K[29G[?25lE:\Foster\foster>git remote a[0K[?25hd[0Kd[0K[33G[?25lE:\Foster\foster>git remote add o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[40G[?25lE:\Foster\foster>git remote add origin h[0K[?25ht[0Kt[0Kp[0Ks[0K:[0K/[0K/[0Kgi[0Kt[0Kh[0Ku[0Kb[0K.[0Kc[0Ko[0Km[0K/[0Km[0Kq[0Ku[0Ke[0Ki[0Kn[0Kn[0Ke[0Kc[0K/[0Kf[0Ko[0Ks[0Kt[0Ke[0Kr[0K.[0Kg[0Ki[0Kt[0K]0;  - git  remote add origin https://github.com/mqueinnec/foster.git[?25l
+E:\Foster\foster>[0K[?25hgit commit -m Update All -a[0K[46G[45G[?25lE:\Foster\foster>git commit -m Update All -[0K[?25h[?25lE:\Foster\foster>git commit -m Update All[0K[43G[?25h[42G[40G[39G[38G[37G[36G[35G[34G[33G[32G[31G[30G[29G[28G[27G[28G[29G[?25lE:\Foster\foster>git commit --m Update All[0K[30G[?25h[?25lE:\Foster\foster>git commit -a-m Update All[0K[31G[?25h[?25lE:\Foster\foster>git commit -a -m Update All[0K[32G[?25h]0;  - git  commit -a -m Update All [?25l
+[0K[?25hfatal: Paths with -a does not make sense.[0K[?25l
 [0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/DE7516FB.[0K[?25l
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/INDEX.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/16DD1703.[0K
-The file will have its original line endings in your working directory[0K
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/16DD1703-contents.[0K[?25l
-The file will have its original line endings in your working directory[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m "[0K[?25hf[0Ki[0Kr[0Ks[0Kt[0K[39G[?25lE:\Foster\foster>git commit -m "first c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K"[0K]0;  - git  commit -m "first commit"[?25l
-[0K[?25h]0; [master (root-commit) c410e45] first commit[0K[?25l
- 14 files changed, 124 insertions(+)[0K
- create mode 100644 .Rbuildignore[0K
- create mode 100644 .Rproj.user/7AFE80E8/console06/C944C50E[0K
- create mode 100644 .Rproj.user/7AFE80E8/console06/INDEX001[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/prop/DE7516FB[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/prop/INDEX[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/16DD1703[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/16DD1703-contents[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/lock_file[0K
- create mode 100644 .Rproj.user/shared/notebooks/patch-chunk-names[0K
- create mode 100644 DESCRIPTION[0K
- create mode 100644 NAMESPACE[0K
- create mode 100644 R/hello.R[0K
- create mode 100644 foster.Rproj[0K
- create mode 100644 man/hello.Rd[0K
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Ks[0Kh[0K[27G[?25lE:\Foster\foster>git push -[0K[?25hu[0K[30G[?25lE:\Foster\foster>git push -u o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[37G[?25lE:\Foster\foster>git push -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  push -u origin master[?25l
-[0K[?25hEnumerating objects: 24, done.[0K[?25l
-Counting objects: 100% (24/24), done.[0K
-Delta compression using up to 24 threads[0K
-Compressing objects: 100% (16/16), done.[0K
-Writing objects:  20% (5/24)[0K[2G[?25h[?25lWriting objects: 100% (24/24), 3.16 KiB | 270.00 KiB/s, done.[0K
-Total 24 (delta 0), reused 0 (delta 0)[0K
-[0K[?25hremote:[0K[?25l
-remote: Create a pull request for 'master' on GitHub by visiting:[0K
-remote:      https://github.com/mqueinnec/foster/pull/new/master[0K
-remote:[0K
-[0K[?25hTo https://github.com/mqueinnec/foster.git[0K[?25l
- * [new branch]      master -> master[0K
-[0K[?25h]0; Branch 'master' set up to track remote branch 'master' from 'origin'.[0K[?25l
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Kl[0Kl[0K[27G[?25lE:\Foster\foster>git pull -[0K[?25h[29G[28G[?25lE:\Foster\foster>git pull -u[0K[?25h[30G[?25lE:\Foster\foster>git pull -u o[0K[?25hr[0Ki[0Kg[0Kn[0Ki[0K[?25lE:\Foster\foster>git pull -u orign[0K[?25h[?25lE:\Foster\foster>git pull -u orig[0K[?25hi[0Kn[0K[37G[?25lE:\Foster\foster>git pull -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  pull -u origin master[?25l
-[0K[?25herror: unknown switch `u'[0K[?25l
-usage: git pull [<options>] [<repository> [<refspec>...]][0K
-[0K
-    -v, --verbose         be more verbose[0K
-    -q, --quiet           be more quiet[0K
-    --progress            force progress reporting[0K
-    --recurse-submodules[=<on-demand>][0K
-                          control for recursive fetching of submodules[0K
-[0K
-Options related to merging[0K
-    -r, --rebase[=(false|true|merges|preserve|interactive)][0K
-                          incorporate changes by rebasing rather than merging[0K
-    -n                    do not show a diffstat at the end of the merge[0K
-    --stat                show a diffstat at the end of the merge[0K[7G[?25h]0; [?25l
-    --log[=<n>]           add (at most <n>) entries from shortlog to merge commit message[0K
-    --signoff[=...]       add Signed-off-by:[0K
-    --squash              create a single commit instead of doing a merge[0K
-    --commit              perform a commit if the merge succeeds (default)[0K
-    --edit                edit message before committing[0K
-    --ff                  allow fast-forward[0K
-    --ff-only             abort if fast-forward is not possible[0K
-    --verify-signatures   verify that the named commit has a valid GPG signature[0K
-    --autostash           automatically stash/stash pop before and after rebase[0K
-    -s, --strategy <strategy>[0K
-                          merge strategy to use[0K
-    -X, --strategy-option <option=value>[0K
-                          option for selected merge strategy[0K
-    -S, --gpg-sign[=<key-id>][0K
-                          GPG sign commit[0K
-    --allow-unrelated-histories[0K
-                          allow merging unrelated histories[0K
-[0K
-Options related to fetching[0K
-    --all                 fetch from all remotes[0K
-    -a, --append          append to .git/FETCH_HEAD instead of overwriting[0K
-    --upload-pack <path>  path to upload pack on remote end[0K
-    -f, --force           force overwrite of local branch[0K
-    -t, --tags            fetch all tags and associated objects[0K
-    -p, --prune           prune remote-tracking branches no longer on remote[0K
-    -j, --jobs[=<n>]      number of submodules pulled in parallel[0K
-    --dry-run             dry run[0K
-    -k, --keep            keep downloaded pack[0K
-    --depth <depth>       deepen history of shallow clone[0K
-    --unshallow           convert to a complete repository[0K
-    --update-shallow      accept refs that update .git/shallow[0K
-    --refmap <refmap>     specify fetch refmap[0K
-    -4, --ipv4            use IPv4 addresses only[0K
-    -6, --ipv6            use IPv6 addresses only[0K
-[0K
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Kl[0Kl[0K[27G[?25lE:\Foster\foster>git pull o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[34G[?25lE:\Foster\foster>git pull origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  pull origin master[?25l
-[0K[?25hremote: Enumerating objects: 4, done.[0K[?25l
-remote: Counting objects: 100% (4/4), done.[0K
-remote: Compressing objects: 100% (2/2), done.[0K
-remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0[0K
-[0K[?25h[?25lUnpacking objects:  33% (1/3)[0K[1G[?25hUnpacking objects: 100% (3/3), done.[0K[?25l
-[0K[?25hFrom https://github.com/mqueinnec/foster[0K[?25l
- * branch            master     -> FETCH_HEAD[0K
-   c410e45..e5e5b74  master     -> origin/master[0K
-[0K[?25hUpdating c410e45..e5e5b74[0K[?25l
-Fast-forward[0K
-[0K[?25h README.md | 1 [0;32m+[0m[0K[?25l
- 1 file changed, 1 insertion(+)[0K
- create mode 100644 README.md[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25h[?25lE:\Foster\foster>git[0K[22G[?25h[21G[?25lE:\Foster\foster>gi[0K[?25h[?25lE:\Foster\foster>g[0K[?25h[?25lE:\Foster\foster>[0K[?25hc[0Ko[0Km[0Km[0Ki[0Kt[0K[25G[?25lE:\Foster\foster>commit *[0K[?25h[?25l
-[0K[?25h'commit' is not recognized as an internal or external command,[0K[?25l
-operable program or batch file.[0K
-[0K
-E:\Foster\foster>[0K[?25ha[0Kd[0Kd[0K[22G[21G[?25lE:\Foster\foster>ad[0K[?25h[?25lE:\Foster\foster>a[0K[?25h[?25lE:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/build_options.[0K[?25l
-The file will have its original line endings in your working directory[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m "[0K[?25hP[0Ko[0K[?25lE:\Foster\foster>git commit -m "P[0K[?25hi[0Ko[0K[?25lE:\Foster\foster>git commit -m "Pi[0K[?25h[?25lE:\Foster\foster>git commit -m "P[0K[?25hi[0Ko[0Kt[0Kr[0K[39G[?25lE:\Foster\foster>git commit -m "Piotr c[0K[?25h[?25lE:\Foster\foster>git commit -m "Piotr[0K[39G[?25h[38G[?25lE:\Foster\foster>git commit -m "Piotr'[0K[?25hs[0K[41G[?25lE:\Foster\foster>git commit -m "Piotr's c[0K[?25ho[0Kd[0Ke[0K[?25lE:\Foster\foster>git commit -m "Piotr's cod[0K[?25h[?25lE:\Foster\foster>git commit -m "Piotr's co[0K[?25h[?25lE:\Foster\foster>git commit -m "Piotr's c[0K[?25h[?25lE:\Foster\foster>git commit -m "Piotr's[0K[41G[?25h[?25lE:\Foster\foster>git commit -m "Piotr's s[0K[?25hc[0Kr[0Ki[0Kp[0Kt[0Ks[0K"[0K]0;  - git  commit -m "Piotr's scripts"[?25l
-[0K[?25h]0; [master 7daf9c0] Piotr's scripts[0K[?25l
- 10 files changed, 832 insertions(+), 1 deletion(-)[0K
- create mode 100644 .Rproj.user/7AFE80E8/build_options[0K
- create mode 100644 R/1001_resampleToMatchOtherRaster.R[0K
- create mode 100644 R/1011_cropAndMask.R[0K
- create mode 100644 R/MatchExtent.R[0K
- create mode 100644 R/MatchResolution.R[0K
- create mode 100644 R/Sample.R[0K
- create mode 100644 R/TemporalMetrics.R[0K
- create mode 100644 R/calcIndices.R[0K
- create mode 100644 R/utils.R[0K
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Ks[0Kh[0K[27G[?25lE:\Foster\foster>git push -[0K[?25hu[0K[30G[?25lE:\Foster\foster>git push -u o[0K[?25hr[0Kg[0Ki[0Kn[0K[?25lE:\Foster\foster>git push -u orgi[0K[?25h[?25lE:\Foster\foster>git push -u org[0K[?25h[?25lE:\Foster\foster>git push -u or[0K[?25hi[0Kg[0Ki[0Kn[0K[37G[?25lE:\Foster\foster>git push -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K[?25l
-[0K[?25h]0;  - git  push -u origin masterEnumerating objects: 22, done.[0K[?25l
-Counting objects:  95% (21/22)[0K[1G[?25hCounting objects: 100% (22/22), done.[0K[?25l
-Delta compression using up to 24 threads[0K
-Compressing objects: 100% (16/16), done.[0K
-Writing objects: 100% (16/16), 10.54 KiB | 1.17 MiB/s, done.[0K
-Total 16 (delta 2), reused 0 (delta 0)[0K
-[0K[?25h[?25lremote: Resolving deltas:   0% (0/2)[0K[1G[?25hremote: Resolving deltas: 100% (2/2), completed with 1 local object.[0K[?25l
-[0K[?25hTo https://github.com/mqueinnec/foster.git[0K[?25l
-   e5e5b74..7daf9c0  master -> master[0K
-[0K[?25hBranch 'master' set up to track remote branch 'master' from 'origin'.[0K[?25l
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m "[0K[?25hM[0Ko[0K[?25lE:\Foster\foster>git commit -m "M[0K[?25h[?25lE:\Foster\foster>git commit -m "[0K[?25hE[0Kd[0Ki[0Kt[0Ki[0Kn[0Kg[0K[41G[40G[?25lE:\Foster\foster>git commit -m "Editin[0K[?25h[?25lE:\Foster\foster>git commit -m "Editi[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit[0K[?25h[38G[?25lE:\Foster\foster>git commit -m "Edit c[0K[?25ha[0Kl[0Kc[0KI[0Kn[0Kd[0Ki[0Kc[0Ke[0Ks[0K.[0KR[0K[52G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R -[0K[?25h[54G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - s[0K[?25hu[0Kp[0Kp[0Ko[0Kr[0Kt[0K[62G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support m[0K[?25hu[0Kl[0Kt[0Ki[0Kp[0Kl[0Ke[0K[71G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple m[0K[?25he[0Kt[0Kh[0Ko[0Kd[0Ks[0K[79G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods +[0K[?25h[81G[80G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods[0K[79G[?25h[78G[79G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods -[0K[?25h[81G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - o[0K[?25hn[0Kl[0Ky[0K[86G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only i[0K[?25hn[0K[89G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in m[0K[?25he[0Kr[0K[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in me[0K[?25hm[0Ko[0Kr[0Ky[0K"[0K[?25l
-[0K[?25h]0;  - git  commit -m "Edit calcIndices.R - support multiple methods - only in memory"On branch master[0K[?25l
-Your branch is up to date with 'origin/master'.[0K
-[0K
-Changes not staged for commit:[0K
-        [0;31mmodified:   .Rproj.user/7AFE80E8/console06/C944C50E[0m[0K
-        [0;31mmodified:   .Rproj.user/7AFE80E8/sources/prop/DE7516FB[0m[0K
-        [0;31mmodified:   .Rproj.user/7AFE80E8/sources/prop/INDEX[0m[0K
-        [0;31mmodified:   .Rproj.user/7AFE80E8/sources/s-68D45BC8/16DD1703[0m[0K
-        [0;31mmodified:   R/calcIndices.R[0m[0K
-[0K
-Untracked files:[0K
-        [0;31m.Rproj.user/7AFE80E8/sources/prop/6C63C3A9[0m[0K
-        [0;31m.Rproj.user/7AFE80E8/sources/prop/AF0C5436[0m[0K
-        [0;31m.Rproj.user/7AFE80E8/sources/prop/ED97C52F[0m[0K
-        [0;31m.Rproj.user/7AFE80E8/sources/s-68D45BC8/639F10DA-contents[0m[0K
-        [0;31m.Rproj.user/7AFE80E8/sources/s-68D45BC8/9CD85100-contents[0m[0K
-        [0;31m.Rproj.user/7AFE80E8/sources/s-68D45BC8/F16DC08D-contents[0m[0K
-        [0;31m.Rproj.user/shared/notebooks/paths[0m[0K
-[0K
-no changes added to commit[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hgit commit -m "Edit calcIndices.R - support multiple methods - only in memory"[0K[95G[94G[95G[96G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in memory[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in memor[0K[?25hy[0K[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in memor[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in memo[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in mem[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in me[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in m[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only i[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only[0K[86G[?25h[85G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - onl[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - on[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - o[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods -[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods[0K[79G[?25h[78G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple method[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple meth[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple met[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple me[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple m[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple[0K[71G[?25h[70G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multip[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multi[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support mult[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support mul[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support mu[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support m[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support[0K[62G[?25h[61G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - suppor[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - supp[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - sup[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - s[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R -[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R[0K[52G[?25h[51G[?25lE:\Foster\foster>git commit -m "Edit calcIndices.[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndices[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndice[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndic[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIndi[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcInd[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcIn[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calcI[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit calc[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit cal[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit ca[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit c[0K[?25h[?25lE:\Foster\foster>git commit -m "Edit[0K[38G[?25h[37G[?25lE:\Foster\foster>git commit -m "Edi[0K[?25h[?25lE:\Foster\foster>git commit -m "Ed[0K[?25h[?25lE:\Foster\foster>git commit -m "E[0K[?25h[?25lE:\Foster\foster>git commit -m "[0K[?25h[?25lE:\Foster\foster>git commit -m[0K[32G[?25h[31G[?25lE:\Foster\foster>git commit -[0K[?25h[?25lE:\Foster\foster>git commit[0K[29G[?25h[28G[?25lE:\Foster\foster>git commi[0K[?25h[?25lE:\Foster\foster>git comm[0K[?25h[?25lE:\Foster\foster>git com[0K[?25h[?25lE:\Foster\foster>git co[0K[?25h[?25lE:\Foster\foster>git c[0K[?25h[?25lE:\Foster\foster>git[0K[22G[?25h[21G[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/DE7516FB.[0K[?25l
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/INDEX.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/16DD1703.[0K
-The file will have its original line endings in your working directory[0K
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/6C63C3A9.[0K[?25l
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/AF0C5436.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/ED97C52F.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/639F10DA-contents.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/9CD85100-contents.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/F16DC08D-contents.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/shared/notebooks/paths.[0K
-The file will have its original line endings in your working directory[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hgit add *[0K[?25lE:\Foster\foster>git commit -m "Edit calcIndices.R - support multiple methods - only in memory"[0K[?25h]0;  - git  commit -m "Edit calcIndices.R - support multiple methods - only in memory"[?25l
-[0K[?25h]0; [master 273aa81] Edit calcIndices.R - support multiple methods - only in memory[0K[?25l
- 12 files changed, 146 insertions(+), 51 deletions(-)[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/prop/6C63C3A9[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/prop/AF0C5436[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/prop/ED97C52F[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/639F10DA-contents[0K
- copy R/calcIndices.R => .Rproj.user/7AFE80E8/sources/s-68D45BC8/9CD85100-contents (100%)[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/F16DC08D-contents[0K
- create mode 100644 .Rproj.user/shared/notebooks/paths[0K
- rewrite R/calcIndices.R (98%)[0K
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Ks[0Kh[0K[27G[?25lE:\Foster\foster>git push -[0K[?25hu[0K[30G[?25lE:\Foster\foster>git push -u r[0K[?25hi[0Kg[0Ki[0K[?25lE:\Foster\foster>git push -u rig[0K[?25h[?25lE:\Foster\foster>git push -u ri[0K[?25h[?25lE:\Foster\foster>git push -u r[0K[?25h[?25lE:\Foster\foster>git push -u[0K[30G[?25h[?25lE:\Foster\foster>git push -u o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[37G[36G[?25lE:\Foster\foster>git push -u origi[0K[?25hn[0K[37G[?25lE:\Foster\foster>git push -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  push -u origin master[?25l
-[0K[?25hEnumerating objects: 33, done.[0K[?25l
-Counting objects:  12% (4/33)[0K[1G[?25hCounting objects: 100% (33/33), done.[0K[?25l
-Delta compression using up to 24 threads[0K
-Compressing objects: 100% (17/17), done.[0K
-Writing objects: 100% (19/19), 5.87 KiB | 667.00 KiB/s, done.[0K
-Total 19 (delta 3), reused 0 (delta 0)[0K
-[0K[?25hremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[0K[?25l
-[0K[?25hTo https://github.com/mqueinnec/foster.git[0K[?25l
-   7daf9c0..273aa81  master -> master[0K
-[0K[?25hBranch 'master' set up to track remote branch 'master' from 'origin'.[0K[?25l
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hh[0Ke[0Kl[0Kp[0K([0K[?25lE:\Foster\foster>help[0K[?25h[?25lE:\Foster\foster>hel[0K[?25h[?25lE:\Foster\foster>he[0K[?25h[?25lE:\Foster\foster>h[0K[?25h[?25lE:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/INDEX.[0K[?25l
-The file will have its original line endings in your working directory[0K
-[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/prop/CC5DA9F6.[0K[?25l
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8.[0K
-The file will have its original line endings in your working directory[0K
-warning: LF will be replaced by CRLF in .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8-contents.[0K
-The file will have its original line endings in your working directory[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git o[0K[?25h[?25lE:\Foster\foster>git[0K[22G[?25h[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m "[0K[?25hA[0Kd[0Kd[0K[37G[?25lE:\Foster\foster>git commit -m "Add d[0K[?25ho[0Kc[0Ku[0Km[0Ke[0Kn[0Kt[0Ka[0Kt[0Ki[0Ko[0Kn[0K[51G[?25lE:\Foster\foster>git commit -m "Add documentation f[0K[?25hi[0Kl[0Ke[0Ks[0K"[0K]0;  - git  commit -m "Add documentation files"[?25l
-[0K[?25h[master e48875a] Add documentation files[0K[?25l
- 13 files changed, 259 insertions(+), 1 deletion(-)[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/prop/CC5DA9F6[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8[0K
- create mode 100644 .Rproj.user/7AFE80E8/sources/s-68D45BC8/452E15B8-contents[0K
- create mode 100644 man/GetSampleValues.Rd[0K
- create mode 100644 man/MatchExtent.Rd[0K
- create mode 100644 man/MatchResolution.Rd[0K
- create mode 100644 man/TemporalMetrics.Rd[0K
- create mode 100644 man/calcIndices.Rd[0K
- create mode 100644 man/getSampleXY.Rd[0K
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git p[0K[?25hu[0Ks[0Kh[0K[27G[?25lE:\Foster\foster>git push -[0K[?25hu[0K[30G[?25lE:\Foster\foster>git push -u o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[37G[?25lE:\Foster\foster>git push -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K]0;  - git  push -u origin master[?25l
-[0K[?25hEnumerating objects: 34, done.[0K[?25l
-Counting objects: 100% (34/34), done.[0K
-Delta compression using up to 24 threads[0K
-Compressing objects:  77% (17/22)[0K[35G[?25h[?25lCompressing objects: 100% (22/22), done.[0K
-Writing objects: 100% (22/22), 4.93 KiB | 560.00 KiB/s, done.[0K
-Total 22 (delta 9), reused 0 (delta 0)[0K
-[0K[?25hremote: Resolving deltas:  44% (4/9)[0K[40G[?25lremote: Resolving deltas:  55% (5/9)[0K[1G[?25hremote: Resolving deltas: 100% (9/9), completed with 7 local objects.[0K[?25l
-[0K[?25hTo https://github.com/mqueinnec/foster.git[0K[?25l
-   273aa81..e48875a  master -> master[0K
-[0K[?25hBranch 'master' set up to track remote branch 'master' from 'origin'.[0K[?25l
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hh[0Ke[0Kl[0Kp[0K([0Kg[0Ke[0Kt[0KS[0Ka[0Km[0Kp[0Kl[0Ke[0KC[0KY[0K)[0K]0;  - help (getSampleCY)[?25l
-[0K[?25h]0; This command is not supported by the help utility.  Try "(getSampleCY) /?".[0K[?25l
-[0K
-E:\Foster\foster>[0K[?25hhelp(getSampleCY)[0K[34G[33G[?25lE:\Foster\foster>help(getSampleY)[0K[32G[?25h[?25lE:\Foster\foster>help(getSampleXY)[0K[33G[?25h[?25lE:\Foster\foster>help(getSampleY)[0K[32G[?25h[?25lE:\Foster\foster>help(getSampleXY)[0K[33G[?25h[?25l
-[0K[?25hThis command is not supported by the help utility.  Try "(getSampleXY) /?".[0K[?25l
-[0K
-E:\Foster\foster>[0K[?25hhelp(getSampleXY)[0K[34G[?25lE:\Foster\foster>help(getSampleX)[0K[33G[?25h[?25lE:\Foster\foster>help(getSample)[0K[32G[?25h[?25lE:\Foster\foster>help(getSampl)[0K[31G[?25h[?25lE:\Foster\foster>help(getSamp)[0K[30G[?25h[?25lE:\Foster\foster>help(getSam)[0K[29G[?25h[?25lE:\Foster\foster>help(getSa)[0K[28G[?25h[?25lE:\Foster\foster>help(getS)[0K[27G[?25h[?25lE:\Foster\foster>help(get)[0K[26G[?25h[?25lE:\Foster\foster>help(ge)[0K[25G[?25h[?25lE:\Foster\foster>help(g)[0K[24G[?25h[?25lE:\Foster\foster>help()[0K[23G[?25h[?25lE:\Foster\foster>help(S)[0K[24G[?25h[?25lE:\Foster\foster>help(Sa)[0K[25G[?25h[?25lE:\Foster\foster>help(Sam)[0K[26G[?25h[?25lE:\Foster\foster>help(Samp)[0K[27G[?25h[?25lE:\Foster\foster>help(Sampl)[0K[28G[?25h[?25lE:\Foster\foster>help(Sample)[0K[29G[?25h]0;  - help (Sample)[?25l
-[0K[?25h]0; This command is not supported by the help utility.  Try "(Sample) /?".[0K[?25l
-[0K
-E:\Foster\foster>[0K[?25hh[0Ke[0Kl[0Kp[0K([0Kc[0Ka[0Kl[0Kc[0KI[0Kn[0K[?25lE:\Foster\foster>help(calcI[0K[?25h[?25lE:\Foster\foster>help(calc[0K[?25h[?25lE:\Foster\foster>help(cal[0K[?25h[?25lE:\Foster\foster>help(ca[0K[?25h[?25lE:\Foster\foster>help(c[0K[?25h[?25lE:\Foster\foster>help([0K[?25h[?25lE:\Foster\foster>help[0K[?25h[?25lE:\Foster\foster>hel[0K[?25h[?25lE:\Foster\foster>he[0K[?25h[?25lE:\Foster\foster>[0K[?25hc[0Ko[0Km[0Km[0Ki[0Kt[0K[?25lE:\Foster\foster>commi[0K[?25h[?25lE:\Foster\foster>comm[0K[?25hi[0Kt[0K[?25lE:\Foster\foster>commi[0K[?25h[?25lE:\Foster\foster>comm[0K[?25h[?25lE:\Foster\foster>com[0K[?25h[?25lE:\Foster\foster>co[0K[?25h[?25lE:\Foster\foster>c[0K[?25h[?25lE:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git a[0K[?25hd[0Kd[0K[26G[?25lE:\Foster\foster>git add *[0K[?25h]0;  - git  add *[?25l
-[0K[?25h
+E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25ha[0K[32G[?25lE:\Foster\foster>git commit -a -[0K[?25hm[0K[35G[?25lE:\Foster\foster>git commit -a -m "[0K[?25hU[0Kp[0Kd[0Ka[0Kt[0Ke[0K[43G[?25lE:\Foster\foster>git commit -a -m "Update A[0K[?25hl[0Kl[0K'[0K[?25lE:\Foster\foster>git commit -a -m "Update All[0K[?25h"[0K
