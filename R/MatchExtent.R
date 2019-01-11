@@ -2,40 +2,33 @@
 #'
 #'@param x Data to crop and mask. May be a \code{raster} object or a path to a raster file.
 #'@param ref Reference raster. May be a \code{raster} object or a path to a raster file.
+#'@param mask logical. Should x be masked by \code{ref} cells that have the value \code{maskValue}
+#'@param maskValue logical. Value of \code{ref} cells that should be masked in \code{x}
 #'@param filename Character. Output filename without directory. Can contain file extension (supported by writeRaster)
-#'@param outdir Character. Output directory. If not provided will be written in the same directory as \code{x}. If \code{x}
 #'is in memory, will be written in working directory
 #'@param ... Other arguments passed to \code{writeRaster} (e.g. format, overwrite ...)
 
-MatchExtent <- function(x,
+matchExtent <- function(x,
                         ref,
+                        mask=T,
+                        maskValue=NA,
                         filename='',
-                        outdir=NA,
                         ...) {
 
   filename <- trimws(filename)
 
-  #inputs can be either paths to rasters or raster objects
-  #check if input reference image is raster
-  if(!(class(ref)[1]== "RasterLayer"|class(ref)[1]== "RasterStack"|class(ref)[1]== "RasterBrick")) ref <- raster::raster(ref)
-  if(!(class(x)[1]== "RasterLayer"|class(x)[1]== "RasterStack"|class(x)[1]== "RasterBrick")) x <- raster::stack(x)
-
-  if(is.na(crs(x))){
-    warning("x doesn't have any specified CRS")
-  }else if(!compare(crs(x),crs(ref))){
-    warning("x and ref don't have the same CRS")
+  if(!raster::compareCRS(x,ref) | !all(raster::origin(x)==raster::origin(ref)) | !all(raster::res(x)==raster::res(ref))) {
+    stop("x and ref don't have the same CRS, origin or spatial resolution. Consider resampling before using MatchExtent")
   }
 
-  out <- raster::crop(x,ref)
-
-  if (filename==''){
-    out <- raster::mask(out,ref)
+  if(mask){
+    x.crop <- raster::crop(x,ref,filename='')
   }else{
-    if(is.na(outdir) & !raster::filename(x)=="") outdir <- dirname(x@file@name)
-    if(is.na(outdir) & raster::filename(x)=="") outdir <- getwd()
-    filename <- file.path(outdir,filename)
-    out <- raster::mask(out,ref,filename=filename)
+    x.crop <- x
   }
+
+  out <- raster::mask(x.crop,ref,maskValue=maskValue,filename=filename)
+  names(out) <- names(x)
 
   return(out)
 }
