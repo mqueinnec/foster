@@ -3,7 +3,7 @@
 #'@description Calculates spectral indices from multibands spectral images
 #'
 #'@param x Composite raster composed of the spectral bands used to calculate the indices. X can be a path to raster or RasterBrick object
-#'@param method Which method is used to calculate the indices. Default is Tasseled Cap. FOr a list of other methods see RStoolbox::spectralIndices
+#'@param indices Which indices is used to calculate the indices. Default is Tasseled Cap. FOr a list of other indicess see RStoolbox::spectralIndices
 #'@param filename character. Optional output filename. If no filename is provided, the output is written to disk only if they cannot be stored in RAM (raster::canProcessinMemory)
 #'@param ... Further arguments passed to RStoolbox:tasseledCap, RStoolbox:spectralIndices or raster::writeRaster
 #'
@@ -11,9 +11,16 @@
 
 
 calcIndices <- function(x,
-                        method="TC",
+                        indices="TC",
                         filename = '',
                         sat=NULL,
+                        blue=NULL,
+                        green=NULL,
+                        red=NULL,
+                        nir=NULL,
+                        swir1=NULL,
+                        swir2=NULL,
+                        swir3=NULL,
                         coefs = list(L = 0.5, G = 2.5, L_evi = 1, C1 = 6, C2 = 7.5,
                                      s = 1, swir2ccc = NULL, swir2coc = NULL),
                         ...) {
@@ -49,7 +56,7 @@ calcIndices <- function(x,
 
   #Tasseled Cap indices (from RSToolbox)
 
-  d <- list(NULL, c("brightness", "greenness", "wetness"))
+  d <- list(NULL, c("TCB", "TCG", "TCW"))
   .TCcoefs <- list(
     landsat4tm = matrix(c(
       # Crist 1985
@@ -102,33 +109,43 @@ calcIndices <- function(x,
 
   #other_args <- list(...)
 
+  if(!all(indices %in% c('TC',names(BANDSdb)))) stop("Unvalid or not implemented index")
+
   #Check if x has another class than supported ones
   #if(!class(x)[1] == "RasterBrick" || !class(x)[1] == "RasterStack") x <- raster::stack(x)
   out <- x
   out_temp <- list()
   #if (raster::canProcessInMemory(out,3)) { #Can be processed in RAM
-  for (m in 1:length(method)){
-    if (method[m] == "TC"){
+  for (m in 1:length(indices)){
+    if (indices[m] == "TC"){
       sat <- tolower(sat)
       if(class(x)[1]=="SpatialPointsDataFrame") {
         cof <- .TCcoefs[[sat]]
-        out_temp[[m]] <- as.matrix(x@data) %*% cof
+        x.dat <- raster::as.data.frame(x)
+        coord.names <- sp::coordnames(x)
+        x.dat <- dplyr::select(x.dat,-coord.names)
+        out_temp[[m]] <- as.matrix(x.dat) %*% cof
         out_temp[[m]] <- cbind(out_temp[[m]],
-                               tca=atan(out_temp[[m]][,"greenness"]/out_temp[[m]][,"brightness"]),
-                               tcd=((out_temp[[m]][,"greenness"])^2+(out_temp[[m]][,"brightness"])^2)^0.5)
+                               TCA=atan(out_temp[[m]][,"TCG"]/out_temp[[m]][,"TCB"]),
+                               TCD=((out_temp[[m]][,"TCG"])^2+(out_temp[[m]][,"TCB"])^2)^0.5)
       }else{
-        out_temp[[m]] <- RStoolbox::tasseledCap(x, sat, ...)
-        tca <- atan(out_temp[[m]]$greenness/out_temp[[m]]$brightness)
+        out_temp[[m]] <- RStoolbox::tasseledCap(x, sat, filename='')
+        names(out_temp[[m]]) <- c("TCB","TCG","TCW")
+        tca <- atan(out_temp[[m]]$TCG/out_temp[[m]]$TCB)
         names(tca) <- "TCA"
-        tcd <- (out_temp[[m]]$greenness^2+out_temp[[m]]$brightness^2)^0.5
+        tcd <- (out_temp[[m]]$TCG^2+out_temp[[m]]$TCB^2)^0.5
         names(tcd) <- "TCD"
-        out_temp[[m]] <- raster::stack(out_temp[[m]],tca,tcd)
+        out_temp[[m]] <- raster::stack(out_temp[[m]],tca
+
+                                       ,tcd)
       }
     }else{
-      ind <- toupper(method[m])
+      ind <- toupper(indices[m])
       if(class(x)[1] =="SpatialPointsDataFrame") {
-        cbands <- list(...)[names(list(...)) %in% BANDSdb[[ind]]]
-        bands <- lapply(cbands,function(c) x@data[,c])
+        req.bands <- BANDSdb[[ind]]
+        args.bands <- sapply(req.bands,function(x) get(x))
+        if(length(unlist(args.bands)) != length(req.bands)) stop("Not all necessary bands provided")
+        bands <- lapply(args.bands, function(b) x[[b]])
         L = coefs[["L"]]
         G = coefs[["G"]]
         L_evi = coefs[["L_evi"]]
@@ -140,12 +157,12 @@ calcIndices <- function(x,
         out_temp[[m]] <- data.frame(do.call(.IDXdb[[ind]],bands))
         colnames(out_temp[[m]]) <- ind
       }else{
-        out_temp[[m]] <- RStoolbox::spectralIndices(x,indices=method[m], ...)
+        out_temp[[m]] <- RStoolbox::spectralIndices(x,indices=indices[m], blue=blue,green=green,red=red,nir=nir,swir1=swir1,swir2=swir2,swir3=swir3,coefs=coefs,filename='')
       }
     }
   }
 
-  #Combine indices of multiple methods
+  #Combine indices of multiple indicess
   if(class(x)[1]=="SpatialPointsDataFrame") {
     all_ind <- do.call(cbind,out_temp)
     out <- sp::SpatialPointsDataFrame(coordinates(x),proj4string=crs(x),data=data.frame(all_ind))
