@@ -8,21 +8,33 @@
 #'@param ... Further arguments passed to \code{RStoolbox::unsuperClass}, to control the kmeans algorithm
 #'@return A \code{SpatialPointsDataFrame} object containing sample locations
 
-getSampleXY <- function(x, layers = seq(1,nlayers(x),1),n, mindist = 500, nClasses = 10, no_cores = 1, ...) {
+getSampleXY <- function(x,
+                        layers = seq(1,raster::nlayers(x),1),
+                        n,
+                        mindist = 500,
+                        nClasses = 10,
+                        ...) {
 
-  print("Preparing Kmeans input")
+  if(!class(x)[1] %in% c('RasterLayer','RasterStack','RasterBrick')){
+    stop("c must be a Raster object")
+  }
+
   #Select layers of x used to compute kmean
-  x_kmean <- x[[layers]]
+  x.layers <- x[[layers]]
+
+  x.clustered <- RStoolbox::unsuperClass(img = x.layers, nClasses = nClasses, norm = T, ...)
+
+  rr <- raster::as.data.frame(x.clustered$map,xy=T)
   #Parallel kmean using knor::Kmeans. Only one starting config?
   #Preparing kmean input
-  km_dat <- raster::as.data.frame(x_kmean,xy=T,na.rm=T)
-  km_dat <- as.matrix(km_dat)
+  #km_dat <- raster::as.data.frame(x_kmean,xy=T,na.rm=T)
+  #km_dat <- as.matrix(km_dat)
 
-  print(sprintf("Calculating %d clusters on %d cores",nClasses,no_cores))
-  km <- knor::Kmeans(km_dat[,!colnames(km_dat) %in% c("x","y")],centers = nClasses,nthread = no_cores)
-  print("Done")
+  #print(sprintf("Calculating %d clusters on %d cores",nClasses,no_cores))
+  #km <- knor::Kmeans(km_dat[,!colnames(km_dat) %in% c("x","y")],centers = nClasses,nthread = no_cores)
+  #print("Done")
 
-  rr <- data.frame(layer=km$cluster,km_dat[,c("x","y")])
+  #rr <- data.frame(layer=km$cluster,km_dat[,c("x","y")])
 
   # kmean using RStoolbox
   # # stratify using knn
@@ -85,7 +97,7 @@ getSampleXY <- function(x, layers = seq(1,nlayers(x),1),n, mindist = 500, nClass
   }
 
   print("Converting to spatial points data frame")
-  samples <- SpatialPointsDataFrame(coords = dplyr::select(samples, x, y), proj4string=crs(x),data=samples)
+  samples <- SpatialPointsDataFrame(coords = dplyr::select(samples, x, y), proj4string=crs(x),data=select(samples,-c("x","y")))
   print("Done.")
   return(samples)
 }
