@@ -70,13 +70,16 @@ modelFoster <- function(x,
 
     preds <- merge(Y.val,Y.pred,by=c('ID','variable'))
 
+    accTable <- foster::accuracyFoster(reference=preds$obs,estimate = preds$preds,by=preds$variable)
+
   }else{
     preds = NULL
   }
 
   out <- list(
-    kNN.model = yai.object$finalModel,
-    preds = preds
+    kNN.model = yai.object,
+    preds = preds,
+    accuracy = accTable
   )
 }
 
