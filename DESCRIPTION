@@ -11,10 +11,15 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Imports: 
-  raster,
+    raster,
+    data.table,
+    reshape2,
+    dplyr,
+    stats,
+    wql,
+    RStoolbox,
+    graphics,
+    yaImpute
+Depends: 
   data.table,
-  reshape2,
-  dplyr,
-  stats,
-  wql
-Depends: data.table
+  dplyr

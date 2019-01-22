@@ -2,28 +2,18 @@
 % Please edit documentation in R/imputeFoster.R
 \name{imputeFoster}
 \alias{imputeFoster}
-\title{Run the imputation model and returns predictred Y variables at targets}
+\title{Returns Y values at targets}
 \usage{
-imputeFoster(x = NULL, y = NULL, method = "kNN",
-  type = "randomForest", k = 1, ntree = 500, mtry = NULL, ...)
+imputeFoster(model = NULL, X.trgs = NULL, ...)
 }
 \arguments{
-\item{x}{A matrix or dataframe of predictors variables X for reference and target observations.
-row names of X are identification of observations
-X cannot contain missing values}
+\item{model}{A model trained at reference locations, ususally created from \code{modelFoster}}
 
-\item{y}{A matrix or dataframe of response variables Y for the reference observations.
-row names of Y are identification of reference observations}
-
-\item{method}{Character. Type of model used for the imputation. Currently supports k-NN only}
-
-\item{type}{Character. Type of distance metric ('euclidean','randomForest' etc.) if method='kNN'}
-
-\item{...}{Additional arguments to control kNN method and type (e.g. ntree, mtry)}
+\item{Xtrgs}{Predictors (X) values at targets}
 }
 \value{
 predicted Y variables at targets
 }
 \description{
-Run the imputation model and returns predictred Y variables at targets
+Returns Y values at targets
 }

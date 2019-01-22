@@ -4,14 +4,16 @@
 \alias{calcIndices}
 \title{calcIndices}
 \usage{
-calcIndices(x, method = "TC", filename = "", sat = NULL,
-  coefs = list(L = 0.5, G = 2.5, L_evi = 1, C1 = 6, C2 = 7.5, s = 1,
-  swir2ccc = NULL, swir2coc = NULL), ...)
+calcIndices(x, indices = "TC", filename = "", sat = NULL,
+  blue = NULL, green = NULL, red = NULL, nir = NULL,
+  swir1 = NULL, swir2 = NULL, swir3 = NULL, coefs = list(L = 0.5, G
+  = 2.5, L_evi = 1, C1 = 6, C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc =
+  NULL), ...)
 }
 \arguments{
 \item{x}{Composite raster composed of the spectral bands used to calculate the indices. X can be a path to raster or RasterBrick object}
 
-\item{method}{Which method is used to calculate the indices. Default is Tasseled Cap. FOr a list of other methods see RStoolbox::spectralIndices}
+\item{indices}{Which indices is used to calculate the indices. Default is Tasseled Cap. FOr a list of other indicess see RStoolbox::spectralIndices}
 
 \item{filename}{character. Optional output filename. If no filename is provided, the output is written to disk only if they cannot be stored in RAM (raster::canProcessinMemory)}
 
