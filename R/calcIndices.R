@@ -166,18 +166,17 @@ calcIndices <- function(x,
   if(class(x)[1]=="SpatialPointsDataFrame") {
     all_ind <- do.call(cbind,out_temp)
     out <- sp::SpatialPointsDataFrame(coordinates(x),proj4string=crs(x),data=data.frame(all_ind))
+    names_indices <- names(out)
   }else{
     out <- do.call(raster::stack,out_temp)
-  }
-  #}else{ #Cannot be processed in RAM
-  #Processing with chunks
-  #}
+    names_indices <- names(out)
 
-  #Calculate indices
-  if(filename != "") {
-    out <- raster::writeRaster(out,filename=filename,...)
+    if(filename != "") {
+      out <- raster::writeRaster(out,filename=filename,...)
+    }
   }
 
+  names(out) <- names_indices
   return(out)
 
 }
