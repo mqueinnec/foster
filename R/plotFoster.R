@@ -33,15 +33,15 @@ bw <- theme_pt()
 #' @param ylab Optional. Title of the y-axis
 #' @param info A logical value indictating whether information on count, bias and RMSE should be added to the plot.
 #' @param position Determines the position of the info box
-#' @param positionauto A logical value indicating whether the position of the info box should be optimized automaticaly.
+#' @param positionauto A logical value indicating whether the position of the info box should be optimized automaticaly
 #' @param lowerlimit A value determining the lower limit of the x and y axis
 #' @param upperlimit A value determining the upper limit of the x and y axis
 #' @param alpha Define the transparency of the points. 0 - fully transparent, 1 - opaque.
 #' @param add.reg.line Logical. Should the regression line be added to the plot? Regression coeficients are calculated automatically.
 #' @param add.reg.eq Logical. Should the regression equation be added to the plot?
 #' @param rug Logical. Add marginal rug to the plot.
-#' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in \code{c("count","R2","bias","bias%","RMSE","RMSE%","slope","intercept")}
-#' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is \code{c("n","R2","bias","bias%","RMSE","RMSE%","slope","intercept")}
+#' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias%","RMSE","RMSE%","slope","intercept")
+#' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias%","RMSE","RMSE%","slope","intercept")
 #' @return a scatterplot of \code{x} and \code{y}.
 #' @description This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}}
 #' @examples
@@ -149,4 +149,18 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
     bw
 
   return(plot)
+}
+
+#'Variable importance
+#'
+#'@param x an object of class yai
+#'@param nTop the nTop most important variables are plotted
+#'@param plot if FALSE, no plotting is done, but the scores are returned
+#'@param ... passed to \code{\link[graphics]{boxplot}} function
+#'@return a plot of variable importance
+#'
+
+fosterVarImp <- function(x,ntop=20,plot=T,...){
+  yaImpute::yaiVarImp(object=x,ntop=ntop,plot=plot,...)
+
 }
