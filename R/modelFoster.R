@@ -39,9 +39,9 @@ modelFoster <- function(x,
     Y.tr <- y
     isVal <- TRUE
   }else if(is.null(inVal)){
-    inVal <- rownames(x[-inTrain,])
+    inVal <- setdiff(seq(1,dim(x)[1],1),inTrain)
   }else if(is.null(inTrain)){
-    inTrain <- rownames(x[-inVal,])
+    inTrain <- setdiff(seq(1,dim(x)[1],1),inVal)
   }
 
   X.tr <- x[inTrain,]
