@@ -39,9 +39,9 @@ scatter(predicted, observed, by = NULL, axisorder = "OP",
 
 \item{rug}{Logical. Add marginal rug to the plot.}
 
-\item{label}{A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias%","RMSE","RMSE%","slope","intercept")}
+\item{label}{A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")}
 
-\item{label_text}{A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias%","RMSE","RMSE%","slope","intercept")}
+\item{label_text}{A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")}
 
 \item{x}{a vector of observed data.}
 

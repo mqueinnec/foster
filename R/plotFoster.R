@@ -38,10 +38,9 @@ bw <- theme_pt()
 #' @param upperlimit A value determining the upper limit of the x and y axis
 #' @param alpha Define the transparency of the points. 0 - fully transparent, 1 - opaque.
 #' @param add.reg.line Logical. Should the regression line be added to the plot? Regression coeficients are calculated automatically.
-#' @param add.reg.eq Logical. Should the regression equation be added to the plot?
 #' @param rug Logical. Add marginal rug to the plot.
-#' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias%","RMSE","RMSE%","slope","intercept")
-#' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias%","RMSE","RMSE%","slope","intercept")
+#' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")
+#' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")
 #' @return a scatterplot of \code{x} and \code{y}.
 #' @description This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}}
 #' @examples
@@ -55,7 +54,7 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
                     title=NULL,info=T,
                     position=0,positionauto=T,
                     lowerlimit=NA,upperlimit=NA,
-                    alpha=1,add.reg.line=F ,add.reg.eq=F,rug=F,
+                    alpha=1,add.reg.line=F,rug=F,
                     label = c("count","R2","bias","bias_per","RMSE","RMSE_per","slope","intercept"),
                     label_text = c("n","R2","bias","bias%","RMSE","RMSE%","slope","intercept")) {
   if (!is.null(by)) {
