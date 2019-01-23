@@ -7,12 +7,16 @@
 scatter(predicted, observed, by = NULL, axisorder = "OP",
   xlab = "Predicted", ylab = "Observed", title = NULL, info = T,
   position = 0, positionauto = T, lowerlimit = NA, upperlimit = NA,
-  alpha = 1, add.reg.line = F, add.reg.eq = F, rug = F,
-  label = c("count", "R2", "bias", "bias_per", "RMSE", "RMSE_per",
-  "slope", "intercept"), label_text = c("n", "R2", "bias", "bias\%",
-  "RMSE", "RMSE\%", "slope", "intercept"))
+  alpha = 1, add.reg.line = F, rug = F, label = c("count", "R2",
+  "bias", "bias_per", "RMSE", "RMSE_per", "slope", "intercept"),
+  label_text = c("n", "R2", "bias", "bias\%", "RMSE", "RMSE\%", "slope",
+  "intercept"))
 }
 \arguments{
+\item{predicted}{a vector of predicted data.}
+
+\item{observed}{a vector of observed data.}
+
 \item{by}{optional grouping variable. Can be character or factor}
 
 \item{axisorder}{Optional. Set to \code{PO} (predicted-observed) to plot predicted (\code{y}) on the y-axis (this is the default). Set to \code{OP} (observed-predicted) to plot observed (\code{x}) on the y-axis.}
@@ -35,26 +39,15 @@ scatter(predicted, observed, by = NULL, axisorder = "OP",
 
 \item{add.reg.line}{Logical. Should the regression line be added to the plot? Regression coeficients are calculated automatically.}
 
-\item{add.reg.eq}{Logical. Should the regression equation be added to the plot?}
-
 \item{rug}{Logical. Add marginal rug to the plot.}
 
-\item{label}{A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")}
+\item{label}{A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias_per","RMSE","RMSE_per","slope","intercept")}
 
 \item{label_text}{A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")}
-
-\item{x}{a vector of observed data.}
-
-\item{y}{a vector of predicted data.}
 }
 \value{
 a scatterplot of \code{x} and \code{y}.
 }
 \description{
-This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}}
-}
-\examples{
-x <- iris$Sepal.Length
-y <- predict(lm(data=iris,iris$Sepal.Length~iris$Petal.Width))
-scatter(x,y)
+scatterplot with optional information on the errors between x and y.
 }

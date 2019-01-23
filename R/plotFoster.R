@@ -25,8 +25,8 @@ bw <- theme_pt()
 
 #' scatterplot with optional information on the errors between x and y.
 #'
-#' @param x a vector of observed data.
-#' @param y a vector of predicted data.
+#' @param predicted a vector of predicted data.
+#' @param observed a vector of observed data.
 #' @param by optional grouping variable. Can be character or factor
 #' @param axisorder Optional. Set to \code{PO} (predicted-observed) to plot predicted (\code{y}) on the y-axis (this is the default). Set to \code{OP} (observed-predicted) to plot observed (\code{x}) on the y-axis.
 #' @param xlab Optional. Title of the x-axis
@@ -39,14 +39,10 @@ bw <- theme_pt()
 #' @param alpha Define the transparency of the points. 0 - fully transparent, 1 - opaque.
 #' @param add.reg.line Logical. Should the regression line be added to the plot? Regression coeficients are calculated automatically.
 #' @param rug Logical. Add marginal rug to the plot.
-#' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")
+#' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias_per","RMSE","RMSE_per","slope","intercept")
 #' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")
 #' @return a scatterplot of \code{x} and \code{y}.
-#' @description This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}}
-#' @examples
-#' x <- iris$Sepal.Length
-#' y <- predict(lm(data=iris,iris$Sepal.Length~iris$Petal.Width))
-#' scatter(x,y)
+#' @description This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}
 #' @export
 
 scatter <- function(predicted,observed,by=NULL,axisorder="OP",
