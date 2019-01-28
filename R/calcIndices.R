@@ -3,15 +3,23 @@
 #'@description Calculates spectral indices from multibands spectral images
 #'
 #'@param x Composite raster composed of the spectral bands used to calculate the indices. X can be a path to raster or RasterBrick object
-#'@param indices Which indices is used to calculate the indices. Default is Tasseled Cap. FOr a list of other indicess see RStoolbox::spectralIndices
+#'@param indices Character vector indicating Which indices are calculated. Tasseled Cap indices are abbrviated as \code{TCB}, \code{TCW}, \code{TCG}, \code{TCA}, \code{TCD}. FOr a list of other indicess see \code{\link[RStoolbox]{spectralIndices}}
 #'@param filename character. Optional output filename. If no filename is provided, the output is written to disk only if they cannot be stored in RAM (raster::canProcessinMemory)
-#'@param ... Further arguments passed to RStoolbox:tasseledCap, RStoolbox:spectralIndices or raster::writeRaster
+#'@param sat Character. Sensor; one of: c("Landsat4TM", "Landsat5TM", "Landsat7ETM", "Landsat8OLI", "MODIS", "QuickBird", "Spot5", "RapidEye").
+#'@param blue Integer. Blue band.
+#'@param green Integer. Green band.
+#'@param red Integer. Red band.
+#'@param nir Integer. Near infrared band (700-1100nm).
+#'@param swir1 temporarily deprecated
+#'@param swir2 Integer. Shortwave infrared band (1400-1800 nm)
+#'@param swir3 Integer. Shortwave infrared band (2000-2500 nm)
+#'@param ... Further arguments passed to \code{\link[raster]{writeRaster}}
 #'
 #'@return A Raster object with spectral indices
 
 
 calcIndices <- function(x,
-                        indices="TC",
+                        indices=c("TCW","TCB","TCG","NDVI"),
                         filename = '',
                         sat=NULL,
                         blue=NULL,
@@ -107,38 +115,73 @@ calcIndices <- function(x,
     #ikonos = matrix(c(NA)),
   )
 
-  #other_args <- list(...)
 
-  if(!all(indices %in% c('TC',names(BANDSdb)))) stop("Unvalid or not implemented index")
+  TC.names <- c("TCG","TCB","TCW","TCA","TCD")
 
-  #Check if x has another class than supported ones
-  #if(!class(x)[1] == "RasterBrick" || !class(x)[1] == "RasterStack") x <- raster::stack(x)
+  if(!all(indices %in% c(TC.names,names(BANDSdb)))) stop("Unvalid or not implemented index")
+  if(any(indices %in% TC.names)) doTC <- TRUE else doTC <- FALSE
+
+
+
+  if(doTC){
+    sat <- tolower(sat)
+    if(class(x)[1]=="SpatialPointsDataFrame") {
+      cof <- .TCcoefs[[sat]]
+      x.dat <- raster::as.data.frame(x)
+      coord.names <- sp::coordnames(x)
+      x.dat <- dplyr::select(x.dat,-coord.names)
+      TC.ind <- as.matrix(x.dat) %*% cof
+      # out_temp[[m]] <- cbind(out_temp[[m]],
+      #                        TCA=atan(out_temp[[m]][,"TCG"]/out_temp[[m]][,"TCB"]),
+      #                        TCD=((out_temp[[m]][,"TCG"])^2+(out_temp[[m]][,"TCB"])^2)^0.5)
+    }else{
+      TC.ind <- RStoolbox::tasseledCap(x, sat, filename='')
+      names(TC.ind) <- c("TCB","TCG","TCW")
+      # tca <- atan(out_temp[[m]]$TCG/out_temp[[m]]$TCB)
+      # names(tca) <- "TCA"
+      # tcd <- (out_temp[[m]]$TCG^2+out_temp[[m]]$TCB^2)^0.5
+      # names(tcd) <- "TCD"
+      # out_temp[[m]] <- raster::stack(out_temp[[m]],tca
+      #
+      #                                ,tcd)
+    }
+  }
+
   out <- x
   out_temp <- list()
-  #if (raster::canProcessInMemory(out,3)) { #Can be processed in RAM
-  for (m in 1:length(indices)){
-    if (indices[m] == "TC"){
-      sat <- tolower(sat)
-      if(class(x)[1]=="SpatialPointsDataFrame") {
-        cof <- .TCcoefs[[sat]]
-        x.dat <- raster::as.data.frame(x)
-        coord.names <- sp::coordnames(x)
-        x.dat <- dplyr::select(x.dat,-coord.names)
-        out_temp[[m]] <- as.matrix(x.dat) %*% cof
-        out_temp[[m]] <- cbind(out_temp[[m]],
-                               TCA=atan(out_temp[[m]][,"TCG"]/out_temp[[m]][,"TCB"]),
-                               TCD=((out_temp[[m]][,"TCG"])^2+(out_temp[[m]][,"TCB"])^2)^0.5)
-      }else{
-        out_temp[[m]] <- RStoolbox::tasseledCap(x, sat, filename='')
-        names(out_temp[[m]]) <- c("TCB","TCG","TCW")
-        tca <- atan(out_temp[[m]]$TCG/out_temp[[m]]$TCB)
-        names(tca) <- "TCA"
-        tcd <- (out_temp[[m]]$TCG^2+out_temp[[m]]$TCB^2)^0.5
-        names(tcd) <- "TCD"
-        out_temp[[m]] <- raster::stack(out_temp[[m]],tca
 
-                                       ,tcd)
+  for (m in 1:length(indices)){
+
+    if (indices[m] %in% c("TCB","TCG","TCW")){
+      if(class(x)[1]=="SpatialPointsDataFrame"){
+        out_temp[[m]] <- TC.ind[,indices[m]]
+        out_temp[[m]] <- data.frame(out_temp[[m]])
+        colnames(out_temp[[m]]) <- indices[m]
+      }else{
+        out_temp[[m]] <- raster::subset(TC.ind,indices[m])
+        names(out_temp[[m]]) <- indices[m]
       }
+    }else if (indices[m] == "TCA"){
+      if(class(x)[1]=="SpatialPointsDataFrame"){
+        out_temp[[m]]=atan(TC.ind[,"TCG"]/TC.ind[,"TCB"])
+        out_temp[[m]] <- data.frame(out_temp[[m]])
+        colnames(out_temp[[m]]) <- "TCA"
+      }else{
+        out_temp[[m]]=atan(raster::subset(TC.ind,"TCG")/raster::subset(TC.ind,"TCB"))
+        names(out_temp[[m]]) <- "TCA"
+      }
+
+    }else if (indices[m] == "TCD"){
+      if(class(x)[1]=="SpatialPointsDataFrame"){
+        out_temp[[m]]=(TC.ind[,"TCG"]^2+TC.ind[,"TCB"]^2)^0.5
+        out_temp[[m]] <- data.frame(out_temp[[m]])
+        colnames(out_temp[[m]]) <- "TCD"
+      }else{
+        out_temp[[m]] <- (raster::subset(TC.ind,"TCG")^2+raster::subset(TC.ind,"TCB")^2)^0.5
+        names(out_temp[[m]]) <- "TCD"
+      }
+
+
     }else{
       ind <- toupper(indices[m])
       if(class(x)[1] =="SpatialPointsDataFrame") {
