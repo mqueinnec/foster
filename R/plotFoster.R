@@ -1,6 +1,3 @@
-
-
-
 theme_pt <- function(base_size = 12, base_family = "") {
   ggplot2::theme_bw(base_size = base_size, base_family = base_family) + #%+replace%
     ggplot2::theme(
@@ -25,6 +22,8 @@ bw <- theme_pt()
 
 #' scatterplot with optional information on the errors between x and y.
 #'
+#' This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}
+#'
 #' @param predicted a vector of predicted data.
 #' @param observed a vector of observed data.
 #' @param by optional grouping variable. Can be character or factor
@@ -42,8 +41,6 @@ bw <- theme_pt()
 #' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias_per","RMSE","RMSE_per","slope","intercept")
 #' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")
 #' @return a scatterplot of \code{x} and \code{y}.
-#' @description This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}
-#' @export
 
 scatter <- function(predicted,observed,by=NULL,axisorder="OP",
                     xlab="Predicted",ylab="Observed",

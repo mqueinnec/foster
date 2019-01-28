@@ -1,20 +1,13 @@
 #'Train a kNN (or regression model) from reponse variables (Y) and predictors (X) at reference location
 #'
-#'@param x A matrix or dataframe of predictors variables X for reference observations.
-#'row names of X are identification of observations
-#'X cannot contain missing values
-#'@param y A matrix or dataframe of response variables Y for the reference observations.
-#'row names of Y are identification of reference observations
-#'@param method Character. Type of model used for the imputation. Currently supports k-NN only
-#'@param type Character. Type of distance metric ('euclidean','randomForest' etc.) if method='kNN'
-#'@param k Numeric. Number of nearest neighbors
-#'@param crossValidation Character. Type of cross validation used : \code{"holdout","loocv","kfold","none"}
-#'@param fracTrain Numeric. Fraction of observations used for training in \code{holdout} CV
-#'@param folds Numeric. Number of folds in \code{k-fold} CV
-#'@param finalModel Character. "All" returns model trained on all the dataset. Cross validation models are discarded
-#'because they are only here to estimate the accuracy to predict unseen data. "CV" returns the model trained during the
-#'CV. If multiple models are trained (e.g. k-fold), the best one (lowest average RMSE) is returned.
-#'@param ... Additional arguments to control kNN method and type (e.g. ntree, mtry)
+#'@param x A matrix or dataframe of predictors variables X for reference observations.Row names of X are identification of observations. X cannot contain missing values
+#'@param y A matrix or dataframe of response variables Y for the reference observations. Row names of Y are identification of reference observations
+#'@param inTrain Optional numeric vector indicating which rows of x and y go to training.
+#'@param inVal Optional numeric vector indicating which rows of x and y go to training. If left empy, all row that are not in inTrain are used for validation
+#'@param k Integer. Number of nearest neighbors
+#'@param method Character. Which nearness netrics is used to computed the nearest neighbors. Default is \code{"randomForest"}. Other methods are listed in \code{\link[yaImpute]{yai}}
+#'@param ntree Number of classification or regression trees drawn for each response variable. Default is 200
+#'@param mtry Number of X varaibles picked randomly to split each node. Default is sqrt(number of X variables)
 #'@return predicted Y variables at targets
 
 
@@ -25,8 +18,7 @@ modelFoster <- function(x,
                         k=1,
                         method='randomForest',
                         ntree=200,
-                        mtry=NULL,
-                        folds=5
+                        mtry=NULL
                         ){
 
   if(length(k)>1) stop("More than one k value. Parameter tuning is not yet implemented")
