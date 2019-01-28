@@ -4,8 +4,8 @@
 \alias{calcIndices}
 \title{calcIndices}
 \usage{
-calcIndices(x, indices = "TC", filename = "", sat = NULL,
-  blue = NULL, green = NULL, red = NULL, nir = NULL,
+calcIndices(x, indices = c("TCW", "TCB", "TCG", "NDVI"), filename = "",
+  sat = NULL, blue = NULL, green = NULL, red = NULL, nir = NULL,
   swir1 = NULL, swir2 = NULL, swir3 = NULL, coefs = list(L = 0.5, G
   = 2.5, L_evi = 1, C1 = 6, C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc =
   NULL), ...)
@@ -13,11 +13,27 @@ calcIndices(x, indices = "TC", filename = "", sat = NULL,
 \arguments{
 \item{x}{Composite raster composed of the spectral bands used to calculate the indices. X can be a path to raster or RasterBrick object}
 
-\item{indices}{Which indices is used to calculate the indices. Default is Tasseled Cap. FOr a list of other indicess see RStoolbox::spectralIndices}
+\item{indices}{Character vector indicating Which indices are calculated. Tasseled Cap indices are abbrviated as \code{TCB}, \code{TCW}, \code{TCG}, \code{TCA}, \code{TCD}. FOr a list of other indicess see \code{\link[RStoolbox]{spectralIndices}}}
 
 \item{filename}{character. Optional output filename. If no filename is provided, the output is written to disk only if they cannot be stored in RAM (raster::canProcessinMemory)}
 
-\item{...}{Further arguments passed to RStoolbox:tasseledCap, RStoolbox:spectralIndices or raster::writeRaster}
+\item{sat}{Character. Sensor; one of: c("Landsat4TM", "Landsat5TM", "Landsat7ETM", "Landsat8OLI", "MODIS", "QuickBird", "Spot5", "RapidEye").}
+
+\item{blue}{Integer. Blue band.}
+
+\item{green}{Integer. Green band.}
+
+\item{red}{Integer. Red band.}
+
+\item{nir}{Integer. Near infrared band (700-1100nm).}
+
+\item{swir1}{temporarily deprecated}
+
+\item{swir2}{Integer. Shortwave infrared band (1400-1800 nm)}
+
+\item{swir3}{Integer. Shortwave infrared band (2000-2500 nm)}
+
+\item{...}{Further arguments passed to \code{\link[raster]{writeRaster}}}
 }
 \value{
 A Raster object with spectral indices
