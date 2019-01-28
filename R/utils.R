@@ -16,6 +16,16 @@ defaultTemporalSummary <- function(x) {
   )
 }
 
+defaultTemporalSummary_v2 <- function(x) {
+  c(
+    mean=mean(x,na.rm=T),
+    sd=sd(x,na.rm=T),
+    median=median(x, na.rm = T),
+    IQR = IQR(x, na.rm = T),
+    slope = as.numeric(wql::mannKen(x)[1])
+  )
+}
+
 remove_extension <- function(x){ #copied from tools::file_path_sans_ext
   sub("([^.]+)\\.[[:alnum:]]+$", "\\1", x)
 }
