@@ -7,7 +7,7 @@
 #'@param output_format Extension of the resampled raster. (Default=tif).
 #'@param overwrite Logical. Should the output raster be overwritten?
 
-temporalMetrics_v2 <- function(s,
+temporalMetrics <- function(s,
                                metrics="defaultTemporalSummary",
                                prefix=NULL,
                                filename='',
