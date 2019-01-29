@@ -7,16 +7,6 @@
 #'
 #'
 defaultTemporalSummary <- function(x) {
-  list(
-    mean=mean(x,na.rm=T),
-    sd=sd(x,na.rm=T),
-    median=median(x, na.rm = T),
-    IQR = IQR(x, na.rm = T),
-    slope = as.numeric(wql::mannKen(x)[1])
-  )
-}
-
-defaultTemporalSummary_v2 <- function(x) {
   c(
     mean=mean(x,na.rm=T),
     sd=sd(x,na.rm=T),
