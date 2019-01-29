@@ -33,7 +33,7 @@ matchResolution <- function(x,
     stop("CRS of x or ref is not defined")
   }else if(!raster::compareCRS(crs(x),crs(ref))){
     warning("x and ref don't have the same CRS. x is projected to ref CRS before resampling")
-    x <- raster::projectRaster(x,crs(ref))
+    x <- raster::projectRaster(x,crs=crs(ref))
   }
 
   if(raster::extent(ref) > raster::extent(x)){
