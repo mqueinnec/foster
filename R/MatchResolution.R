@@ -1,15 +1,14 @@
-#'Resample a raster from a reference
+#'Match the resolution of two Raster objects
 #'
-#'Resample a raster from a reference
+#'Successsively projects and resamples a Raster coordinate system and spatial resolution to reference ones
 #'
-#'\code{x} and \code{ref} must have defined CRS. You can assign a CRS using \code{\link[raster]{crs}}. If the CRS don't match, \code{x} is projected to \code{ref} CRS. \code{x} keeps its original extent, even if \code{ref} extent is larger.
+#'\code{x} and \code{ref} must have defined CRS (can be assigned using \code{\link[raster]{crs}}). If the CRS don't match, \code{x} is projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherits the extent of \code{ref}.
 #'
 #'@param x \code{Raster*} object to resample
 #'@param ref Reference \code{Raster*} object with parameters that \code{x} should be resampled to.
 #'@param method Character. Method used to compute values for the resampled raster. Can be \code{'bilinear'} for bilinear
 #'interpolation or \code{'ngb'} for nearest neighbor interpolation.
-#'@param filename Character. Output filename without directory. Can contain file extension (supported by writeRaster)
-#'is in memory, will be written in working directory
+#'@param filename Character. Output filename (optional)
 #'@param ... Other arguments passed to \code{\link[raster]{writeRaster}}
 #'@return A \code{Raster*} object
 
@@ -42,8 +41,6 @@ matchResolution <- function(x,
   }else{
     ref_crop <- ref
   }
-
-
   #Resampling
   out <- raster::resample(x=x,y=ref_crop,method=method,filename=filename,...)
 

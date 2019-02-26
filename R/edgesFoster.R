@@ -1,7 +1,7 @@
 #'Remove edges of input Raster
 #'
 #'@param x A \code{Raster* object}
-#'@param w Numeric. Window size around each cell. If one of the cell if the neighborhood had a edgeVal value, then all the cells inside the neighborhood will be removed.
+#'@param w Numeric. Window size around each cell. If one of the cell in the neighborhood has a edgeVal value, then all the cells inside the neighborhood will be removed.
 #'@param edgeVal value of cells that are on the outer side of edges
 #'@param filename Character (optional). If the output is written to disk, full path to location including filename
 #'@param ... Additional arguments as for \code{\link[raster]{writeRaster}}

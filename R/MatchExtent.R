@@ -1,16 +1,15 @@
-#'Match the extent of a reference raster
+#'Match the extent of a reference Raster
 #'
 #'Crop and mask input raster to match the extent of the reference
 #'
 #'\code{x} and \code{ref} need to have the same CRS, spatial resolution and origin. If this is not the case, you can use \code{\link[foster]{matchResolution}}. For more information about cropping and masking function you can refer to \code{\link[raster]{crop}} and \code{\link[raster]{mask}}
 #'
-#'@param x Data to crop and mask. May be a \code{Raster*} object or a path to a raster file.
-#'@param ref Reference raster. May be a \code{raster} object or a path to a raster file.
+#'@param x Raster* object
+#'@param ref Raster* object with extent that \code{x} shoudl be cropped to
 #'@param mask logical. Should x be masked by \code{ref} cells that have the value \code{maskValue}
 #'@param maskValue logical. Value of \code{ref} cells that should be masked in \code{x}
-#'@param filename Character. Output filename without directory. Can contain file extension (supported by writeRaster)
-#'is in memory, will be written in working directory
-#'@param ... Other arguments passed to \code{writeRaster} (e.g. format, overwrite ...)
+#'@param filename Character. Output filename
+#'@param ... Other arguments passed to \code{writeRaster}
 #'@return A \code{Raster*} object
 
 matchExtent <- function(x,
@@ -35,14 +34,14 @@ matchExtent <- function(x,
     stop("x and ref don't have the same CRS, origin or spatial resolution. Consider resampling before using MatchExtent")
   }
 
-  extent.x <- extent(x)
-  extent.ref <- extent(ref)
+  extent.x <- raster::extent(x)
+  extent.ref <- raster::extent(ref)
   area.x <- (extent.x@xmax - extent.x@xmin)*(extent.x@ymax-extent.x@ymin)
   area.ref <- (extent.ref@xmax - extent.ref@xmin)*(extent.ref@ymax-extent.ref@ymin)
 
   if(area.x<area.ref){
     x.extent <- raster::extend(x,ref[[1]],filename='')
-  }else if(extent(x)>extent(ref)){
+  }else if(raster::extent(x)>raster::extent(ref)){
     x.extent <- raster::crop(x,ref[[1]],filename='')
   }else{
     x.extent <- x

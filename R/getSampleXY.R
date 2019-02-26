@@ -26,7 +26,7 @@ getSampleXY <- function(x,
   #Select layers of x used to compute kmean
   x.layers <- x[[layers]]
 
-  x.clustered <- RStoolbox::unsuperClass(img = x.layers, nClasses = nClasses, norm = T, ...)
+  x.clustered <- RStoolbox::unsuperClass(img = x.layers, nClasses = nClasses, ...)
 
   rr <- raster::as.data.frame(x.clustered$map,xy=T)
   rr$cellID <- rownames(rr)
@@ -95,7 +95,7 @@ getSampleXY <- function(x,
 
       #protect agaist endless loops
       count_runs<- count_runs+1
-      if (count_runs >= 20 * dplyr::filter(samples_count, layer==strata)$n_samples) {
+      if (count_runs >= 30 * dplyr::filter(samples_count, layer==strata)$n_samples) {
         warning("Exeeded maximum number of runs for strata ",strata)
         break
       }
@@ -103,7 +103,7 @@ getSampleXY <- function(x,
   }
 
 
-  samples <- SpatialPointsDataFrame(coords = dplyr::select(samples, x, y), proj4string=crs(x),data=select(samples,-c("x","y")))
+  samples <- SpatialPointsDataFrame(coords = dplyr::select(samples, x, y), proj4string=crs(x),data=dplyr::select(samples,-c("x","y")))
 
   return(samples)
 }
