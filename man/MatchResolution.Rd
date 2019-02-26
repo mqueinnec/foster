@@ -2,7 +2,7 @@
 % Please edit documentation in R/MatchResolution.R
 \name{matchResolution}
 \alias{matchResolution}
-\title{Resample a raster from a reference}
+\title{Match the resolution of two Raster objects}
 \usage{
 matchResolution(x, ref, method = "bilinear", filename = "", ...)
 }
@@ -14,8 +14,7 @@ matchResolution(x, ref, method = "bilinear", filename = "", ...)
 \item{method}{Character. Method used to compute values for the resampled raster. Can be \code{'bilinear'} for bilinear
 interpolation or \code{'ngb'} for nearest neighbor interpolation.}
 
-\item{filename}{Character. Output filename without directory. Can contain file extension (supported by writeRaster)
-is in memory, will be written in working directory}
+\item{filename}{Character. Output filename (optional)}
 
 \item{...}{Other arguments passed to \code{\link[raster]{writeRaster}}}
 }
@@ -23,8 +22,8 @@ is in memory, will be written in working directory}
 A \code{Raster*} object
 }
 \description{
-Resample a raster from a reference
+Successsively projects and resamples a Raster coordinate system and spatial resolution to reference ones
 }
 \details{
-\code{x} and \code{ref} must have defined CRS. You can assign a CRS using \code{\link[raster]{crs}}. If the CRS don't match, \code{x} is projected to \code{ref} CRS. \code{x} keeps its original extent, even if \code{ref} extent is larger.
+\code{x} and \code{ref} must have defined CRS (can be assigned using \code{\link[raster]{crs}}). If the CRS don't match, \code{x} is projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherits the extent of \code{ref}.
 }

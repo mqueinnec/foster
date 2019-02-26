@@ -9,7 +9,7 @@ edgesFoster(x, w, filename = "", edgeVal = NA, ...)
 \arguments{
 \item{x}{A \code{Raster* object}}
 
-\item{w}{Numeric. Window size around each cell. If one of the cell if the neighborhood had a edgeVal value, then all the cells inside the neighborhood will be removed.}
+\item{w}{Numeric. Window size around each cell. If one of the cell in the neighborhood has a edgeVal value, then all the cells inside the neighborhood will be removed.}
 
 \item{filename}{Character (optional). If the output is written to disk, full path to location including filename}
 

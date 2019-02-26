@@ -2,24 +2,23 @@
 % Please edit documentation in R/MatchExtent.R
 \name{matchExtent}
 \alias{matchExtent}
-\title{Match the extent of a reference raster}
+\title{Match the extent of a reference Raster}
 \usage{
 matchExtent(x, ref, mask = F, inverse = FALSE, maskValue = NA,
   updatevalue = NA, updateNA = FALSE, filename = "", ...)
 }
 \arguments{
-\item{x}{Data to crop and mask. May be a \code{Raster*} object or a path to a raster file.}
+\item{x}{Raster* object}
 
-\item{ref}{Reference raster. May be a \code{raster} object or a path to a raster file.}
+\item{ref}{Raster* object with extent that \code{x} shoudl be cropped to}
 
 \item{mask}{logical. Should x be masked by \code{ref} cells that have the value \code{maskValue}}
 
 \item{maskValue}{logical. Value of \code{ref} cells that should be masked in \code{x}}
 
-\item{filename}{Character. Output filename without directory. Can contain file extension (supported by writeRaster)
-is in memory, will be written in working directory}
+\item{filename}{Character. Output filename}
 
-\item{...}{Other arguments passed to \code{writeRaster} (e.g. format, overwrite ...)}
+\item{...}{Other arguments passed to \code{writeRaster}}
 }
 \value{
 A \code{Raster*} object

@@ -6,9 +6,10 @@
 \usage{
 scatter(predicted, observed, by = NULL, axisorder = "OP",
   xlab = "Predicted", ylab = "Observed", title = NULL, info = T,
-  position = 0, positionauto = T, lowerlimit = NA, upperlimit = NA,
-  alpha = 1, add.reg.line = F, rug = F, label = c("count", "R2",
-  "bias", "bias_per", "RMSE", "RMSE_per", "slope", "intercept"),
+  size.point = 4, shape.point = 1, size.info = 6, position = 0,
+  positionauto = T, lowerlimit = NA, upperlimit = NA, alpha = 1,
+  add.reg.line = F, rug = F, label = c("count", "R2", "bias",
+  "bias_per", "RMSE", "RMSE_per", "slope", "intercept"),
   label_text = c("n", "R2", "bias", "bias\%", "RMSE", "RMSE\%", "slope",
   "intercept"))
 }

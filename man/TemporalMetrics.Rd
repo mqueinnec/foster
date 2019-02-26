@@ -5,12 +5,12 @@
 \title{Calculate temporal metrics}
 \usage{
 temporalMetrics(s, metrics = "defaultTemporalSummary", prefix = NULL,
-  filename = "", ...)
+  filename = "", no_cores = 1, par = F, ...)
 }
 \arguments{
 \item{x}{Input \code{raster::stack} object containing a time series of spectral indices (e.g. NDVI). Input stack may be generated with \code{calcIndices}}
 
-\item{fun}{Name of a function (e.g. \code{"median"} or \code{"myFunction"}) used to process the time series data. Function should return a named \code{list}. \code{default_temporal_summary} function used as the default returns median, IQR, and slope values.}
+\item{fun}{Name of a function (e.g. \code{"median"} or \code{"myFunction"}) used to process the time series data. Function should return a named \code{vector}. \code{default_temporal_summary} function used as the default returns median, IQR, and slope values.}
 
 \item{output_dir}{Path to the output directory. If not provided, output is saved in the same directory as \code{x}.}
 
