@@ -45,6 +45,7 @@ bw <- theme_pt()
 scatter <- function(predicted,observed,by=NULL,axisorder="OP",
                     xlab="Predicted",ylab="Observed",
                     title=NULL,info=T,
+                    size.point=4,shape.point=1,size.info=6,
                     position=0,positionauto=T,
                     lowerlimit=NA,upperlimit=NA,
                     alpha=1,add.reg.line=F,rug=F,
@@ -52,10 +53,10 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
                     label_text = c("n","R2","bias","bias%","RMSE","RMSE%","slope","intercept")) {
   if (!is.null(by)) {
     data <- data.frame(x=predicted,y=observed,by=by)
-    pts <- ggplot2::geom_point(shape=1,size=2,alpha=alpha,ggplot2::aes(colour=by))
+    pts <- ggplot2::geom_point(shape=shape.point,size=size.point,alpha=alpha,ggplot2::aes(colour=by))
   } else {
     data <- data.frame(x=predicted,y=observed)
-    pts <- ggplot2::geom_point(shape=1,size=2,alpha=alpha)
+    pts <- ggplot2::geom_point(shape=shape.point,size=size.point,alpha=alpha)
   }
 
   if(axisorder == "PO") {
@@ -120,7 +121,7 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
   if(position == 0)  {ann_x <- upperlimit; ann_y <- -Inf; ann_hjust <- 1; ann_vjust <- -0.2}
   if(position == 1)  {ann_x <- lowerlimit; ann_y <- upperlimit; ann_hjust <- 0; ann_vjust <- 0.9}
 
-  if (info==T) {ann <- ggplot2::annotate("text",x=ann_x,y=ann_y,label=eval.label,hjust=ann_hjust,vjust=ann_vjust)} else {ann<-bw}
+  if (info==T) {ann <- ggplot2::annotate("text",x=ann_x,y=ann_y,label=eval.label,hjust=ann_hjust,vjust=ann_vjust,size=size.info)} else {ann<-bw}
   if (rug==T) {addrug <- ggplot2::geom_rug(alpha=0.2)} else {addrug <-bw}
 
   if (add.reg.line==T) {reg.line <- ggplot2::geom_smooth(se = FALSE,method="lm",colour="red")} else {reg.line <- bw}
@@ -132,7 +133,7 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
     ggplot2::ggtitle(title) +
     ggplot2::xlim(lowerlimit,upperlimit) +
     ggplot2::ylim(lowerlimit,upperlimit) +
-    ggplot2::geom_abline(intercept=0,slope=1,linetype='dashed')+
+    ggplot2::geom_abline(intercept=0,slope=1,linetype='dashed',lwd=1)+
     ann+
     ggplot2::theme(legend.position='bottom')+
     ggplot2::coord_equal(ratio =1) +
