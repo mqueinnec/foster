@@ -50,5 +50,5 @@ scatter(predicted, observed, by = NULL, axisorder = "OP",
 a scatterplot of \code{x} and \code{y}.
 }
 \description{
-scatterplot with optional information on the errors between x and y.
+This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with calc.error
 }

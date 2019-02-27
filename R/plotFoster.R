@@ -22,7 +22,7 @@ bw <- theme_pt()
 
 #' scatterplot with optional information on the errors between x and y.
 #'
-#' This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with \code{\link{calc.error}
+#' This scatterplot is a wrapper function for a ggplot-based plot. It containes additional text panel that shows values calculated with calc.error
 #'
 #' @param predicted a vector of predicted data.
 #' @param observed a vector of observed data.

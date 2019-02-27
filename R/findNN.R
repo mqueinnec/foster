@@ -11,7 +11,7 @@
 #'@return predicted Y variables at targets
 
 
-modelFoster <- function(x,
+findNN <- function(x,
                         y,
                         inTrain=NULL,
                         inVal=NULL,
