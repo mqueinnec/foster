@@ -41,6 +41,7 @@ bw <- theme_pt()
 #' @param label A character vector containing the name of the metrics that are annotated on the plot. Must be in c("count","R2","bias","bias_per","RMSE","RMSE_per","slope","intercept")
 #' @param label_text A character vector containing of the same length as label contaning th name of each label. Default is c("n","R2","bias","bias\%","RMSE","RMSE\%","slope","intercept")
 #' @return a scatterplot of \code{x} and \code{y}.
+#' @export
 
 scatter <- function(predicted,observed,by=NULL,axisorder="OP",
                     xlab="Predicted",ylab="Observed",
@@ -151,7 +152,7 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
 #'@param plot if FALSE, no plotting is done, but the scores are returned
 #'@param ... passed to \code{\link[graphics]{boxplot}} function
 #'@return a plot of variable importance
-#'
+#'@export
 
 fosterVarImp <- function(x,ntop=20,plot=T,...){
   yaImpute::yaiVarImp(object=x,ntop=ntop,plot=plot,...)

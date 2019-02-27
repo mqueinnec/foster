@@ -9,7 +9,7 @@
 #'@param NAonly logical. If TRUE only cel values that are NA are replaced with the computed focal values
 #'@param filename Character (optional). If the output is written to disk, full path to location including filename
 #'@param ... Additional arguments as for \code{\link[raster]{writeRaster}}
-#'
+#'@export
 
 focalFoster <- function(x,
                          w,

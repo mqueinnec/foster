@@ -16,6 +16,7 @@
 #'@param ... Further arguments passed to \code{\link[raster]{writeRaster}}
 #'
 #'@return A Raster object with spectral indices
+#'@export
 
 
 calcIndices <- function(x,

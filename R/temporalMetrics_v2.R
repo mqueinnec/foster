@@ -6,6 +6,7 @@
 #'@param output_name Filename of the resampled raster without extension. If not provided \code{x} name is used with an appendix (_resampled)
 #'@param output_format Extension of the resampled raster. (Default=tif).
 #'@param overwrite Logical. Should the output raster be overwritten?
+#'@export
 
 temporalMetrics_v2 <- function(s,
                             metrics="defaultTemporalSummary",
@@ -28,12 +29,13 @@ temporalMetrics_v2 <- function(s,
   eval.fun <- paste(eval.fun,collapse=",")
 
   if (class(s)[1]=="SpatialPointsDataFrame") {
+    coordnames(s) <- c("x","y")
     ind.df <- raster::as.data.frame(s) #xy arg is not necessary for spdf, it adds a column
     ind.dt <- data.table::as.data.table(ind.df)
     #convert to long
     ind.dt.long <-  data.table::melt(ind.dt, id.vars = c("x","y"),value.name='value')
     #generate summary
-    result <- ind.dt.long[,j=eval(parse(text=eval.fun)),by=list(x,y)]
+    result <- ind.dt.long[,j=as.list(eval(parse(text=eval.fun))),by=list(x,y)]
     # output should be spatial object
     coordinates(result) <- ~x+y
     names(result) <- paste0(prefix,"_",names(result))
@@ -42,10 +44,12 @@ temporalMetrics_v2 <- function(s,
   }else{
     if(par){
       raster::beginCluster(no_cores)
-      result <- raster::clusterR(s,fun=calc,args=list(fun=eval(parse(text=metrics))),filename=filename)
+      result <- raster::clusterR(s,fun=calc,args=list(fun=eval(parse(text=metrics))),filename=filename,...)
       raster::endCluster()
+      #names(result) <- paste0(prefix,"_",names(result))
     }else{
       result <- raster::calc(s,fun=eval(parse(text=metrics)),filename=filename,...)
+      #names(result) <- paste0(prefix,"_",names(result))
     }
 
   }

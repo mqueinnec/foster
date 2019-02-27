@@ -11,6 +11,7 @@
 #'@param filename Character. Output filename
 #'@param ... Other arguments passed to \code{writeRaster}
 #'@return A \code{Raster*} object
+#'@export
 
 matchExtent <- function(x,
                         ref,

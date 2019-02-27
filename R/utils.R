@@ -4,6 +4,7 @@
 #'
 #'@param x Vector of numeric values
 #'@return A list with median, IQR and slope
+#'@export
 #'
 #'
 defaultTemporalSummary <- function(x) {

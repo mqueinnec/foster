@@ -14,7 +14,7 @@
 #'@param filename Character (optional). If the output is written to disk, full path to location including filename
 #'@param keepNA Logical. If TRUE (default), NA cells of \code{x} are unchanged
 #'@param ... Additional arguments as for \code{\link[raster]{writeRaster}}
-#'
+#'@export
 
 focalMultiBand <- function(x,
                         w,

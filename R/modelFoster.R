@@ -9,6 +9,7 @@
 #'@param ntree Number of classification or regression trees drawn for each response variable. Default is 200
 #'@param mtry Number of X varaibles picked randomly to split each node. Default is sqrt(number of X variables)
 #'@return predicted Y variables at targets
+#'@export
 
 
 modelFoster <- function(x,

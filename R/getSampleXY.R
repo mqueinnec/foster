@@ -11,6 +11,7 @@
 #'@param nClasses Number of strata. Default is 5.
 #'@param ... Further arguments passed to \code{\link[RStoolbox]{unsuperClass}} or \code{\link[raster]{writeRaster}} to control the kmeans algorithm or writing parameters
 #'@return A \code{SpatialPointsDataFrame} object containing sample locations
+#'@export
 
 getSampleXY <- function(x,
                         layers = seq(1,raster::nlayers(x),1),

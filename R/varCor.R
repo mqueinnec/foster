@@ -11,7 +11,7 @@
 #'@param names logical. Should column names (TRUE) pr column index (FALSE) be returned?
 #'@param exact logical. Should the average correlations be recomputed at each step? See details in documentation of \code{\link[caret]{findCorrelation}}
 #'@return A list containing a new dataframe without most correlated variables and a vector with the columns index or names that have been removed
-#'
+#'@export
 
 varCor <- function(x,
                    vars=1:ncol(x),

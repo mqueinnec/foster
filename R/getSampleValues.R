@@ -3,6 +3,7 @@
 #'@param x A raster layer
 #'@param s Locations of the samples. Object of class \code{SpatialPointsDataFrame}, usually generated with \code{getSampleXY}
 #'@return A \code{SpatialPointsDataFrame} object containing pixel values corresponding to sample locations
+#'@export
 
 getSampleValues <- function(x, s) {
 

@@ -5,7 +5,7 @@
 #'@param edgeVal value of cells that are on the outer side of edges
 #'@param filename Character (optional). If the output is written to disk, full path to location including filename
 #'@param ... Additional arguments as for \code{\link[raster]{writeRaster}}
-#'
+#'@export
 
 edgesFoster <- function(x,
                         w,

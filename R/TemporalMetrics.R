@@ -6,6 +6,7 @@
 #'@param output_name Filename of the resampled raster without extension. If not provided \code{x} name is used with an appendix (_resampled)
 #'@param output_format Extension of the resampled raster. (Default=tif).
 #'@param overwrite Logical. Should the output raster be overwritten?
+#'@export
 
 temporalMetrics <- function(s,
                                metrics="defaultTemporalSummary",

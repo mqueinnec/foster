@@ -17,6 +17,7 @@
 #'@param nFolds Numeric. During parameter tuning, k-fold resmapling is performed.
 #'@param ... Additional arguments to control kNN method and type (e.g. ntree, mtry)
 #'@return predicted Y variables at targets
+#'@export
 
 
 trainFoster <- function(x,

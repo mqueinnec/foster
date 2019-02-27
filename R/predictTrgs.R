@@ -6,8 +6,9 @@
 #'@param par Logical. Should imputation be performed on parallel threads?
 #'@param n.cores Integer. Number of parallel threads (relevant only if par=TRUE)
 #'@return predicted Y variables at targets
+#'@export
 
-imputeFoster <- function(model=NULL,
+predictTrgs <- function(model=NULL,
                          X.trgs=NULL,
                          filename='',
                          par=F,
