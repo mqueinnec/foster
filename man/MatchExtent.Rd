@@ -27,5 +27,5 @@ A \code{Raster*} object
 Crop and mask input raster to match the extent of the reference
 }
 \details{
-\code{x} and \code{ref} need to have the same CRS, spatial resolution and origin. If this is not the case, you can use \code{\link[foster]{matchResolution}}. For more information about cropping and masking function you can refer to \code{\link[raster]{crop}} and \code{\link[raster]{mask}}
+\code{x} and \code{ref} need to have the same CRS, spatial resolution and origin. If this is not the case, you can use \code{\link[foster]{MatchResolution}}. For more information about cropping and masking function you can refer to \code{\link[raster]{crop}} and \code{\link[raster]{mask}}
 }

@@ -2,7 +2,7 @@
 #'
 #'Successsively projects and resamples a Raster coordinate system and spatial resolution to reference ones
 #'
-#'\code{x} and \code{ref} must have defined CRS (can be assigned using \code{\link[raster]{crs}}). If the CRS don't match, \code{x} is projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherits the extent of \code{ref}.
+#'\code{x} and \code{ref} must have defined CRS (can be assigned using \code{\link[raster]{projection}}). If the CRS don't match, \code{x} is projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherits the extent of \code{ref}.
 #'
 #'@param x \code{Raster*} object to resample
 #'@param ref Reference \code{Raster*} object with parameters that \code{x} should be resampled to.
