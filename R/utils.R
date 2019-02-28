@@ -5,8 +5,6 @@
 #'@param x Vector of numeric values
 #'@return A list with median, IQR and slope
 #'@export
-#'
-#'
 defaultTemporalSummary <- function(x) {
   c(
     mean=mean(x,na.rm=T),
@@ -17,16 +15,23 @@ defaultTemporalSummary <- function(x) {
   )
 }
 
-remove_extension <- function(x){ #copied from tools::file_path_sans_ext
-  sub("([^.]+)\\.[[:alnum:]]+$", "\\1", x)
+
+#'Convert a SPDF to data.frame
+#'
+#'@param x A \code{SpatailPointsDataFrame} object
+#'@param xy Logical. If TRUE, coordinates of \code{x} are added to data.frame
+#'@export
+
+spdf2df <- function(x,xy=F){
+  out <- raster::as.data.frame(x)
+  if(!xy){
+    coord.name <- sp::coordnames(x)
+    out[,coord.name[1]] <- NULL
+    out[,coord.name[2]] <- NULL
+  }
+  return(out)
 }
 
-create_name <- function(r,output_format="tif",odix="_resampled") {
-  if(class(r)[1]== "RasterLayer"|| class(r)[1]== "RasterBrick") input_basename <- remove_extension(basename(r@file@name))
-  if(class(r)[1]== "RasterStack") input_basename <- remove_extension(basename(r@layers[[1]]@file@name))
-  paste0(input_basename, odix, ".",output_format)
-
-}
 
 unwrap_indices <- function(x,y){
   #x is a list

@@ -13,7 +13,7 @@
 #' @return summary statistics of the differences between \code{reference} and \code{estimate}.
 #' @export
 
-accuracyFoster <-function(reference,estimate,by=NULL,noinfo=TRUE,dist.normal=TRUE,short=FALSE) {
+accuracy <-function(reference,estimate,by=NULL,noinfo=TRUE,dist.normal=TRUE,short=FALSE) {
 
   #check input variables
   if (!is.numeric(reference) | !is.numeric(estimate)) {

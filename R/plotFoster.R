@@ -76,7 +76,7 @@ scatter <- function(predicted,observed,by=NULL,axisorder="OP",
 
   if(length(label_text)!=length(label)){ stop("label and label_text must have the same length")}
 
-  d <- foster::calc_error(reference = observed,estimate = predicted)
+  d <- calc_error(reference = observed,estimate = predicted)
 
 
   eval.label <- character()

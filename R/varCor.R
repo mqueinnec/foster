@@ -33,8 +33,8 @@ varCor <- function(x,
   }
 
   out <- list(
-    xReduced = new.df,
+    x = new.df,
     highCorVar = highCor
   )
   return(out)
-  }
+}
