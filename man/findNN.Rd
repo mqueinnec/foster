@@ -5,7 +5,7 @@
 \title{Train a kNN (or regression model) from reponse variables (Y) and predictors (X) at reference location}
 \usage{
 findNN(x, y, inTrain = NULL, inVal = NULL, k = 1,
-  method = "randomForest", ntree = 200, mtry = NULL)
+  method = "randomForest", ntree = 200, mtry = NULL, ...)
 }
 \arguments{
 \item{x}{A matrix or dataframe of predictors variables X for reference observations.Row names of X are identification of observations. X cannot contain missing values}

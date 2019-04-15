@@ -5,7 +5,7 @@
 \title{Match the extent of a reference Raster}
 \usage{
 matchExtent(x, ref, mask = F, inverse = FALSE, maskValue = NA,
-  updatevalue = NA, updateNA = FALSE, filename = "", ...)
+  filename = "", ...)
 }
 \arguments{
 \item{x}{Raster* object}
@@ -14,7 +14,9 @@ matchExtent(x, ref, mask = F, inverse = FALSE, maskValue = NA,
 
 \item{mask}{logical. Should x be masked by \code{ref} cells that have the value \code{maskValue}}
 
-\item{maskValue}{logical. Value of \code{ref} cells that should be masked in \code{x}}
+\item{inverse}{logical. If TRUE, cells of \code{ref} that are not \code{maskvalue} are masked}
+
+\item{maskValue}{Value of \code{ref} cells that should be masked in \code{x}}
 
 \item{filename}{Character. Output filename}
 
@@ -24,8 +26,8 @@ matchExtent(x, ref, mask = F, inverse = FALSE, maskValue = NA,
 A \code{Raster*} object
 }
 \description{
-Crop and mask input raster to match the extent of the reference
+Crops or extends the extent of a raster to the extent of a reference. Some cells of the reference raster can optionally be masked based on their values.
 }
 \details{
-\code{x} and \code{ref} need to have the same CRS, spatial resolution and origin. If this is not the case, you can use \code{\link[foster]{MatchResolution}}. For more information about cropping and masking function you can refer to \code{\link[raster]{crop}} and \code{\link[raster]{mask}}
+\code{x} and \code{ref} need to have the same CRS, spatial resolution and origin. If this is not the case, you can use \code{\link[foster]{MatchResolution}}.
 }

@@ -4,19 +4,17 @@
 \alias{edges}
 \title{Remove cells in the neighbourhood of a boundary cell}
 \usage{
-edges(x, w, filename = "", edgeVal = NA, ...)
+edges(x, w, filename = "", ...)
 }
 \arguments{
 \item{x}{A \code{Raster* object}}
 
-\item{w}{Numeric. Size of the window around each cell (must be an odd number). Window size around each cell.}
+\item{w}{Numeric. Size of the window around each cell. Must be an odd number.}
 
 \item{filename}{Character (optional). If the output is written to disk, full path to location including filename}
-
-\item{edgeVal}{value of cells that are on the outer side of edges}
 
 \item{...}{Additional arguments as for \code{\link[raster]{writeRaster}}}
 }
 \description{
-A boundary is considered as a cell having a \code{edgeVal}) value. If one of the cell in the neighborhood has a edgeVal value, then all the cells inside the neighborhood will be assigned a NA value.
+Assigns NA value to all cells having a NA values within their \code{wxw} neighbourhood.
 }

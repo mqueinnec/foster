@@ -4,23 +4,28 @@
 \alias{predictTrgs}
 \title{Returns Y values at targets}
 \usage{
-predictTrgs(model = NULL, X.trgs = NULL, filename = "", par = F,
-  n.cores = 1, ...)
+predictTrgs(model = NULL, x = NULL, filename = "", no_cores = 1,
+  nrows = 1, ...)
 }
 \arguments{
 \item{model}{A model trained at reference locations, ususally created from \code{modelFoster}}
 
+\item{x}{Predictors (X) values at targets}
+
 \item{filename}{Character. Path to file written to disk (may include the extension)}
+
+\item{nrows}{number of rows processed at a time. Default is 1.}
 
 \item{par}{Logical. Should imputation be performed on parallel threads?}
 
 \item{n.cores}{Integer. Number of parallel threads (relevant only if par=TRUE)}
-
-\item{Xtrgs}{Predictors (X) values at targets}
 }
 \value{
 predicted Y variables at targets
 }
 \description{
-Returns Y values at targets
+Finds the k-NN of targets and impute response variables
+}
+\details{
+By default, the data is processed row by row to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, processing data row by row slows down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process multiple rows at the same time and considerably reduce processign times.
 }

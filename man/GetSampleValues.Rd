@@ -4,16 +4,22 @@
 \alias{getSampleValues}
 \title{Get raster cell values at samples}
 \usage{
-getSampleValues(x, s)
+getSampleValues(x, s, append = FALSE, filename = "", ...)
 }
 \arguments{
 \item{x}{A raster layer}
 
-\item{s}{Locations of the samples. Object of class \code{SpatialPointsDataFrame}, usually generated with \code{getSampleXY}}
+\item{s}{Locations of the samples. Object of class \code{SpatialPointsDataFrame}, usually generated with \code{\link[foster]{getSample}}}
+
+\item{append}{Should the values be appended to s? Default is FALSE}
+
+\item{filename}{Character. Ouput filename (without extension)}
+
+\item{...}{Additional arguments passed to \code{\link[rgdal]{writeOGR}}}
 }
 \value{
-A \code{SpatialPointsDataFrame} object containing pixel values corresponding to sample locations
+A \code{\link[sp]{SpatialPointsDataFrame}} object containing cells values corresponding to samples
 }
 \description{
-Get raster cell values at samples
+Uses \code{\link[raster]{extract}} to get values of a Raster object at samples
 }

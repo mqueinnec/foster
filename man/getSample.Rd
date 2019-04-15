@@ -4,28 +4,39 @@
 \alias{getSample}
 \title{Stratified random sampling}
 \usage{
-getSample(x, layers = seq(1, raster::nlayers(x), 1), n, mindist = 0,
-  nClasses = 5, ...)
+getSample(x, strata = 5, layers = names(x), norm = TRUE, n,
+  mindist = 0, maxIter = 30, xy = T, filename_cluster = "",
+  filename_samples = "", ...)
 }
 \arguments{
 \item{x}{A \code{Raster*} object used to generate random sample}
 
-\item{layers}{Vector containing the band numbers of \code{x} used in stratification. By default, all layers of x are used}
+\item{strata}{Number of strata. Default is 5.}
+
+\item{layers}{Vector indicating the bands of \code{x} used in stratification (as integer or names). By default, all layers of x are used.}
+
+\item{norm}{Logical. If TRUE (default), \code{x} is normalized before k-means clustering. This is useful if \code{layers} have different scales.}
 
 \item{n}{Sample size}
 
 \item{mindist}{Minimum distance between samples (in units of \code{x}). Default is 0.}
 
-\item{nClasses}{Number of strata. Default is 5.}
+\item{maxIter}{Numeric. This number is multiplied to the number of samples to select per strata. If the number of iterations to select samples exceeds maxIter x the number of samples to select then the loop will break and a warnign message returned. Default is 30.}
+
+\item{xy}{Logical indicating if X and Y coordinates of samples should be included in the fields of the returned \code{\link[sp]{SpatialPointsDataFrame}} object. Only relevant if \code{sp= TRUE}}
+
+\item{filename_cluster}{Character. Filename of the clustered \code{x} raster if saved to disk.}
+
+\item{filename_samples}{Character. Filename of the samples saved to disk as an ESRI Shapefile. It is not necessary to add extension.}
 
 \item{...}{Further arguments passed to \code{\link[RStoolbox]{unsuperClass}} or \code{\link[raster]{writeRaster}} to control the kmeans algorithm or writing parameters}
 }
 \value{
-A \code{SpatialPointsDataFrame} object containing sample locations
+A list with a \code{SpatialPointsDataFrame} object containing sample locations and the output of \code{\link[RSToolbox]{unsuperClass}}
 }
 \description{
-Generate a minimum distance stratified random sample
+Performs kmeans clustering to stratify \code{x} and randomnly sample within the strata until \code{n} samples are selected. The number of samples selected in each starta is proportional to the occurence of those strata in \code{x}.
 }
 \details{
-\code{x} is stratified using kmean clustering from \code{\link[RStoolbox]{unsuperClass}}. Default kmean clustering method is Hartigan-Wong algorithm. The algorithm might not converge and output "Quick Tansfer" warning. If this is the case, we suggest decreasing \code{nClasses}. Also, if \code{minDist} is too large, the algorithm might not be able to select enough sample per strata. In that case, the warning "Exeeded maximum number of runs for strata" is displayed.
+\code{x} is stratified using kmean clustering from \code{\link[RStoolbox]{unsuperClass}}. By default, clustering is performed on a random subset of \code{x} and run with multiple starting condigurations in order to find a convergent solution from the multiple starts. The parameters controling the number of random samples used to perform kmeans clustering and the number of starting configurations can be provided under the \code{...} argument. More information on the behaviour of the kmeans clustering can be found in \code{\link[RSToolbox]{unsuperClass}}. The default kmean clustering method is Hartigan-Wong algorithm. The algorithm might not converge and output "Quick Tansfer" warning. If this is the case, we suggest decreasing \code{strata}. Also, if \code{minDist} is too large, it might not be possbile to select enough samples per strata. In that case, the warning "Exeeded maximum number of runs for strata" is displayed.
 }

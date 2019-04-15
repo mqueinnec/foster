@@ -29,7 +29,7 @@ focalMultiBand(x, w, fun, filename = "", na.rm = TRUE, pad = FALSE,
 \item{...}{Additional arguments as for \code{\link[raster]{writeRaster}}}
 }
 \description{
-Apply a spatial filter to a RatsterLayer or all layers of a RatserStack or RasterBrick object. The mathematical operation applied within the neighbourhood can be done by using a function (\code{fun}) or by adjusting the weights of the matrix \code{w}.
+Apply a spatial filter to a RasterLayer or all layers of a RatserStack or RasterBrick object. The mathematical operation applied within the neighbourhood can be done by using a function (\code{fun}) or by adjusting the weights of the matrix \code{w}.
 }
 \details{
 If the Raster contains NA values, applying a function \code{fun} with \code{na.rm=TRUE} or adjusting the weights of \code{w} are not equivalent (in that case the result would be wrong). During filtering, NA cells of \code{x} can get a value assigned if \code{na.rm=T}. In order to keep these cells value to NA, the argument \code{keepNA=TRUE} can be used (default).
