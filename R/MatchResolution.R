@@ -1,6 +1,6 @@
 #'Match the resolution of two Raster objects
 #'
-#'Successsively projects and resamples a Raster coordinate system and spatial resolution to reference ones
+#'Successsively projects and resamples a Raster coordinate system and spatial resolution to the reference
 #'
 #'\code{x} and \code{ref} must have defined CRS (can be assigned using \code{\link[raster]{projection}}). If the CRS don't match, \code{x} is projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherits the extent of \code{ref}.
 #'
@@ -14,10 +14,10 @@
 #'@export
 
 matchResolution <- function(x,
-                               ref,
-                               method='bilinear',
-                               filename='',
-                               ...){
+                            ref,
+                            method='bilinear',
+                            filename='',
+                            ...){
 
 
   if(!class(x)[1] %in% c('RasterLayer','RasterBrick','RasterStack')){
@@ -29,11 +29,11 @@ matchResolution <- function(x,
   }
 
   #Check CRS
-  if(is.na(crs(x)) | is.na(crs(ref))){
+  if(is.na(raster::crs(x)) | is.na(raster::crs(ref))){
     stop("CRS of x or ref is not defined")
   }else if(!raster::compareCRS(crs(x),crs(ref))){
     warning("x and ref don't have the same CRS. x is projected to ref CRS before resampling")
-    x <- raster::projectRaster(x,crs=crs(ref))
+    x <- raster::projectRaster(x,crs=raster::crs(ref))
   }
 
   if(raster::extent(ref) > raster::extent(x)){
