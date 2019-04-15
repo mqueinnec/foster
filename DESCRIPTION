@@ -1,9 +1,10 @@
 Package: foster
 Type: Package
-Title: What the Package Does (Title Case)
+Title: FOrest Structure Extrapolation with R
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: c(
+  person("Martin","Queinnec",email="martin.queinnec@gmail.com",role=c("cre","aut")))
+Maintainer: Martin Queinnec <martin.queinnec@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
@@ -11,15 +12,18 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Imports: 
-    raster,
-    data.table,
-    reshape2,
-    dplyr,
-    stats,
-    wql,
-    RStoolbox,
-    graphics,
-    yaImpute
-Depends: 
-  data.table,
-  dplyr
+    data.table (>= 1.11.8),
+    raster (>= 2.8.4),
+    reshape2 (>= 1.4.3),
+    dplyr (>= 0.8.0.1),
+    stats (>= 3.5.1),
+    RStoolbox (>= 0.2.3),
+    graphics (>= 3.5.1),
+    yaImpute (>= 1.0.30),
+    sp (>= 1.3.1),
+    tools
+Suggests:
+    wql (>= 0.4.9),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
