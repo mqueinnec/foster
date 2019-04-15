@@ -1,24 +1,23 @@
 #'Remove cells in the neighbourhood of a boundary cell
 #'
-#'A boundary is considered as a cell having a \code{edgeVal}) value. If one of the cell in the neighborhood has a edgeVal value, then all the cells inside the neighborhood will be assigned a NA value.
+#'Assigns NA value to all cells having a NA values within their \code{wxw} neighbourhood.
 #'
 #'@param x A \code{Raster* object}
-#'@param w Numeric. Size of the window around each cell (must be an odd number). Window size around each cell.
-#'@param edgeVal value of cells that are on the outer side of edges
+#'@param w Numeric. Size of the window around each cell. Must be an odd number.
 #'@param filename Character (optional). If the output is written to disk, full path to location including filename
 #'@param ... Additional arguments as for \code{\link[raster]{writeRaster}}
 #'@export
 
 edges <- function(x,
-                        w,
-                        filename='',
-                        edgeVal = NA,
-                        ...) {
+                  w,
+                  filename='',
+                  ...) {
 
   if(w%%2==0) stop("w must be an odd number")
 
   filt <- matrix(0,nr=w,nc=w)
   filt[floor(w/2)+1,floor(w/2)+1] = 1
+
 
   if(class(x)[1] == 'RasterLayer'){
     out <- raster::focal(x=x,w=filt,na.rm=F,pad=F,NAonly=F,filename=filename,...)
@@ -37,13 +36,7 @@ edges <- function(x,
 
   names(out) <- names(x)
 
-
-
   return(out)
-
-
-
-
 }
 
 
