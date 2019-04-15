@@ -13,14 +13,14 @@
 
 
 findNN <- function(x,
-                        y,
-                        inTrain=NULL,
-                        inVal=NULL,
-                        k=1,
-                        method='randomForest',
-                        ntree=200,
-                        mtry=NULL
-){
+                   y,
+                  inTrain=NULL,
+                  inVal=NULL,
+                  k=1,
+                  method='randomForest',
+                  ntree=200,
+                  mtry=NULL,
+                  ...){
 
   if(length(k)>1) stop("More than one k value. Parameter tuning is not yet implemented")
 
@@ -30,7 +30,7 @@ findNN <- function(x,
     message("No training or validation set provided.")
     X.tr <- x
     Y.tr <- y
-    isVal <- TRUE
+    isVal <- FALSE
   }else if(is.null(inVal)){
     inVal <- setdiff(seq(1,dim(x)[1],1),inTrain)
   }else if(is.null(inTrain)){
@@ -45,13 +45,13 @@ findNN <- function(x,
     Y.val <- y[inVal,]
   }
 
-  yai.object <- yaImpute::yai(x=X.tr,y=Y.tr,method=method,k=k,mtry=mtry,ntree = ntree*ncol(y),bootstrap = FALSE)
+  yai.object <- yaImpute::yai(x=X.tr,y=Y.tr,method=method,k=k,mtry=mtry,ntree = ntree*ncol(y),bootstrap = FALSE,...)
 
   if(isVal){
     yai.newtrgs <- yaImpute::newtargets(yai.object,X.val)
 
     if (k==1){
-      Y.val.predicted <- yaImpute::impute(yai.newtrgs,method='closest',observed=FALSE)
+      Y.val.predicted <- yaImpute::impute(yai.newtrgs,method='closest',observed=T)
     }else{
       Y.val.predicted <- yaImpute::impute(yai.newtrgs,method='dstWeighted',observed=FALSE)
     }
@@ -70,7 +70,7 @@ findNN <- function(x,
   }
 
   out <- list(
-    kNN.model = yai.object,
+    model = yai.object,
     preds = preds,
     accuracy = accTable
   )
