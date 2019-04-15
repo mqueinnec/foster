@@ -1,6 +1,6 @@
 #'Apply a spatial filter to a Raster object
 #'
-#'Apply a spatial filter to a RatsterLayer or all layers of a RatserStack or RasterBrick object. The mathematical operation applied within the neighbourhood can be done by using a function (\code{fun}) or by adjusting the weights of the matrix \code{w}.
+#'Apply a spatial filter to a RasterLayer or all layers of a RatserStack or RasterBrick object. The mathematical operation applied within the neighbourhood can be done by using a function (\code{fun}) or by adjusting the weights of the matrix \code{w}.
 #'
 #'If the Raster contains NA values, applying a function \code{fun} with \code{na.rm=TRUE} or adjusting the weights of \code{w} are not equivalent (in that case the result would be wrong). During filtering, NA cells of \code{x} can get a value assigned if \code{na.rm=T}. In order to keep these cells value to NA, the argument \code{keepNA=TRUE} can be used (default).
 #'
@@ -57,16 +57,13 @@ focalMultiBand <- function(x,
 
   #Write to file if filename provided
   if(filename != ''){
-    writeRaster(out,filename = filename, ...)
+    names(out) <- names(x)
+    out <- writeRaster(out,filename = filename, ...)
   }
 
   names(out) <- names(x)
 
   return(out)
-
-
-
-
 }
 
 
