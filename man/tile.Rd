@@ -9,16 +9,23 @@ tile(x, nx, ny, filename = "", suffix = NULL, ...)
 \arguments{
 \item{x}{Raster object to split}
 
-\item{nx}{Number of goizontal cells}
+\item{nx}{Number of horizontal cells in the splitting grid}
 
-\item{ny}{Number of vertical cells}
+\item{ny}{Number of vertical cells in the splitting grid}
 
-\item{filename}{Output filename}
+\item{filename}{Character (optional). Output filename including path to
+directory and eventually extension}
 
-\item{suffix}{Character appended to filename to differentiate tiles (must have length nx x ny). If left NULL, tiles will be numbered by columns and rows}
+\item{suffix}{Character appended to filename to differentiate tiles
+(must have length nx x ny). If left NULL, tiles will be numbered by columns
+and rows}
 
 \item{...}{Additional parameters passed to \code{\link[raster]{writeRaster}}}
 }
 \description{
-This function is used to break up a raster into smaller tiles. The raster is splitted in a grid pattern with nx columns and ny rows.
+This function is used to split a raster into smaller tiles. The raster is
+split in a grid pattern with nx columns and ny rows.
+}
+\seealso{
+\code{\link[raster]{crop}}
 }

@@ -2,24 +2,27 @@
 % Please edit documentation in R/getSampleValues.R
 \name{getSampleValues}
 \alias{getSampleValues}
-\title{Get raster cell values at samples}
+\title{Get raster cell values at sample points}
 \usage{
 getSampleValues(x, s, append = FALSE, filename = "", ...)
 }
 \arguments{
 \item{x}{A raster layer}
 
-\item{s}{Locations of the samples. Object of class \code{SpatialPointsDataFrame}, usually generated with \code{\link[foster]{getSample}}}
+\item{s}{Location of the sample points. Object of class \code{SpatialPointsDataFrame}, usually generated with \code{\link[foster]{getSample}}}
 
 \item{append}{Should the values be appended to s? Default is FALSE}
 
-\item{filename}{Character. Ouput filename (without extension)}
+\item{filename}{Character. Output filename including path to directory. File will be automatically saved as an ESRI Shapefile and any extension in \code{filename} will be overwritten}
 
 \item{...}{Additional arguments passed to \code{\link[rgdal]{writeOGR}}}
 }
 \value{
-A \code{\link[sp]{SpatialPointsDataFrame}} object containing cells values corresponding to samples
+A \code{\link[sp]{SpatialPoints}} object containing cells values corresponding to samples
 }
 \description{
-Uses \code{\link[raster]{extract}} to get values of a Raster object at samples
+Given a raster layer and a SpatialPointsDataFrame object, the functions returns a SpatialPointsDataFrame objects with the values of the raster at sample points.
+}
+\seealso{
+\code{\link[raster]{extract}}
 }

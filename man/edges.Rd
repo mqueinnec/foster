@@ -2,7 +2,7 @@
 % Please edit documentation in R/edges.R
 \name{edges}
 \alias{edges}
-\title{Remove cells in the neighbourhood of a boundary cell}
+\title{Remove cells in the neighorhood of a boundary cell}
 \usage{
 edges(x, w, filename = "", ...)
 }
@@ -11,10 +11,15 @@ edges(x, w, filename = "", ...)
 
 \item{w}{Numeric. Size of the window around each cell. Must be an odd number.}
 
-\item{filename}{Character (optional). If the output is written to disk, full path to location including filename}
+\item{filename}{Character (optional). Output filename including path to
+directory and eventually extension}
 
-\item{...}{Additional arguments as for \code{\link[raster]{writeRaster}}}
+\item{...}{Additional arguments passed to \code{\link[raster]{writeRaster}}}
 }
 \description{
-Assigns NA value to all cells having a NA values within their \code{wxw} neighbourhood.
+Assigns NA value to all cells having a NA values within their \code{w x w}
+neighorhood.
+}
+\seealso{
+\code{\link[raster]{focal}}
 }

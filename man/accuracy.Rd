@@ -2,7 +2,7 @@
 % Please edit documentation in R/accuracy.R
 \name{accuracy}
 \alias{accuracy}
-\title{Calculate bias, RMSE, corelation etc of two vectors.}
+\title{Calculate accuracy metrics of two vectors}
 \usage{
 accuracy(reference, estimate, by = NULL, noinfo = TRUE,
   dist.normal = TRUE, short = FALSE)
@@ -16,7 +16,7 @@ accuracy(reference, estimate, by = NULL, noinfo = TRUE,
 
 \item{noinfo}{Logical. Should the additional information on the calculations be displayed?}
 
-\item{dist.normal}{Logical. Is the distribution normal? If TRUE t-test and Pearson correlation is calculated. If FALSE, Wilcoxon paired test and Spearman corelation is calculated.}
+\item{dist.normal}{Logical. Is the distribution normal? If TRUE t-test and Pearson correlation is calculated. If FALSE, Wilcoxon paired test and Spearman correlation is calculated.}
 
 \item{short}{Logical. Calculate only a subset of summary statistics.}
 }
@@ -24,8 +24,8 @@ accuracy(reference, estimate, by = NULL, noinfo = TRUE,
 summary statistics of the differences between \code{reference} and \code{estimate}.
 }
 \description{
-Calculates: corelation coeficient,
- bias (absolute and relative), RMSE (absolute and relative), and performes statistical test to check if the differences between \code{reference} and \code{estimate} are significant.
- Correlation coefficient as well as statistical test depend on the \code{dist.normal} value.
- Optionally statistics can be calculated for groups of data, specified with the \code{by} parameter.
+This is a direct call to \code{\link[scatter]{calc.error}}. Calculate bias, RMSE, correlation etc of two vectors.
+}
+\references{
+\url{https://github.com/ptompalski/scatter}
 }

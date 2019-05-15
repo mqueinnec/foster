@@ -2,30 +2,40 @@
 % Please edit documentation in R/predictTrgs.R
 \name{predictTrgs}
 \alias{predictTrgs}
-\title{Returns Y values at targets}
+\title{Return Y values at targets}
 \usage{
-predictTrgs(model = NULL, x = NULL, filename = "", no_cores = 1,
-  nrows = 1, ...)
+predictTrgs(model = NULL, x = NULL, nrows = 1, nnID = TRUE,
+  filename = "", par = F, threads = 2, progress = TRUE, ...)
 }
 \arguments{
-\item{model}{A model trained at reference locations, ususally created from \code{modelFoster}}
+\item{model}{\code{yai} object. A model trained at reference locations, usually created from \code{\link[foster]{findNN}}}
 
-\item{x}{Predictors (X) values at targets}
-
-\item{filename}{Character. Path to file written to disk (may include the extension)}
+\item{x}{Raster object where each layer corresponds to a predictor variable calculated at targets}
 
 \item{nrows}{number of rows processed at a time. Default is 1.}
 
+\item{nnID}{Logical. Should the ID of each target's nearest neighbor used for imputation be returned?}
+
+\item{filename}{Character (optional). Output filename including path to
+directory and eventually extension}
+
 \item{par}{Logical. Should imputation be performed on parallel threads?}
 
-\item{n.cores}{Integer. Number of parallel threads (relevant only if par=TRUE)}
+\item{threads}{Integer. Number of parallel threads (relevant only if par=TRUE)}
+
+\item{progress}{Logical. If TRUE (default) a progress bar is displayed.}
+
+\item{...}{Other arguments passed to \code{\link[raster]{writeRaster}}}
 }
 \value{
-predicted Y variables at targets
+A RasterStack object where the first layers correspond to the imputed response variables and the remaining layers to the nearest neighbor ID (if \code{nnID = TRUE})
 }
 \description{
-Finds the k-NN of targets and impute response variables
+This function finds the k-NN of target observations and imputes response variables. \code{X} is a raster object where each layer correspond to one of the predictor variable used to train the k-NN model \code{model}.
 }
 \details{
-By default, the data is processed row by row to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, processing data row by row slows down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process multiple rows at the same time and considerably reduce processign times.
+By default, the data is processed row by row to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, processing data row by row slows down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process multiple rows at the same time and considerably reduce processing times.
+}
+\seealso{
+\code{\link[yaImpute]{newtargets}}, \code{\link[yaImpute]{impute.yai}}
 }

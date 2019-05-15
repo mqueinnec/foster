@@ -4,13 +4,30 @@
 \alias{varImp}
 \title{Returns variable importance}
 \usage{
-varImp(model, scaled = TRUE)
+varImp(model, scaled = TRUE, plot = TRUE, plotType = "boxplot")
 }
 \arguments{
 \item{model}{A yai object}
 
-\item{scaled}{Should impotance values be centered and scaled}
+\item{scaled}{Logical. Should importance values be centered and scaled?}
+
+\item{plot}{Logical. If TRUE, returns a ggplot2 object based on plotType value}
+
+\item{plotType}{Either of "boxplot" or "grid"}
+}
+\value{
+A list containing the following objects:
+   \describe{
+       \item{\code{importance}}{A data.frame object containing the importance of each response variable and the mean importance of all variables combined}
+       \item{\code{plot}}{A ggplot object showing a plot of the importance values according to plotType}
+   }
 }
 \description{
-When RF is used to find nearest neighbours, the importance of each variable in the RF trees is calculated
+When RF is used to find nearest neighbors, the importance of each variable in the RF trees is calculated. This function returns the importance of each variable and a \code{ggplot2} object
+}
+\details{
+If \code{scaled = TRUE}, importance values are centered by subtracting their mean and scaled by dividing the centered importance by their standard deviation.
+}
+\seealso{
+\code{\link[randomForest]{importance}}, \code{\link[yaImpute]{yaiVarImp}}
 }

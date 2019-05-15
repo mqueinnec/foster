@@ -8,14 +8,15 @@ calcIndices(x, indices = "NDVI", sat = NULL, blue = NULL,
   green = NULL, red = NULL, nir = NULL, swir1 = NULL,
   swir2 = NULL, swir3 = NULL, coefs = list(L = 0.5, G = 2.5, L_evi =
   1, C1 = 6, C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc = NULL),
-  filename = "", par = F, no_cores = 2, m = 2, ...)
+  filename = "", par = F, threads = 2, m = 2, progress = TRUE,
+  ...)
 }
 \arguments{
-\item{x}{Composite raster composed of the spectral bands used to calculate the indices. X can be a path to raster or RasterBrick object}
+\item{x}{Raster or spatialPointsDataFrame object composed of the multispectral bands used to calculate the indices}
 
-\item{indices}{Character vector indicating Which indices are calculated. Tasseled Cap indices are abbrviated as \code{TCB}, \code{TCW}, \code{TCG}, \code{TCA}, \code{TCD}. FOr a list of other indicess see \code{\link[RStoolbox]{spectralIndices}}}
+\item{indices}{Character vector indicating Which indices are calculated. Tasseled Cap indices are abbreviated as \code{TCB}, \code{TCW}, \code{TCG}, \code{TCA}, \code{TCD}. For a list of other supported indices see \code{\link[RStoolbox]{spectralIndices}}}
 
-\item{sat}{Character. Sensor; one of: c("Landsat4TM", "Landsat5TM", "Landsat7ETM", "Landsat8OLI", "MODIS", "QuickBird", "Spot5", "RapidEye").}
+\item{sat}{Character. If calculating tasseled cap indices, name of the sensor needs to be provided. One of: c("Landsat4TM", "Landsat5TM", "Landsat7ETM", "Landsat8OLI", "MODIS", "QuickBird", "Spot5", "RapidEye").}
 
 \item{blue}{Integer. Blue band.}
 
@@ -31,21 +32,30 @@ calcIndices(x, indices = "NDVI", sat = NULL, blue = NULL,
 
 \item{swir3}{Integer. Shortwave infrared band (2000-2500 nm)}
 
-\item{coefs}{Coefficients used to calculate spectral indices}
+\item{coefs}{Coefficients necessary to calculate some of the spectral indices (e.g. EVI)}
 
-\item{filename}{character. Optional output filename. If no filename is provided, the output is written to disk only if they cannot be stored in memory}
+\item{filename}{Character. Output filename including path to directory and eventually extension}
 
-\item{par}{Logical. Should the function be executed in parallel threads}
+\item{par}{Logical. Should the function be executed on parallel threads}
 
-\item{no_cores}{Numbre of threads used if par = T}
+\item{threads}{Number of parallel threads used if par = TRUE}
 
-\item{m}{Scaling parameter}
+\item{m}{tuning parameter to determine how many blocks will be used (m blocks will be processed by each cluster)}
 
-\item{...}{Further arguments passed to \code{\link[raster]{writeRaster}}}
+\item{progress}{Logical. If TRUE (default) a progress bar is displayed when using parallel processing.}
+
+\item{...}{Other arguments passed to \code{\link[raster]{writeRaster}}}
 }
 \value{
 A Raster object with spectral indices
 }
 \description{
-Calculates spectral indices from multibands spectral images
+Calculates spectral indices (e.g. NDVI, tasseled cap coefficients etc.) from multispectral images. Calculations are based on the functions \code{\link[RStoolbox]{spectralIndices}} and \code{\link[RStoolbox]{tasseledCap}}. Refer to the documentation of these functions for more details.
+}
+\details{
+If x is a raster, each layer should be one of the spectral bands used to calculate the indices. If x is a spatialPointsDataFrame, each column should be a spectral band. When calculating tasseledCap indices, bands should be provided in a specific order specified in \code{\link[RStoolbox]{tasseledCap}}.
+When using parallel processing, you can control how many blocks will be processed by each cluster by setting \code{m}.
+}
+\seealso{
+\code{\link[RStoolbox]{spectralIndices}}, \code{\link[RStoolbox]{tasseledCap}}, \code{\link[raster]{cluster}}
 }

@@ -1,248 +1,93 @@
-#'Train a kNN (or regression model) from reponse variables (Y) and predictors (X) at reference location
+#' Train a k-NN model
 #'
-#'@param x A matrix or dataframe of predictors variables X for reference observations.Row names of X are identification of observations. X cannot contain missing values
-#'@param y A matrix or dataframe of response variables Y for the reference observations. Row names of Y are identification of reference observations
-#'@param inTrain Optional numeric vector indicating which rows of x and y go to training.
-#'@param inVal Optional numeric vector indicating which rows of x and y go to training. If left empy, all row that are not in inTrain are used for validation
-#'@param k Integer. Number of nearest neighbors
-#'@param method Character. Which nearness netrics is used to computed the nearest neighbors. Default is \code{"randomForest"}. Other methods are listed in \code{\link[yaImpute]{yai}}
-#'@param ntree Number of classification or regression trees drawn for each response variable. Default is 200
-#'@param mtry Number of X varaibles picked randomly to split each node. Default is sqrt(number of X variables)
-#'@return predicted Y variables at targets
-#'@export
+#' This function trains a k-NN model from response variables (Y) and predictors (X) at reference location using the package yaImpute (see \code{\link[yaImpute]{yai}}). Optionally, training and testing sets can be provided to return the accuracy of the trained k-NN model.
+#'
+#' If inTest = NULL, all rows that are not in inTrain will be used for model testing. If inTrain = NULL, all rows that are not in inTest will be used for model training. If both inTrain and inTest are NULL, all rows of x and y will be used for training and no testing is performed.
+#'
+#' @param x A matrix or dataframe of predictors variables X for reference observations.Row names of X are used as identification of reference observations.
+#' @param y A matrix or dataframe of response variables Y for the reference observations. Row names of Y are used as identification of reference observations.
+#' @param inTrain Optional numeric vector indicating which rows of x and y go to training.
+#' @param inTest Optional numeric vector indicating which rows of x and y go to training. If left NULL, all row that are not in inTrain are used for validation
+#' @param k Integer. Number of nearest neighbors
+#' @param method Character. Which nearness metrics is used to computed the nearest neighbors. Default is \code{"randomForest"}. Other methods are listed in \code{\link[yaImpute]{yai}}
+#' @param ntree Number of classification or regression trees drawn for each response variable. Default is 200
+#' @param mtry Number of X variables picked randomly to split each node. Default is sqrt(number of X variables)
+#' @param ... Other arguments passed to \code{\link[raster]{writeRaster}}
+#'
+#' @seealso \code{\link[yaImpute]{yai}}, \code{\link[yaImpute]{newtargets}}, \code{\link[yaImpute]{impute.yai}}, \code{\link[foster]{accuracy}}
+#'
+#' @return A list containing the following objects:
+#'    \describe{
+#'    \item{\code{model}}{A \code{yai} object, the trained k-NN model}
+#'    \item{\code{preds}}{A data.frame with observed and predicted values of the testing set for each response variables}
+#'    \item{\code{accuracy}}{A data.frame with accuracy metrics of the trained k-NN model}
+#'    }
+#' @export
 
 
 findNN <- function(x,
                    y,
-                  inTrain=NULL,
-                  inVal=NULL,
-                  k=1,
-                  method='randomForest',
-                  ntree=200,
-                  mtry=NULL,
-                  ...){
+                   inTrain = NULL,
+                   inTest = NULL,
+                   k = 1,
+                   method = "randomForest",
+                   ntree = 200,
+                   mtry = NULL,
+                   ...) {
+  if (length(k) > 1) stop("Support pny a single value of k")
+  if (dim(x)[1] != dim(y)[1]) stop("x an y must have the same number of rows")
 
-  if(length(k)>1) stop("More than one k value. Parameter tuning is not yet implemented")
 
-  isVal <- TRUE #Do we perform validation
+  isTest <- TRUE # Do we perform validation
 
-  if(is.null(inTrain) & is.null(inVal)) {
+  if (is.null(inTrain) & is.null(inTest)) {
     message("No training or validation set provided.")
-    X.tr <- x
-    Y.tr <- y
-    isVal <- FALSE
-  }else if(is.null(inVal)){
-    inVal <- setdiff(seq(1,dim(x)[1],1),inTrain)
-  }else if(is.null(inTrain)){
-    inTrain <- setdiff(seq(1,dim(x)[1],1),inVal)
+    X_tr <- x
+    Y_tr <- y
+    isTest <- FALSE
+  } else if (is.null(inTest)) {
+    inTest <- setdiff(seq(1, dim(x)[1], 1), inTrain)
+  } else if (is.null(inTrain)) {
+    inTrain <- setdiff(seq(1, dim(x)[1], 1), inTest)
   }
 
-  X.tr <- x[inTrain,]
-  Y.tr <- y[inTrain,]
+  X_tr <- x[inTrain, ]
+  Y_tr <- y[inTrain, ]
 
-  if(isVal){
-    X.val <- x[inVal,]
-    Y.val <- y[inVal,]
+  if (isTest) {
+    X_val <- x[inTest, ]
+    Y_val <- y[inTest, ]
   }
 
-  yai.object <- yaImpute::yai(x=X.tr,y=Y.tr,method=method,k=k,mtry=mtry,ntree = ntree*ncol(y),bootstrap = FALSE,...)
+  yai_object <- yaImpute::yai(x = X_tr, y = Y_tr, method = method, k = k,
+                  mtry = mtry, ntree = ntree * ncol(y), bootstrap = FALSE, ...)
 
-  if(isVal){
-    yai.newtrgs <- yaImpute::newtargets(yai.object,X.val)
+  if (isTest) {
+    yai_newtrgs <- yaImpute::newtargets(yai_object, X_val)
 
-    if (k==1){
-      Y.val.predicted <- yaImpute::impute(yai.newtrgs,method='closest',observed=T)
-    }else{
-      Y.val.predicted <- yaImpute::impute(yai.newtrgs,method='dstWeighted',observed=FALSE)
+    if (k == 1) {
+      Y_val_predicted <- yaImpute::impute(yai_newtrgs, method = "closest",
+                                          observed = T)
+    } else {
+      Y_val_predicted <- yaImpute::impute(yai_newtrgs, method = "dstWeighted",
+                                          observed = FALSE)
     }
-    Y.val.predicted <- Y.val.predicted[,colnames(Y.tr)]
-    Y.val.predicted <- data.frame(ID=rownames(Y.val.predicted),Y.val.predicted)
-    Y.val <- data.frame(ID=rownames(Y.val),Y.val)
-    Y.pred <- reshape2::melt(Y.val.predicted,measure.vars=colnames(Y.tr),value.name='preds')
-    Y.val <- reshape2::melt(Y.val,measure.vars=colnames(Y.tr),value.name="obs")
+    Y_val_predicted <- Y_val_predicted[, colnames(Y_tr)]
+    Y_val_predicted <- data.frame(ID = rownames(Y_val_predicted), Y_val_predicted)
+    Y_val <- data.frame(ID = rownames(Y_val), Y_val)
+    Y_pred <- reshape2::melt(Y_val_predicted, measure_vars = colnames(Y_tr),
+                             value.name = "preds", id.vars = "ID")
+    Y_val <- reshape2::melt(Y_val, measure.vars = colnames(Y_tr),
+                            value.name = "obs", id.vars = "ID")
 
-    preds <- merge(Y.val,Y.pred,by=c('ID','variable'))
+    preds <- merge(Y_val, Y_pred, by = c("ID", "variable"))
 
-    accTable <- foster::accuracyFoster(reference=preds$obs,estimate = preds$preds,by=preds$variable)
-
-  }else{
-    preds = NULL
+  } else {
+    preds <- NULL
   }
 
   out <- list(
-    model = yai.object,
-    preds = preds,
-    accuracy = accTable
+    model = yai_object,
+    preds = preds
   )
 }
-
-
-
-
-
-
-
-
-
-
-#   #Check inputs, NAs in x and y etc...
-#   #I expect this function to return a trained model, not perfom imputation.
-#   #The inputs should only be at reference location, not targets
-#
-#   theStats = NULL
-#
-# if(cv=="holdout"){
-#   if(is.na(fracTrain)|is.null(fracTrain)|!is.numeric(fracTrain)) stop("Not valid fracTrain")
-#   if(fracTrain>1 | fracTrain < 0) stop("fracTrain needs to be between 0 and 1")
-#   trainIndex <- sample(rownames(x),round(fracTrain*nrow(x)))
-#   validIndex <- setdiff(rownames(x),trainIndex)
-#
-#   X.tr <- x[trainIndex,]
-#   Y.tr <- y[trainIndex,]
-#
-#   X.val <- x[validIndex,]
-#   Y.val <- y[validIndex,]
-#
-#   if(method=='kNN'){
-#     #Train the kNN model
-#     yai.object <- yaImpute::yai(x=X.tr,y=Y.tr,method=type,k=k,mtry=mtry,ntree = ntree*ncol(y),bootstrap = FALSE)
-#     #Find k-NN of validation
-#     newtargets.output <- yaImpute::newtargets(yai.object,X.val)
-#     if (k==1){
-#       Y.val.predicted <- yaImpute::impute(newtargets.output,method='closest',observed=FALSE)
-#     }else{
-#       Y.val.predicted <- yaImpute::impute(newtargets.output,method='dstWeighted',observed=FALSE)
-#     }
-#     Y.val.predicted <- Y.val.predicted[,colnames(Y.tr)]
-#
-#     model_cv <- yai.object
-#     #Get accuracy
-#     obs <- melt(Y.val,measure.vars=colnames(y))
-#     preds <- melt(Y.val.predicted,measure.vars=colnames(y))
-#     theStats <- accuracyFoster(obs$value,preds$value,by=obs$variable)
-#
-#     cv_summary <- list(val.fit = data.frame(var=obs$variable,val.obs=obs$value,val.preds=preds$value),trainIndex=trainIndex,validIndex=validIndex)
-#   }else{
-#     stop("Currently only kNN is implemented")
-#   }
-#
-# }else if(cv=="loocv"){
-#   #Will store each the predictions of each loop (1 prediction per loop)
-#   Y.val.predicted = NULL
-#
-#   for(i in 1:nrow(x)){
-#     if(i%%10 == 0) print(sprintf("%d%%",round(i/nrow(x)*100)))
-#     trainIndex <- rownames(x[-i,])
-#     validIndex <- rownames(x[i,])
-#
-#     X.tr <- x[trainIndex,]
-#     Y.tr <- y[trainIndex,]
-#
-#     X.val <- x[validIndex,]
-#     Y.val <- y[validIndex,]
-#
-#     if(method=='kNN'){
-#       #Train the kNN model
-#       yai.object <- yaImpute::yai(x=X.tr,y=Y.tr,method=type,k=k,mtry=mtry,ntree = ntree*ncol(y),bootstrap = FALSE)
-#       #Find k-NN of validation
-#       newtargets.output <- yaImpute::newtargets(yai.object,X.val)
-#       if (k==1){
-#         Y.val.predicted_temp <- yaImpute::impute(newtargets.output,method='closest',observed=FALSE)
-#       }else{
-#         Y.val.predicted_temp <- yaImpute::impute(newtargets.output,method='dstWeighted',observed=FALSE)
-#       }
-#       Y.val.predicted <- rbind(Y.val.predicted,Y.val.predicted_temp[,colnames(Y.tr)])
-#     }
-#
-#   }
-#
-#   model_cv <- yai.object
-#
-#   obs <- melt(Y.val,measure.vars=colnames(y))
-#   preds <- melt(Y.val.predicted,measure.vars=colnames(y))
-#   theStats <- accuracyFoster(obs$value,preds$value,by=obs$variable)
-#
-# }else if(cv=="kfold"){
-#
-#   if(is.na(folds)|is.null(folds)|!is.numeric(folds)|!(folds%%1 == 0)) stop("Need to provide a valid number of folds for k-fold CV")
-#   #Will store each the predictions of each loop (1 prediction per loop)
-#
-#   #Calculate the size of each fold
-#   foldIndex <- seq(1,folds,1)
-#   nFolds <- rep(floor(nrow(x)/folds),folds)
-#   addObs <- nrow(x) - sum(nFolds)
-#   #Randomly add obsevrations to match # observations (floor is used above)
-#   if(addObs != 0) {
-#     for (i in 1:addObs){
-#       n <- sample(foldIndex,1)
-#       nFolds[n] <- nFolds[n]+1
-#     }
-#   }
-#
-#    trainIndex =NULL
-#    validIndex = NULL
-#    candidates <- rownames(x)
-#
-#    Y.val.predicted = NULL
-#    theStats = NULL
-#    model_cv = NULL
-#    cv_summary = NULL
-#   for(i in 1:folds){
-#     print(sprintf("Doing fold %d",i))
-#
-#     #fold[i] is the validation sample, rest is training
-#     validIndex[[i]] <- sample(candidates,nFolds[i],replace=FALSE)
-#     trainIndex[[i]] <- setdiff(rownames(x),validIndex[[i]])
-#
-#     #Remove row that are already in a fold
-#     candidates <- setdiff(candidates,unlist(validIndex))
-#
-#     X.tr <- x[trainIndex[[i]],]
-#     Y.tr <- y[trainIndex[[i]],]
-#
-#     X.val <- x[validIndex[[i]],]
-#     Y.val <- y[validIndex[[i]],]
-#
-#     if(method=='kNN'){
-#       #Train the kNN model
-#       yai.object <- yaImpute::yai(x=X.tr,y=Y.tr,method=type,k=k,mtry=mtry,ntree = ntree*ncol(y),bootstrap = FALSE)
-#       #Find k-NN of validation
-#       newtargets.output <- yaImpute::newtargets(yai.object,X.val)
-#       if (k==1){
-#         Y.val.predicted <- yaImpute::impute(newtargets.output,method='closest',observed=FALSE)
-#       }else{
-#         Y.val.predicted<- yaImpute::impute(newtargets.output,method='dstWeighted',observed=FALSE)
-#       }
-#       Y.val.predicted <- Y.val.predicted[,colnames(Y.tr)]
-#       Y.val.predicted <- Y.val.predicted[rownames(Y.val),]
-#       obs[[i]] <- melt(Y.val,measure.vars=colnames(y))
-#       preds[[i]] <- melt(Y.val.predicted,measure.vars=colnames(y))
-#       theStats_kfold <- accuracyFoster(obs$value,preds$value,by=obs$variable)
-#
-#       theStats <- rbind(theStats,data.frame(fold=i,theStats_kfold))
-#       model_cv[[i]] <- yai.object
-#
-#       cv_summary[[i]] <- list(Fold=i,val.fit = data.frame(val.obs=obs,val.preds=preds),trainIndex=trainIndex,validIndex=validIndex)
-#     }
-#   }
-#    theStats <- dplyr::arrange(theStats,factor)
-#
-#
-# }
-#
-#   if(cv=='none'|finalModel=='All'){
-#     #Train the final model on the entire dataset
-#     X.tr <- x
-#     Y.tr <- y
-#
-#     if (method=='kNN'){
-#       yai.object <- yaImpute::yai(x=x,y=y,method=type,k=k,mtry=mtry,ntre=ntree*ncol(y),bootstrap=FALSE)
-#     }
-#     model_cv <- yai.object
-#   }
-#
-#   model.final <- model_cv
-#   #Return the kNN or regression model and stats associated to the cross validation
-#   return(list(model=model.final,crossValidationType=cv,accuracy = theStats,cv_summary=cv_summary))
-
-

@@ -1,13 +1,17 @@
 Package: foster
 Type: Package
 Title: FOrest Structure Extrapolation with R
-Version: 0.1.0
+Version: 0.0.0.9000
 Authors@R: c(
   person("Martin","Queinnec",email="martin.queinnec@gmail.com",role=c("cre","aut")))
 Maintainer: Martin Queinnec <martin.queinnec@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: This package contains function that can be used to extrapolate sparse 
+  forest attribute data on larger scale using a k-NN imputation approach. FOSTER allows to perform the following tasks: 
+  data preprocessing (Resampling, cropping, masking, smoothing raster datasets), 
+  calculating spectral indices and summarize time-series of variables to be used as predictors, 
+  selecting training and testing samples using a stratified random selection approach,
+  training a k-NN model and assess its accuracy, 
+  imputing response variables simultaneously on a large scale using the trained k-NN model. 
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
@@ -21,9 +25,19 @@ Imports:
     graphics (>= 3.5.1),
     yaImpute (>= 1.0.30),
     sp (>= 1.3.1),
-    tools
+    tools (>= 3.5.1),
+    ggplot2 (>= 3.0.0),
+    spatstat (>= 1.57.1),
+    randomForest (>= 4.6.14),
+    caret (>= 6.0.80),
+    rgdal (>= 1.3.4),
+    snow (>= 0.4.3),
+    scatter,
+    wql (>= 0.4.9)
 Suggests:
-    wql (>= 0.4.9),
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Remotes: github::ptompalski/scatter
+License: GPL-2
+Depends: R (>= 3.5)
