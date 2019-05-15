@@ -10,14 +10,14 @@ FOSTER allows to perform the following tasks:
 * Train a k-NN model and assess its accuracy 
 * Impute response variables simultaneously on a large scale using the trained k-NN model 
 
-##Installation 
+## Installation 
 ```
 install.packages("devtools")
 devtools::install_github("mqueinnec/foster")
 library(foster)
 ```
 
-##Vignette
+## Vignette
 We advise reading through the vignette to get familiar with FOSTER. It contains a short description of the package and a step-by-step example to illustrate the framework around which it has been designed. 
 
 By default, the vignette is not built when installing the package. In order to access the vignette there are two solutions: 
