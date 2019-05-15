@@ -1,10 +1,0 @@
-[0m[0KMicrosoft Windows [Version 10.0.17134.471][0K[?25l
-(c) 2018 Microsoft Corporation. All rights reserved.[0K
-[0K
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25hm[0K[32G[?25lE:\Foster\foster>git commit -m U[0K[?25hp[0Kd[0Ka[0Kt[0Ke[0K[39G[?25lE:\Foster\foster>git commit -m Update A[0K[?25hl[0Kl[0K[43G[?25lE:\Foster\foster>git commit -m Update All -[0K[?25ha[0K[46G[?25l
-[0K[?25h]0;  - git  commit -m Update All -a fatal: Paths with -a does not make sense.[0K[?25l
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hgit commit -m Update All -a[0K[46G[45G[?25lE:\Foster\foster>git commit -m Update All -[0K[?25h[?25lE:\Foster\foster>git commit -m Update All[0K[43G[?25h[42G[40G[39G[38G[37G[36G[35G[34G[33G[32G[31G[30G[29G[28G[27G[28G[29G[?25lE:\Foster\foster>git commit --m Update All[0K[30G[?25h[?25lE:\Foster\foster>git commit -a-m Update All[0K[31G[?25h[?25lE:\Foster\foster>git commit -a -m Update All[0K[32G[?25h]0;  - git  commit -a -m Update All [?25l
-[0K[?25hfatal: Paths with -a does not make sense.[0K[?25l
-[0K[?25h]0; [?25l
-E:\Foster\foster>[0K[?25hg[0Ki[0Kt[0K[22G[?25lE:\Foster\foster>git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[29G[?25lE:\Foster\foster>git commit -[0K[?25ha[0K[32G[?25lE:\Foster\foster>git commit -a -[0K[?25hm[0K[35G[?25lE:\Foster\foster>git commit -a -m "[0K[?25hU[0Kp[0Kd[0Ka[0Kt[0Ke[0K[43G[?25lE:\Foster\foster>git commit -a -m "Update A[0K[?25hl[0Kl[0K'[0K[?25lE:\Foster\foster>git commit -a -m "Update All[0K[?25h"[0K
