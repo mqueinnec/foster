@@ -37,7 +37,7 @@
 #' @return A list with the following objects:
 #'    \describe{
 #'        \item{\code{samples}}{A \code{\link[sp]{SpatialPoints}} object containing sample points}
-#'        \item{\code{cluster}}{The clustered \code{x} raster, output of \code{\link[RSToolbox]{unsuperClass}}}
+#'        \item{\code{cluster}}{The clustered \code{x} raster, output of \code{\link[RStoolbox]{unsuperClass}}}
 #'    }
 #'
 #' @seealso \code{\link[RStoolbox]{unsuperClass}}
