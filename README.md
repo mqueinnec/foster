@@ -23,5 +23,5 @@ We advise reading through the vignette to get familiar with FOSTER. It contains 
 By default, the vignette is not built when installing the package. In order to access the vignette there are two solutions: 
 
 * Force building vignettes using ```devtools::install_github("mqueinnec/foster", build_vignettes = TRUE)```. Note that the package might take a few minutes to install since the vignette needs to be created by R. The vignette can then be accessed with ```browseVignette("foster")```. 
-* The vignette already built is also located in the doc folder of this repository. However, it won't be built when installing the package and therefore ```browseVignette("foster")``` will indicate that the vignette doesn't exist. 
+* You can aslo directly download the html vignette located in the doc folder of this repository. However, it won't be built when installing the package and therefore ```browseVignette("foster")``` will indicate that the vignette doesn't exist. 
 
