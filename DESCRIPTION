@@ -1,7 +1,7 @@
 Package: foster
 Type: Package
 Title: FOrest Structure Extrapolation with R
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
   person("Martin","Queinnec",email="martin.queinnec@gmail.com",role=c("cre","aut")))
 Maintainer: Martin Queinnec <martin.queinnec@gmail.com>
