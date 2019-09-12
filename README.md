@@ -1,6 +1,6 @@
 foster: Forest Structure Extrapolation with R
 ======================================================================================================
-<img src="https://raw.githubusercontent.com/samherniman/foster/master/man/figures/thick_border-equal_flight-lower.png" align="right"/>
+<img src="https://raw.githubusercontent.com/samherniman/foster/master/man/figures/thick_border-equal_flight-lower.png" align="right" width="200"/>
 
 This package contains functions that can be used to extrapolate sparse forest attribute data on larger scale using a k-NN imputation approach. 
 
