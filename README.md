@@ -1,4 +1,6 @@
-# foster: Forest Structure Extrapolation with R
+foster: Forest Structure Extrapolation with R
+======================================================================================================
+<img src="https://raw.githubusercontent.com/samherniman/foster/master/man/figures/thick_border-equal_flight-lower.png" align="right"/>
 
 This package contains functions that can be used to extrapolate sparse forest attribute data on larger scale using a k-NN imputation approach. 
 
@@ -12,8 +14,8 @@ FOSTER allows to perform the following tasks:
 
 ## Installation 
 ```
-install.packages("devtools")
-devtools::install_github("mqueinnec/foster")
+install.packages("remotes")
+remotes::install_github("mqueinnec/foster")
 library(foster)
 ```
 
