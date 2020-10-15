@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<metadata xml:lang="en"><Esri><CreaDate>20190118</CreaDate><CreaTime>15295800</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="c:\program files (x86)\arcgis\desktop10.6\ArcToolbox\Toolboxes\Spatial Analyst Tools.tbx\ExtractByMask" Date="20190118" Time="152958">ExtractByMask pt000001_normalized_p95.tif mask_lines_small E:\Foster\example_metrics\input\metrics\p95_lines_small.tif</Process></lineage></DataProperties></Esri></metadata>
