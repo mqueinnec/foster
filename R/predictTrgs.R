@@ -1,27 +1,44 @@
-#' Return Y values at targets
+#' Impute response variables across the landscape
 #'
-#' This function finds the k-NN of target observations and imputes response variables. \code{X} is a raster object where each layer correspond to one of the predictor variable used to train the k-NN model \code{model}.
+#' This function finds the k-NN of target observations and imputes response variables. \code{X} is a raster object where each layer correspond to one of the predictor variable used to train the k-NN model \code{model} obtained from \code{\link[foster]{trainNN}}.
 #'
-#' By default, the data is processed row by row to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, processing data row by row slows down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process multiple rows at the same time and considerably reduce processing times.
+#'The method used to impute the NN is set from the kNN model trained by \code{\link[foster]{trainNN}}. If \code{k=1} the value of the single closest NN is imputed. If \code{k>1}, the closest, mean, median or weighted distance mean (default) of all k NN values is imputed. This is set using the \code{impute.cont} and \code{impute.fac} arguments of \code{\link[foster]{trainNN}}.
 #'
-#' @param model \code{yai} object. A model trained at reference locations, usually created from \code{\link[foster]{findNN}}
+#' The raster \code{x} is processed as blocks of \code{nrows} to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, low values of \code{nrows} slow down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process more rows at the same time and considerably reduce processing time.
+#'
+#' @param model A trained kNN model obtained from \code{\link[foster]{trainNN}}
 #' @param x Raster object where each layer corresponds to a predictor variable calculated at targets
-#' @param nrows number of rows processed at a time. Default is 1.
+#' @param nrows number of rows processed at a time. Default is 200 .
 #' @param nnID Logical. Should the ID of each target's nearest neighbor used for imputation be returned?
-#' @param filename Character (optional). Output filename including path to
-#' directory and eventually extension
+#' @param nnDist Logical. Should the distance to each target's nearest neighbor used for imputation be returned?
+#' @param filename Character. Output file name including path to directory and
+#'   eventually extension.Default is \code{""} (output not written to disk).
 #' @param par Logical. Should imputation be performed on parallel threads?
 #' @param threads Integer. Number of parallel threads (relevant only if par=TRUE)
 #' @param progress Logical. If TRUE (default) a progress bar is displayed.
 #' @param ... Other arguments passed to \code{\link[raster]{writeRaster}}
-#' @return A RasterStack object where the first layers correspond to the imputed response variables and the remaining layers to the nearest neighbor ID (if \code{nnID = TRUE})
+#' @return A RasterStack object where the first layers correspond to the imputed response variables and the remaining layers to the nearest neighbor(s) ID (if \code{nnID = TRUE}) and nearest neighbor(s) distance (if \code{nnDist = TRUE})
 #' @seealso \code{\link[yaImpute]{newtargets}}, \code{\link[yaImpute]{impute.yai}}
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # X_vars is a RasterStack where each layer is a predictor variable
+#' # kNN_model is the trained kNN model obtained from foster::trainNN
+#'
+#' Y_imputed <- predictTrgs(model=kNN_model,
+#' x = X_vars,
+#' nnID = TRUE,
+#' nnDist = TRUE)
+#' }
+#'
 #' @export
 
 predictTrgs <- function(model = NULL,
                         x = NULL,
-                        nrows = 1,
+                        nrows = 200,
                         nnID = TRUE,
+                        nnDist = TRUE,
                         filename = "",
                         par = F,
                         threads = 2,
@@ -35,111 +52,72 @@ predictTrgs <- function(model = NULL,
   if (!all(colnames(model$xRefs) %in% names(x))) stop("Predictor variables
                                                       names don't match")
 
-  if (progress) progress <- "text" else progress <- NULL
+  if (is.null(model$impute.cont) | is.null(model$impute.fac)) {
+    stop("Cannot find the imputation method (closest, mean, median or distWeighted) from the trained kNN model. Make sure that the model was created with foster::trainNN")
+  }
 
-  # Define predict function
-  predFun.yai <- function(model, data, nnID) {
-    newtrgs <- yaImpute::newtargets(model, data)
-    trgs.imputed <- yaImpute::impute(newtrgs, observed = F,
-                                     vars = colnames(newtrgs$yRefs))
-    if (nnID) {
-      nnID <- matrix(as.numeric(as.character(newtrgs$neiIdsTrgs)),
-        ncol = newtrgs$k,
-        dimnames = list(NULL, paste0("nnID", as.character(seq(1:newtrgs$k)))))
-      preds <- cbind(as.matrix(trgs.imputed, rownames.force = F), nnID)
-    } else {
-      preds <- as.matrix(trgs.imputed, rownames.force = F)
-    }
-
-    return(preds)
+  if (progress) {
+    progress <- "text"
+    print_pb <- TRUE
+  }else{
+    print_pb <- FALSE
+    progress <- NULL
   }
 
   # If empty filename write to temp
   if (filename == "") {
-    filename <- rasterTmpFile()
+    filename <- raster::rasterTmpFile()
   }
 
   # Create empty raster where predictions will be saved
+  nlyr <- length(colnames(model$yRefs))
   if (nnID) {
-    nlyr <- length(colnames(model$yRefs)) + model$k
-  } else {
-    nlyr <- length(colnames(model$yRefs))
+    nlyr <- nlyr + model$k
+  }
+  if (nnDist) {
+    nlyr <- nlyr + model$k
   }
 
-  predrast <- brick(x, values = FALSE, nl = nlyr)
+  predrast <- raster::brick(x, values = FALSE, nl = nlyr)
 
   # Divide x in blocks.
   tr <- raster::blockSize(x, minblocks = round(nrow(x) / nrows))
 
   # Create progress bar
-  pb <- pbCreate(tr$n, label = "predict", progress = progress)
+  pb <- raster::pbCreate(tr$n, label = "predict", progress = progress)
 
   if (!par | threads == 1) {
-    predrast <- writeStart(predrast, filename = filename, ...)
+    predrast <- raster::writeStart(predrast, filename = filename, ...)
 
     for (i in 1:tr$n) {
-      napred <- matrix(rep(NA, ncol(predrast) * tr$nrows[i] * nlayers(predrast))
-                       , ncol = nlayers(predrast))
 
-      blockVals <- data.frame(getValues(x, row = tr$row[i], nrows = tr$nrows[i]))
+      blockVals <- data.frame(raster::getValues(x, row = tr$row[i], nrows = tr$nrows[i]))
 
-      # Remove NAs from blockVals
-      blockVals <- stats::na.omit(blockVals)
+      predv <- predFun.yai(model, blockVals, nnID, nnDist)
 
-      if (nrow(blockVals) == 0) {
-        predv <- napred
-      } else {
-        # Change rownames to avoid false duplicates with yai
-        rownames(blockVals) <- paste0("trgs_", rownames(blockVals))
-        # Predict
-        predv <- predFun.yai(model, blockVals, nnID)
-      }
-      # Assign back NA
-      naind <- as.vector(attr(blockVals, "na.action"))
-      if (!is.null(naind)) {
-        p <- napred
-        p[-naind, ] <- predv
-        predv <- p
-        rm(p)
-      }
       # Write preds to file
-      predrast <- writeValues(predrast, predv, tr$row[i])
+      predrast <- raster::writeValues(predrast, predv, tr$row[i])
 
-      raster::pbStep(pb, i)
+      if(print_pb) raster::pbStep(pb, i)
     }
   } else if (par & threads > 1) {
     .sendCall <- eval(parse(text = "parallel:::sendCall"))
+    .recvOneData <- eval(parse(text="parallel:::recvOneData"))
 
     # Start clusters
-    beginCluster(threads)
+    raster::beginCluster(threads)
 
-    cl <- getCluster()
-    on.exit(endCluster())
+    cl <- raster::getCluster()
+    on.exit(raster::endCluster())
     nodes <- length(cl)
 
-    # Define function that will be exectuted by clusters
+    # Define function that will be executed by clusters
     clusfun <- function(fun, i) {
-      napred <- matrix(rep(NA, ncol(predrast) * tr$nrows[i] * nlayers(predrast))
-                       , ncol = nlayers(predrast))
-      blockVals <- data.frame(getValues(x, row = tr$row[i], nrows = tr$nrows[i]))
-      # Remove NAs from blockVals
-      blockVals <- stats::na.omit(blockVals)
-      if (nrow(blockVals) == 0) {
-        predv <- napred
-      } else {
-        # Change rownames to avoid false duplicates with yai
-        rownames(blockVals) <- paste0("trgs_", rownames(blockVals))
-        # Predict
-        predv <- fun(model = model, data = blockVals, nnID = nnID)
-      }
-      # Assign back NA
-      naind <- as.vector(attr(blockVals, "na.action"))
-      if (!is.null(naind)) {
-        p <- napred
-        p[-naind, ] <- predv
-        predv <- p
-        rm(p)
-      }
+
+      blockVals <- data.frame(raster::getValues(x, row = tr$row[i], nrows = tr$nrows[i]))
+
+      predv <- fun(model = model, data = blockVals, nnID = nnID, nnDist = nnDist)
+
       return(predv)
     }
 
@@ -154,17 +132,17 @@ predictTrgs <- function(model = NULL,
     }
 
     for (i in 1:tr$n) {
-      pbStep(pb, i)
+      if(print_pb) raster::pbStep(pb, i)
 
-      d <- snow::recvOneData(cl)
+      d <- .recvOneData(cl)
 
       if (!d$value$success) stop("cluster error")
 
       if (i == 1) {
-        predrast <- writeStart(predrast, filename = filename, ...)
+        predrast <- raster::writeStart(predrast, filename = filename, ...)
       }
 
-      predrast <- writeValues(predrast, d$value$value, tr$row[d$value$tag])
+      predrast <- raster::writeValues(predrast, d$value$value, tr$row[d$value$tag])
       ni <- nodes + i
 
       if (ni <= tr$n) {
@@ -172,15 +150,101 @@ predictTrgs <- function(model = NULL,
       }
     }
   }
-  if (nnID) {
+
+  predrast <- raster::writeStop(predrast)
+  raster::pbClose(pb)
+  raster::endCluster()
+
+  # Set names of returned Raster
+  if (nnID & !nnDist) {
     try(names(predrast) <- c(colnames(model$yRefs), paste0("nnID",
                                     as.character(seq(1:model$k)))), silent = T)
+  } else if (!nnID & nnDist) {
+    try(names(predrast) <- c(colnames(model$yRefs), paste0("nnDist",
+                                                           as.character(seq(1:model$k)))), silent = T)
+  } else if (nnDist & nnDist) {
+    try(names(predrast) <- c(colnames(model$yRefs),
+                             paste0("nnID", as.character(seq(1:model$k))),
+                             paste0("nnDist", as.character(seq(1:model$k)))), silent = T)
   } else {
     try(names(predrast) <- c(colnames(model$yRefs)), silent = T)
   }
 
-  predrast <- writeStop(predrast)
-  pbClose(pb)
-  endCluster()
   return(predrast)
+}
+
+
+
+#' Predict function for yai
+#'
+#' Used in predictTrgs
+#' @noRd
+
+predFun.yai <- function(model, data, nnID, nnDist) {
+  # Change rownames to avoid false duplicates
+  rownames(data) <- paste0("trgs_", rownames(data))
+
+  nrow_preds <- NROW(data)
+  n_yvars <- ncol(model$yRefs)
+  n_nnID <- ifelse(nnID, model$k, 0)
+  n_nnDist <- ifelse(nnID, model$k, 0)
+
+  ncols_preds <- n_yvars + n_nnID + n_nnDist
+
+  rows_with_NA <- !stats::complete.cases(data)
+
+  #Create template for output
+  preds_NA <- data.frame(matrix(NA, nrow = nrow_preds, ncol = ncols_preds))
+  rownames(preds_NA) <- rownames(data)
+
+  out_colnames <- colnames(model$yRefs)
+  out_colnames <- if(nnID) {
+    c(out_colnames, paste0("nnID",seq(1:model$k)))
+  }else{
+    out_colnames
+  }
+  out_colnames <- if(nnDist) {
+    c(out_colnames, paste0("nnDist",seq(1:model$k)))
+  }else{
+    out_colnames
+  }
+
+  colnames(preds_NA) <- out_colnames
+
+  if (all(rows_with_NA)) {
+    preds <- preds_NA
+  }else{
+    data_dropNA <- data[!rows_with_NA,]
+
+    newtrgs <- yaImpute::newtargets(model, data_dropNA)
+
+    trgs.imputed <- yaImpute::impute(newtrgs,
+                                     observed = F,
+                                     vars = colnames(newtrgs$yRefs),
+                                     method = model$impute.cont,
+                                     method.factor = model$impute.fac)
+    if (nnID) {
+      nnID_df <- data.frame(matrix(as.numeric(as.character(newtrgs$neiIdsTrgs)),
+                                   ncol = newtrgs$k,
+                                   dimnames = list(NULL, paste0("nnID", as.character(seq(1:newtrgs$k))))))
+      trgs.imputed <- cbind(trgs.imputed, nnID_df)
+    }
+    if(nnDist) {
+      nnDist_df <- data.frame(matrix(as.numeric(newtrgs$neiDstTrgs),
+                                     ncol = newtrgs$k,
+                                     dimnames = list(NULL, paste0("nnDist", as.character(seq(1:newtrgs$k))))))
+      trgs.imputed <- cbind(trgs.imputed,nnDist_df)
+    }
+
+    colnames(preds_NA) <- colnames(trgs.imputed)
+
+    preds <- rbind(trgs.imputed, preds_NA[rows_with_NA,])
+
+    #Reorder preds by rowname
+    preds <- preds[rownames(data), ]
+
+  }
+  #tranform to matrix
+  preds <- as.matrix(preds, rownames.force = F)
+  return(preds)
 }

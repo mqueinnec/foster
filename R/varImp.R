@@ -14,12 +14,27 @@
 #'        \item{\code{plot}}{A ggplot object showing a plot of the importance values according to plotType}
 #'    }
 #' @seealso \code{\link[randomForest]{importance}}, \code{\link[yaImpute]{yaiVarImp}}
+#'
+#' @examples
+#' \dontrun{
+#' # kNN_model is the trained kNN model obtained from foster::trainNN
+#' varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
+#' }
 #' @export
 
 varImp <- function(model,
                    scaled = TRUE,
                    plot = TRUE,
                    plotType = "boxplot") {
+
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("'ggplot2' package is needed for this function to work.",
+         call. = FALSE)
+  }
+
+  # Define variables as NULL (fix "no visible binding for global variable" note during check)
+  variable <- value <- var <-  NULL
+
   imp <- list()
   i <- 0
   for (Rf in model$ranForest) {
@@ -55,34 +70,38 @@ varImp <- function(model,
       imp_combined_long <- reshape2::melt(imp_combined, id.vars = "variable",
                             measure.vars = c(names(imp)), variable.name = "var")
 
-      p <- ggplot2::ggplot(imp_combined_long, aes(x = variable, y = value)) +
-        geom_boxplot() +
-        coord_flip() +
-        ylab(y_lab) +
-        scatter::theme_pt()
+      p <- ggplot2::ggplot(imp_combined_long, ggplot2::aes(x = variable, y = value)) +
+        ggplot2::geom_boxplot() +
+        ggplot2::coord_flip() +
+        ggplot2::ylab(y_lab) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(panel.grid = ggplot2::element_blank())
+
     } else if (plotType == "grid") {
       imp_combined_long <- reshape2::melt(imp_combined, id.vars = "variable",
                     measure.vars = c(names(imp), "mean"), variable.name = "var")
       imp_combined_long$value <- round(imp_combined_long$value, 1)
 
-      mid_val <- median(imp_combined_long$value)
+      mid_val <- stats::median(imp_combined_long$value)
 
-      p <- ggplot2::ggplot(imp_combined_long, aes(x = variable, y = var)) +
-        geom_tile(aes(fill = value)) + theme_bw() +
-        scale_fill_gradient2(
+      p <- ggplot2::ggplot(imp_combined_long, ggplot2::aes(x = variable, y = var)) +
+        ggplot2::geom_tile(ggplot2::aes(fill = value)) +
+        ggplot2::theme_bw() +
+        ggplot2::scale_fill_gradient2(
           low = "#4C7AB5", high = "#D93A2B", mid = "#F9FABE", name = y_lab,
           midpoint = mid_val,
-          guide = guide_colourbar(title.position = "bottom", title.hjust = 0.5)
+          guide = ggplot2::guide_colourbar(title.position = "bottom", title.hjust = 0.5)
         ) +
-        coord_equal(ratio = 1) + geom_text(aes(label = value)) +
-        theme(
-          axis.text.x = element_text(angle = 90, vjust = 1, size = 12, hjust = 1),
-          axis.text.y = element_text(size = 12),
-          axis.title.x = element_blank(),
-          axis.title.y = element_blank(),
+        ggplot2::coord_equal(ratio = 1) +
+        ggplot2::geom_text(ggplot2::aes(label = value)) +
+        ggplot2::theme(
+          axis.text.x = ggplot2::element_text(angle = 90, vjust = 1, size = 12, hjust = 1),
+          axis.text.y = ggplot2::element_text(size = 12),
+          axis.title.x = ggplot2::element_blank(),
+          axis.title.y = ggplot2::element_blank(),
           legend.position = "bottom",
-          legend.title = element_text(size = 12),
-          legend.key.width = unit(3, "cm")
+          legend.title = ggplot2::element_text(size = 12),
+          legend.key.width = ggplot2::unit(3, "cm")
         )
     } else {
       warning("plotType not supported")

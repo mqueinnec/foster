@@ -1,17 +1,35 @@
-#' Get raster cell values at sample points
+#' Extract raster values at sample points
 #'
-#' Given a raster layer and a SpatialPointsDataFrame object, the functions returns a SpatialPointsDataFrame objects with the values of the raster at sample points.
+#' Given a Raster* object and a SpatialPointsDataFrame object, the functions returns a SpatialPointsDataFrame objects with the values of the raster at sample points.
 #'
-#' @param x A raster layer
-#' @param s Location of the sample points. Object of class \code{SpatialPointsDataFrame}, usually generated with \code{\link[foster]{getSample}}
-#' @param append Should the values be appended to s? Default is FALSE
+#' @param x A Raster* object
+#' @param s Location of the sample points. Object of class \code{SpatialPointsDataFrame} generated with \code{\link[foster]{getSample}}
+#' @param keepCols Should the columns of \code{s} be retained? Default is FALSE
 #' @param filename Character. Output filename including path to directory. File will be automatically saved as an ESRI Shapefile and any extension in \code{filename} will be overwritten
 #' @param ... Additional arguments passed to \code{\link[rgdal]{writeOGR}}
-#' @return A \code{\link[sp]{SpatialPoints}} object containing cells values corresponding to samples
+#' @return SpatialPointsDataFrame object
 #' @seealso \code{\link[raster]{extract}}
+#' @examples
+#' \dontrun{
+#' # Load raster package
+#' library(raster)
+#'
+#' # Open and stack ALS metrics
+#' elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+#' cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+#' Y_vars <- stack(elev_p95,cover)
+#' names(Y_vars) <- c("p95","cover")
+#'
+#' # SampleLoc is a SpatialPointsDataFrame obtained from getSample
+#' Y_vars_sample <- getSampleValues(Y_vars, sampleLoc)
+#' }
 #' @export
 
-getSampleValues <- function(x, s, append = FALSE, filename = "", ...) {
+getSampleValues <- function(x,
+                            s,
+                            keepCols = FALSE,
+                            filename = "",
+                            ...) {
   if (!any(class(x)[1] %in% c("RasterLayer", "RasterBrick", "RasterStack"))) {
     stop("x must be a Raster object")
   }
@@ -21,7 +39,7 @@ getSampleValues <- function(x, s, append = FALSE, filename = "", ...) {
 
   values <- raster::extract(x, s, method = "simple", sp = T)
 
-  if (!append) {
+  if (!keepCols) {
     values <- values[, setdiff(names(values), names(s))]
   }
 

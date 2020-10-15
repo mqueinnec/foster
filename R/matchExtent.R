@@ -1,28 +1,55 @@
-#'Match the extent of a reference Raster
+#' Match the extent of a reference raster
 #'
-#'Crops or extends the extent of a raster to the extent of a reference. Some
-#'cells of the reference raster can optionally be masked based on their values.
+#' This function crops or extends the extent of a raster to the extent of a
+#' reference. Some cells of the reference raster can optionally be masked based
+#' on their values.
 #'
-#'\code{x} and \code{ref} need to have the same CRS, spatial resolution and
-#'origin. If this is not the case, you can use
-#'\code{\link[foster]{matchResolution}}.
+#' \code{x} and \code{ref} need to have the same CRS, spatial resolution and
+#' origin. If this is not the case, you can use
+#' \code{\link[foster]{matchResolution}} before \code{matchExtent}.
 #'
-#'@param x Raster* object
-#'@param ref Raster* object with extent that \code{x} should be cropped to
-#'@param mask logical. Should x be masked by \code{ref} cells that have the
-#'value \code{maskValue}
-#'@param inverse logical. If TRUE, cells of \code{ref} that are not
-#'\code{maskvalue} are masked
-#'@param maskValue Value of \code{ref} cells that should be masked in \code{x}
-#'@param filename Character (optional). Output filename including path to
-#'directory and eventually extension
-#'@param ... Other arguments passed to \code{writeRaster}
-#'@return A \code{Raster*} object
-#'@seealso \code{\link[raster]{crop}}, \code{\link[raster]{extend}},
-#'\code{\link[raster]{mask}}
-#'@export
+#' @param x Raster* object or list of Raster* objects.
+#' @param ref Raster* object. \code{x} extent will be matched to \code{ref}
+#'   extent.
+#' @param mask Logical. Should x be masked by \code{ref} cells that have the
+#'   value \code{maskValue}
+#' @param inverse Logical. If TRUE, cells of \code{ref} that are not
+#'   \code{maskvalue} are masked
+#' @param maskValue Value of \code{ref} cells that should be masked in \code{x}.
+#'   Default is \code{NA}.
+#' @param filename Character. Output file name including path to directory and
+#'   eventually extension. If \code{x} is a list, \code{filename} must be a vector of characters with one file name for each element of x. Default is \code{""} (output not written to disk).
+#' @param ... Other arguments passed to \code{writeRaster}
+#' @return Raster* object or list of Raster* objects.
+#' @seealso \code{\link[raster]{crop}}, \code{\link[raster]{extend}},
+#'   \code{\link[raster]{mask}}
+#' @examples
+#' \dontrun{
+#' # Load raster package
+#' library(raster)
+#'
+#' # Open dem and mask of forested areas as Raster objects
+#' dem <- raster(system.file("extdata/inputs/topo/DEM.tif",package="foster"))
+#' mask_forest <- raster(system.file("extdata/inputs/landcover/VLCE_forest_2008.tif",package="foster"))
+#'
+#' # Match extent and mask DEM NA values
+#' dem_forest <- matchExtent(dem, mask_forest, mask = TRUE)
+#' }
+#' @export
 
 matchExtent <- function(x,
+                        ref,
+                        mask=FALSE,
+                        inverse=FALSE,
+                        maskValue=NA,
+                        filename="",
+                        ...) {
+
+  UseMethod("matchExtent", x)
+}
+
+#'@export
+matchExtent.Raster <- function(x,
                         ref,
                         mask=FALSE,
                         inverse=FALSE,
@@ -41,7 +68,7 @@ matchExtent <- function(x,
   if (!raster::compareCRS(x, ref) | !all(raster::origin(x) ==
       raster::origin(ref)) | !all(raster::res(x) == raster::res(ref))) {
     stop("x and ref don't have the same CRS, origin or spatial resolution.
-         Consider resampling before using MatchExtent")
+         Consider projecting or resampling before using MatchExtent")
   }
 
   extent_x <- raster::extent(x)
@@ -65,8 +92,35 @@ matchExtent <- function(x,
   } else {
     out <- x_extent
     if (filename != "") {
-      out <- writeRaster(out, filename = filename, ...)
+      out <- raster::writeRaster(out, filename = filename, ...)
+      names(out) <- names(x)
     }
   }
   return(out)
 }
+
+#'@export
+matchExtent.list <- function(x,
+                             ref,
+                             mask=FALSE,
+                             inverse=FALSE,
+                             maskValue=NA,
+                             filename="",
+                             ...) {
+
+  if (length(filename) < length(list)) {
+    # Append missing filenames
+    toAdd <- length(list) - length(filename)
+    filename = c(filename, rep("", toAdd))
+  }
+
+  # Check if filenames are unique (other than "")
+  if (length(unique(filename[filename != ""])) != length(filename[filename != ""])) {
+    stop("filename must have unique values (other than \"\") for each element of the list x")
+  }
+
+  args <- c(as.list(environment()), list(...))
+  args <- args[ ! names(args) %in% c("x", "filename")]
+  mapply(matchExtent, x, filename, MoreArgs = args)
+
+  }

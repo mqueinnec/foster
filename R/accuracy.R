@@ -1,74 +1,263 @@
-#' Calculate accuracy metrics of two vectors
+#' Calculate accuracy metrics
 #'
-#' This is a direct call to \code{\link[scatter]{calc.error}}. Calculate bias, RMSE, correlation etc of two vectors.
+#' Calculate coefficient of determination (R2), root-mean square error (RMSE) and bias between predictions and observations of continuous variables.
 #'
-#' @param reference a vector of reference values
-#' @param estimate a vector of estimated values
-#' @param by Optional grouping variable
-#' @param noinfo Logical. Should the additional information on the calculations be displayed?
-#' @param dist.normal Logical. Is the distribution normal? If TRUE t-test and Pearson correlation is calculated. If FALSE, Wilcoxon paired test and Spearman correlation is calculated.
-#' @param short Logical. Calculate only a subset of summary statistics.
-#' @return summary statistics of the differences between \code{reference} and \code{estimate}.
-#'@references \url{https://github.com/ptompalski/scatter}
+#' R2 is calculated with the following formula:
+#' \deqn{R^{2} = 1 - \frac{\sum (y_{i} - \hat{y}_{i})^{2}}{\sum (y_{i} - \bar{y}_{i})^{2}}}
+#'
+#' RMSE is calculated with the following formula:
+#' \deqn{RMSE = \sqrt{\frac{1}{n} \sum (\hat{y}_{i} - y_{i})^{2}}}
+#'
+#' Bias is calculated with the following formula:
+#' \deqn{Bias = \frac{\sum (\hat{y}_{i} - y_{i})}{n}}
+#'
+#' Relative RMSE and bias are also calculated by dividing their value by the mean of observations.
+#'
+#' If accuracy assessment was performed using k-fold cross-validation the accuracy metrics are calculated for each fold separately. The mean value of the accuracy metrics across all folds is also returned.
+#'
+#' @param obs A vector of observed values
+#' @param preds A vector of predicted values
+#' @param vars Optional vector indicating different variables
+#' @param folds Optional vector indicating the folds
+#'
+#'@return Data frame with following columns: \describe{
+#'   \item{\code{vars}}{Response variable}
+#'   \item{\code{R2}}{R2}
+#'   \item{\code{RMSE}}{RMSE}
+#'   \item{\code{RMSE_rel}}{Relative RMSE }
+#'   \item{\code{bias}}{bias}
+#'   \item{\code{bias_rel}}{Relative bias}
+#'   \item{\code{count}}{Number of observations}}
+#' @examples
+#' \dontrun{
+#'
+#' # kNN_preds is a data frame obtained from foster::trainNN
+#'
+#' accuracy(obs = kNN_preds$obs,
+#' preds = kNN_preds$preds,
+#' vars = kNN_preds$variable,
+#' folds = kNN_preds$Fold)
+#'
+#' }
 #'@export
+#'@importFrom dplyr %>%
 
-accuracy <- function(reference,
-                     estimate,
-                     by = NULL,
-                     noinfo = TRUE,
-                     dist.normal = TRUE,
-                     short = FALSE){
+accuracy <- function(obs,
+                     preds,
+                     vars = NULL,
+                     folds = NULL){
 
-  scatter::calc.error(reference, estimate, by, noinfo, dist.normal, short)
+  #check input variables
+  if (!is.numeric(obs) | !is.numeric(preds)) {
+    stop("Input values not numeric")
+  }
+
+  #check if input values are equal length
+  if(length(obs) != length(preds)) {
+    stop("Input variable not of equal length")
+  }
+
+  if(!is.null(vars)) {
+    if(length(obs) != length(vars) | length(preds) != length(vars)) {
+      stop("Input variable not of equal length")
+    }
+  }
+
+  if(!is.null(folds)) {
+    if(length(obs) != length(folds) | length(preds) != length(folds)) {
+      stop("Input variable not of equal length")
+    }
+  }
+
+  # Define variables as NULL (fix "no visible binding for global variable" note during check)
+  RMSE_rel <- bias_rel <- count <- NULL
+
+  # Calculate stats
+
+  if (is.null(folds)) {
+    if(is.null(vars)) {
+      df <- data.frame(preds = preds, obs = obs)
+      out <- df %>%
+        dplyr::summarise(R2 = R2(obs = obs, preds = preds),
+                         RMSE = RMSE(obs = obs, preds = preds),
+                         bias = bias(obs = obs, preds = preds),
+                         RMSE_rel = RMSE / mean(obs, na.rm = TRUE) * 100,
+                         bias_rel = bias / mean(obs, na.rm = TRUE) * 100,
+                         count = dplyr::n())
+    }else{
+      df <- data.frame(preds = preds, obs = obs, vars = vars)
+      out <- df %>%
+        dplyr::group_by(vars) %>%
+        dplyr::summarise(R2 = R2(obs = obs, preds = preds),
+                         RMSE = RMSE(obs = obs, preds = preds),
+                         bias = bias(obs = obs, preds = preds),
+                         RMSE_rel = RMSE / mean(obs, na.rm = TRUE) * 100,
+                         bias_rel = bias / mean(obs, na.rm = TRUE) * 100,
+                         count = dplyr::n())
+    }
+  }else{
+    if(is.null(vars)) {
+      df <- data.frame(preds = preds, obs = obs, folds = as.character(folds))
+      out <- df %>%
+        dplyr::group_by(folds) %>%
+        dplyr::summarise(R2 = R2(obs = obs, preds = preds),
+                         RMSE = RMSE(obs = obs, preds = preds),
+                         bias = bias(obs = obs, preds = preds),
+                         RMSE_rel = RMSE / mean(obs, na.rm = TRUE) * 100,
+                         bias_rel = bias / mean(obs, na.rm = TRUE) * 100,
+                         count = dplyr::n())
+
+      out_all_folds <- out %>%
+        dplyr::summarise(R2 = mean(R2),
+                         RMSE = mean(RMSE),
+                         bias = mean(bias),
+                         RMSE_rel = mean(RMSE_rel),
+                         bias_rel = mean(bias_rel),
+                         count = sum(count)) %>%
+        dplyr::mutate(folds = "all")
+
+      out <- rbind(out, out_all_folds)
+    }else{
+      df <- data.frame(preds = preds, obs = obs, folds = as.character(folds), vars = vars)
+      out <- df %>%
+        dplyr::group_by(folds, vars) %>%
+        dplyr::summarise(R2 = R2(obs = obs, preds = preds),
+                         RMSE = RMSE(obs = obs, preds = preds),
+                         bias = bias(obs = obs, preds = preds),
+                         RMSE_rel = RMSE / mean(obs, na.rm = TRUE) * 100,
+                         bias_rel = bias / mean(obs, na.rm = TRUE) * 100,
+                         count = dplyr::n())
+
+      nobs <- out
+
+      out_all_folds <- out %>%
+        dplyr::group_by(vars) %>%
+        dplyr::summarise(R2 = mean(R2),
+                       RMSE = mean(RMSE),
+                       bias = mean(bias),
+                       RMSE_rel = mean(RMSE_rel),
+                       bias_rel = mean(bias_rel),
+                       count = sum(count)) %>%
+        dplyr::mutate(folds = "all")
+
+      out <- rbind(out, out_all_folds)
+    }
+  }
+
+  return(out)
 }
 
-#' scatterplot with information on the errors between x and y.
+#' Scatterplot with information on the errors between x and y.
 #'
-#' This is a direct call to \code{\link[scatter]{scatter}}.This scatterplot is a wrapper function for a ggplot-based plot. It contains additional text panel that shows values calculated with \code{\link{calc.error}}
+#' Scatterplot between a vector of observed data and a vector of predicted data with information on the errors between them.
 #'
-#' @param x a vector of observed data.
-#' @param y a vector of predicted data.
-#' @param R2 Optional. Can be enabled or disabled by setting TRUE/FALSE. Can also be a value in cases where the R2 is calculated by other function.
-#' @param axisorder Optional. Set to \code{PO} (predicted-observed) to plot predicted (\code{y}) on the y-axis (this is the default). Set to \code{OP} (observed-predicted) to plot observed (\code{x}) on the y-axis.
-#' @param xlab Optional. Title of the x-axis
-#' @param ylab Optional. Title of the y-axis
-#' @param info A logical value indicating whether information on count, bias and RMSE should be added to the plot.
-#' @param position Determines the position of the info box
-#' @param positionauto A logical value indicating whether the position of the info box should be optimized automatically.
-#' @param lowerlimit A value determining the lower limit of the x and y axis
-#' @param upperlimit A value determining the upper limit of the x and y axis
-#' @param alpha Define the transparency of the points. 0 - fully transparent, 1 - opaque.
-#' @param add.reg.line Logical. Should the regression line be added to the plot? Regression coefficients are calculated automatically.
-#' @param rug Logical. Add marginal rug to the plot.
-#' @param label_text A character vector of length=5 defining the names for the values in the info box.
-#' @return a scatterplot of \code{x} and \code{y}.
+#' Accuracy metrics are calculated from \code{\link[foster]{accuracy}}
+#'
+#' @param obs A vector of observed values
+#' @param preds A vector of predicted values
+#' @param vars Optional vector indicating different variables
+#' @param info A logical value indicating whether information on count, R2, bias and RMSE should be added to the plot
+#' @return A ggplot2 object or a list of ggplot2 objects (one per variable)
+#' @seealso \code{\link[foster]{accuracy}}
 #' @examples
-#' x <- iris$Sepal.Length
-#' y <- predict(lm(data=iris,iris$Sepal.Length~iris$Petal.Width))
-#' scatter(x,y)
-#' @references \url{https://github.com/ptompalski/scatter}
+#' \dontrun{
+#' scatter(obs = kNN_preds$obs,
+#' preds = kNN_preds$preds,
+#' vars = kNN_preds$variable)
+#' }
 #' @export
-#'
-scatter <- function (x, y, R2=T, axisorder = "OP", xlab = "Observed",
-                     ylab = "Predicted", title = NULL, info = T, position = 0,
-                     positionauto = T, lowerlimit = NA, upperlimit = NA, alpha = 1, normality=T,
-                     add.reg.line = F, rug = F, label_text = c("n", "bias", "bias%",
-                                                               "RMSE", "RMSE%","p-value")){
-  scatter::scatter(x,
-                   y,
-                   R2,
-                   axisorder,
-                   xlab,
-                   ylab,
-                   title,
-                   info,
-                   position,
-                   positionauto,
-                   lowerlimit,
-                   upperlimit,
-                   alpha,
-                   normality,
-                   add.reg.line,
-                   rug,
-                   label_text)
+scatter <- function (obs,
+                     preds,
+                     vars,
+                     info = TRUE){
+
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("'ggplot2' package is needed for this function to work.",
+         call. = FALSE)
+  }
+
+  if (missing(vars)) {
+      nplots = 1
+      df <- data.frame(obs = obs, preds = preds)
+      unique_vars <- "all"
+  }else{
+      unique_vars <- as.character(unique(vars))
+      nplots <- length(unique_vars)
+      df <- data.frame(obs = obs, preds = preds, vars = vars)
+  }
+
+  out_plot <- list()
+
+  for (n in unique_vars) {
+    if (!missing(vars)) {
+      data <- dplyr::filter(df, vars == n)
+    }else{
+      data <- df
+    }
+
+      if (info == TRUE) {
+        d <- accuracy(obs = data$obs, preds = data$preds)
+
+        label <- paste("n", " = ", d$count, "\n",
+                       "R2", " = ", round(d$R2,2), "\n",
+                       "RMSE", " = ", round(d$RMSE, 3), "\n",
+                       "RMSE%", " = ", round(d$RMSE_rel, 2), "\n",
+                       "bias", " = ", round(d$bias, 3), "\n",
+                       "bias%", " = ", round(d$bias_rel, 2), "\n",
+                       sep = "")
+
+        lowerlimit <- min(data[c("obs", "preds")], na.rm = T)
+        upperlimit <- max(data[c("obs", "preds")], na.rm = T)
+
+        if (is.finite(d$bias_rel) & d$bias_rel < -20) {
+          ann_x <- lowerlimit
+          ann_y <- upperlimit
+          ann_hjust <- 0
+          ann_vjust <- 0.9
+        }else{
+          ann_x <- upperlimit
+          ann_y <- -Inf
+          ann_hjust <- 1
+          ann_vjust <- -0.2
+        }
+
+        ann <- ggplot2::annotate("text",
+                                 x = ann_x,
+                                 y = ann_y,
+                                 label = label,
+                                 hjust = ann_hjust,
+                                 vjust = ann_vjust)
+
+      }
+
+    if (info == TRUE) {
+      out_plot[[n]] <- ggplot2::ggplot(data = data,
+                                                    ggplot2::aes(x = preds, y = obs)) +
+        ggplot2::geom_point(shape = 1, size = 2) +
+        ggplot2::coord_equal(ratio = 1) +
+        ggplot2::xlab("Predicted") +
+        ggplot2::ylab("Observed") +
+        ann +
+        ggplot2::geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(panel.grid = ggplot2::element_blank())
+    }else{
+      out_plot[[n]] <- ggplot2::ggplot(data = data,
+                                       ggplot2::aes(x = preds, y = obs)) +
+        ggplot2::geom_point(shape = 1, size = 2) +
+        ggplot2::coord_equal(ratio = 1) +
+        ggplot2::xlab("Predicted") +
+        ggplot2::ylab("Observed") +
+        ggplot2::geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(panel.grid = ggplot2::element_blank())
+    }
+
+  }
+  if (nplots == 1) {
+    return(out_plot[[1]])
+  }else{
+    return(out_plot)
+  }
+
 }

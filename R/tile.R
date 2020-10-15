@@ -1,18 +1,26 @@
 #' Split a raster into tiles
 #'
 #' This function is used to split a raster into smaller tiles. The raster is
-#' split in a grid pattern with nx columns and ny rows.
+#' split in a grid pattern with \code{nx} columns and \code{ny} rows.
 #'
-#' @param x Raster object to split
+#' @param x Raster* object to split
 #' @param nx Number of horizontal cells in the splitting grid
 #' @param ny Number of vertical cells in the splitting grid
-#' @param filename Character (optional). Output filename including path to
-#' directory and eventually extension
+#' @param filename Character. Output file name including path to directory and
+#'   eventually extension.Default is \code{""} (output not written to disk).
 #' @param suffix Character appended to filename to differentiate tiles
 #' (must have length nx x ny). If left NULL, tiles will be numbered by columns
 #' and rows
 #' @param ... Additional parameters passed to \code{\link[raster]{writeRaster}}
 #' @seealso \code{\link[raster]{crop}}
+#' @return A list of Raster* objects
+#' @examples
+#' \dontrun{
+#' # X_vars is a RasterStack where each layer is a predictor variable
+#'
+#' # Split X_vars into a 5 x 5 grid
+#' tile(X_vars, nx = 5, ny = 5)
+#' }
 #' @export
 
 tile <- function(x,
@@ -55,7 +63,7 @@ tile <- function(x,
       c1 <- i * inc_c
       if (i == nx) c1 <- nc
       if (j == ny) r1 <- nr
-      e[[n]] <- extent(x, r0, r1, c0, c1)
+      e[[n]] <- raster::extent(x, r0, r1, c0, c1)
       n <- n + 1
     }
   }
