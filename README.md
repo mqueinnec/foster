@@ -1,27 +1,54 @@
-# foster: Forest Structure Extrapolation with R
 
-This package contains functions that can be used to extrapolate sparse forest attribute data on larger scale using a k-NN imputation approach. 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-FOSTER allows to perform the following tasks: 
+# FOSTER: Forest structure extrapolation with R
 
-* Data preprocessing: Resampling, cropping, masking, smoothing raster datasets
-* Calculate spectral indices and summarize time-series of variables to be used as predictors
-* Select training and testing samples using a stratified random selection approach
-* Train a k-NN model and assess its accuracy 
-* Impute response variables simultaneously on a large scale using the trained k-NN model 
+<!-- badges: start -->
 
-## Installation 
-```
-install.packages("devtools")
+<!-- badges: end -->
+
+The goal of foster is to streamline the modeling of the relationship
+between satellite imagery time series or any other environmental
+information, such as terrain elevation, with forest structural
+attributes derived from 3D point cloud data and their subsequent
+imputation over the broader landscape.
+
+The package is organized around functions for data preprocessing,
+stratified random sample selection, spectral index calculation, time
+series summary metrics calculation, k-NN predictive model development
+and their accuracy assessment, and finally response variable
+(i.e. forest attributes) imputation. The following figure shows a
+diagram explaining the general processing flow a user might encounter
+when imputing forest attributes from selected predictors that may
+include time series of multispectral satellite images and topographic
+variables.
+
+![FOSTER
+workflow](https://github.com/mqueinnec/foster/blob/master/man/figures/FOSTER_workflow.png?raw=true)
+
+## Installation
+
+You can install the development version of foster from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
 devtools::install_github("mqueinnec/foster")
-library(foster)
 ```
 
-## Vignette
-We advise reading through the vignette to get familiar with FOSTER. It contains a short description of the package and a step-by-step example to illustrate the framework around which it has been designed. 
+## Get Started
 
-By default, the vignette is not built when installing the package. In order to access the vignette there are two solutions: 
+A vignette is available to give an overview of FOSTER and run through an
+example of ALS metrics imputation.
 
-* Force building vignettes using ```devtools::install_github("mqueinnec/foster", build_vignettes = TRUE)```. Note that the package might take a few minutes to install since the vignette needs to be created by R. The vignette can then be accessed with ```browseVignette("foster")```. 
-* You can aslo directly download the html vignette located in the doc folder of this repository. However, it won't be built when installing the package and therefore ```browseVignette("foster")``` will indicate that the vignette doesn't exist. 
+``` r
+browseVignettes("foster")
+```
 
+Note that if using the development version of FOSTER, the vignette to be
+build during installation to access it with `browseVignette("foster")`.
+It will take a few minutes to build the vignette.
+
+``` r
+devtools::install_github("mqueinnec/foster", build_vignettes = TRUE)
+```
