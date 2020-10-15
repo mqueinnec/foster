@@ -4,7 +4,7 @@ author: "Martin Queinnec"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{foster-example}
+  %\VignetteIndexEntry{Imputing forest attributes with FOSTER}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +24,7 @@ set.seed(1234)
   
 ```
 
-##Introduction 
+## Introduction 
 
 The goal of this vignette is to illustrate how FOSTER can be used to impute ALS-derived forest variables (response variables **Y**) to a larger area covered by multispectral satellite imagery and topographic data (predictor variables **X**). We can usually describe an imputation problem by defining two sets of observations: the reference and the target observations. At reference observations, both Y and X variables are defined while only X variables are available at targets. Ultimately, targets are the area where we want to impute response variables. 
 
@@ -32,18 +32,17 @@ The goal of this vignette is to illustrate how FOSTER can be used to impute ALS-
 FOSTER has been designed around the following workflow: 
 
 * Data preprocessing to match the extent and spatial resolution of input data, mask cells that won't be included in the analysis or perform spatial filtering to smooth the data before main processing
+* Calculate spectral indices from multispectral data and summarize time series of spectral indices
 * Perform a stratified random sampling to select cells that will be used to train and assess the accuracy of the k-NN model
-* Calculate spectral indices from multispectral data and summarize time series of spectral indices at both references and targets 
 * Divide the stratified random sample into training and validation sets
 * Train a k-NN model from the training set and assess its accuracy with the validation set
-* Impute response variables from the training set to the targets
+* Impute response variables from sampled reference observations to the targets
 
-
-```{r, echo=FALSE, out.width='100%'}
-knitr::include_graphics(system.file("extdata/workflow/diagram_foster_compact_v2.png",package="foster"))
+```{r, echo=FALSE, out.width="80%", fig.cap="FOSTER workflow"}
+knitr::include_graphics("https://github.com/mqueinnec/foster/blob/master/man/figures/FOSTER_workflow.png?raw=true")
 ```
 
-##Using FOSTER
+## Using FOSTER
 
 ### Load packages
 In order to use the functions of FOSTER directly we need to attach the package using `library()`. Otherwise the functions need to be called explicitly from foster namespace using `foster::function_name()`. The `raster` package is regularly used throughout the workflow to read data using the functions `raster`, `stack` or `brick` (see below). It is therefore recommended attach the `raster` package as well. 
@@ -68,7 +67,8 @@ library(raster)
 * `getSampleValues`: extract the values of a raster at sample points 
 
 #### Calculate spectral indices and time series-based metrics
-These functions supports both raster and point features to calculate wall-to-wall predictor variables or only at sample locations
+
+These functions supports both raster and point features (ESRI Shapefiles) to calculate wall-to-wall predictor variables or only at sampled observations
 
 * `calcIndices`: calculate a set of spectral indices from multispectral data
 * `temporalMetrics`: summarize variables time series in a few metrics (e.g. mean, median, slope, IQR) 
@@ -76,7 +76,7 @@ These functions supports both raster and point features to calculate wall-to-wal
 #### Train a k-NN model and assess its accuracy 
 
 * `partition`: split samples into training and testing sets
-* `findNN`: train a k-NN model from the training sets and use the trained model to impute the Y variables on the testing set. Also returns the model accuracy by comparing observed and imputed response variables from the testing set
+* `trainNN`: train a k-NN model from the training sets and use the trained model to impute the Y variables on the testing set. Also returns the model accuracy by comparing observed and imputed response variables from the testing set
 * `accuracy`: compute accuracy metrics from observed and predicted variables
 * `scatter` : create a scatterplot between observed and predicted variables
 * `varImp`: return the importance of each predictor variable if random forest is used to calculate the nearest neighbors
@@ -86,33 +86,37 @@ These functions supports both raster and point features to calculate wall-to-wal
 * `predictTrgs`: impute response variables from a trained k-NN model and predictor variables at targets.
 
 ### Data types
-Two types of data are encountered when using FOSTER: rasters for wall-to-wall variables and vectors for variables extracted at sample points (point features). 
+
+Two types of data are encountered when using FOSTER: raster data for wall-to-wall variables and vectors for variables extracted at sample points (point features). 
 
 ### Reading data from disk
 
 #### Raster data
 
-If the raster contains a single layer it can be read with `raster()` to create a `RasterLayer` object . However, if it is a multiband raster, `stack()` (`RasterStack`) or `brick()` (`RasterBrick`) should be used. `RasterBrick` are usually more efficient to process but they can only point to a single file while `RasterStack` can be assembled of layers from different file sources. `RasterStack` objects can also be created from multiple `RasterLayer` objects. 
+If the raster contains a single layer it can be read with `raster()` to create a `RasterLayer` object . However, if it is a raster with multiple layers, `stack()` (`RasterStack`) or `brick()` (`RasterBrick`) should be used. `RasterBrick` are usually more efficient to process but they can only point to a single file while `RasterStack` can be assembled of layers from different file sources. `RasterStack` objects can also be created from multiple `RasterLayer` objects. 
 The functions `raster`, `stack` and `brick` take the filename (full path to file or relative path from your current working directory) of the raster as an argument. Please refer to the documentation of these functions to learn more about the various options and file types supported by the raster package. 
 
-```{r}
+```{r, eval = F}
 #Read single layer raster
-elev_p95 <- raster(system.file("extdata/inputs/lidar/p95_lines_small.tif",package="foster"))
-#Read muli-layer raster
-spectral_1984 <- stack(system.file("extdata/inputs/spectral/Mosaic_SRef_UTM10S_1984_proxy_v2.tif",package="foster"))
+raster_layer <- raster("path/to/raster_layer.tif")
+#Read multi-layer raster
+raster_stack <- stack("path/to/raster_stack.tif")
 ```
  
 #### Vector data
+
 In order to read a shapefile from a file on disk we use `readOGR` from `rgdal` package, providing the directory where the file is located in `dsn` and the name of the layer without the `.shp` extension. Please refer to the documentation of rgdal for supported file type and other options. The data will be stored in a `SpatialPointsDataFrame` object. 
 
-```{r}
-dem_samples <- rgdal::readOGR(dsn = system.file("extdata/inputs/ref_table/",package = "foster"), layer = "dem_sample",verbose=F)
+```{r, eval = F}
+dem_samples <- rgdal::readOGR(dsn = "path/to/directory", 
+                              layer = "layer_name")
 ```
 
 ### Write data to disk
 
 #### Raster data
-We can choose to process data in memory or write the output to disk. When dealing with small raster object, it is safe to process and save everything in memory. However, it is strongly advised to write data to disk everytime a function is called especially with larger datasets. Writing raster data to disk can be done with the function `raster::writeRaster` taking as arguments at least the name of the raster object and its full output filename (including path and optionally extension type). Whenever calling a function of FOSTER returning a raster object, the `filename` can be provided directly in the function call and `writeRaster` will be automatically used to save the output to disk. The functions also usually supports `...` arguments where additional parameters controlling `writeRaster` can be provided (e.g. `overwrite` to overwrite existing files, `format` to specify the output file type if not given in filename, `bylayer` to write each layer of the raster object individually). 
+
+We can choose to process data in memory or write the output to disk. When dealing with small raster object, it is safe to process and save everything in memory. However, it is advised to write data to disk when processing large datasets. Writing raster data to disk can be done with the function `raster::writeRaster` taking as arguments at least the name of the raster object and its full output filename (including path and optionally extension type). Whenever calling a function of FOSTER returning a raster object, the `filename` can be provided directly in the function call and `writeRaster` will be automatically used to save the output to disk. The functions also usually supports `...` arguments where additional parameters controlling `writeRaster` can be provided (e.g. `overwrite` to overwrite existing files, `format` to specify the output file type if not given in filename, `bylayer` to write each layer of the raster object individually). 
 
 ```{r, eval=F}
 #Example to write output of calcIndices to disk using different options
@@ -120,7 +124,7 @@ ind <- calcIndices(x, indices = c("NDVI","TCG","TCW"),red = 3,nir=4,filename = "
 ind <- calcIndices(x, indices = c("NDVI","TCG","TCW"),red = 3,nir=4,filename = "full/path/to/filename", format="GTiff", overwrite=T, byLayer=T)
 ```
 
-Whenever `filename` is kept to its default value `""` (empty character), the output raster will be processed and saved in memory if possible. If the file is too large to be processed in memory and no filename is provided, the output will be automatically written to a temp folder. The location of the temp folder and the maximum size that can be processed in memory can be found (among other options) using `rasterOptions()`. It is possible to change the global options of the `raster` package by using `rasterOptions(optionName) <- optionValue`. It is for example recommended to change the default temp directory to easily access it and clear it if necessary. 
+Whenever `filename` is kept to its default value `""` (empty character), the output raster will be processed and saved in memory if possible. If the file is too large to be processed in memory and no filename is provided, the `raster` package will automatically write the output to a temporary folder. The location of the temporary folder and the maximum size that can be processed in memory can be found (among other options) using `rasterOptions()`. It is possible to change the global options of the `raster` package by using `rasterOptions(optionName) <- optionValue`. It is for example recommended to change the default temp directory to easily access it and clear it if necessary. 
 
 ```{r, eval=F}
 rasterOptions(tmpdir) <- "path/to/tempdir"
@@ -130,155 +134,197 @@ rasterOptions(tmpdir) <- "path/to/tempdir"
 
 The function `getSample`, `getSampleValues`, `calcIndices` and `temporalMetrics` can return `SpatialPointsDataFrame` objects. These objects are usually relatively small and can be easily processed in memory. However, as for raster data, it is possible to provide the name out the output under the `filename` argument (full path to output, file extension not necessary). Only ESRI Shapefile objects are saved by FOSTER hence any other file extension provided in `filename` would be  overwritten by `.shp`
 
-### Optimize computing times 
+### Optimize computing performance
 
 The functions `calcIndices`, `temporalMetrics` and `predictTrgs` support parallel processing. To enable parallel processing you need to set `par = TRUE` and the number of parallel threads `threads`. When parallel processing is performed, the input data is divided in chunks and each cluster processes a chunk at a time. For `calcIndices` and `temporalMetrics` you can specify the number of chunks each cluster will process with the argument `m` (the raster will be divided into `m x threads` blocks). 
 
-For `predictTrgs`, controlling how data is processed is slightly different. Memory issues can occur when processing too much data at the same time because large matrices need to be stored in memory. The argument `nrows` specifies the number of rows that will be processed at a time (or per cluster when using parallel processing). By default `nrows = 1` which may not be the optimum value depending on the size of the dataset and available memory on the computer. In general, increasing `nrows` will speed up computing but also increase risks of running into memory issues. In order to choose the best value of `nrows`, it is suggested to make some test runs and monitor the memory usage of the computer to see if should be increased or decreased. 
+For `predictTrgs`, controlling how data is processed is slightly different. Memory issues can occur when processing too much data at the same time because large matrices need to be stored in memory. The argument `nrows` specifies the number of rows that will be processed at a time (or per cluster when using parallel processing). By default `nrows = 200` which may not be the optimum value depending on the size of the dataset and available memory on the computer. In general, increasing `nrows` will speed up computing but also increase risks of running into memory issues. In order to choose the best value of `nrows`, it is suggested to make some test runs and monitor the memory usage of the computer to see if should be increased or decreased. 
 
-##Description of the example
+## Description of the example
 
-We illustrate how FOSTER can be used by imputing two ALS-derived variables: the 95th percentile of first returns height (`elev_p95`) and standard deviation of first returns height (`elev_std`). `elev_p95` and `elev_std` have been calculated on a 20 m x 20 m grid from an ALS point cloud. For this example we assume that only three ALS stripes of 500 m width and 4 km length are available. The goal is to impute these two ALS metrics on a 4km x 4 km area (extent of the multispectral data). 
+We illustrate how FOSTER can be used by imputing two ALS-derived variables: the 95th percentile of first returns height (`elev_p95`) and canopy cover above mean height (`cover`). `elev_p95` and `cover` have been calculated on a 20 m x 20 m grid from an ALS point cloud. For this example we assume that only three 500 m x 4 km ALS stripes are available. The goal is to impute these two ALS metrics on a 4km x 4 km area only partially covered by the ALS stripes.  
 
 We will use the following predictor variables: 
 
-* Median, IQR and Theil-Sen slope of 25 years time series of Tasseled Cap Brightness (TCB), Greenness (TCG), Wetness (TCW) and NDVI. 
+* Median, IQR and Theil-Sen slope of a 3 year time series of Tasseled Cap Brightness (TCB), Greenness (TCG), Wetness (TCW) and NDVI. Not that longer time series are generally used but it was kept to three years for this example. 
 * Elevation (DEM) and terrain slope (DEM_slope)
 
-The imputation will be based on a Random Forest k-NN model (measure of nearness based on the Random FOrest proximity matrix). 
+The imputation in FOSTER is based on a Random Forest k-NN model (measure of nearness based on the Random Forest proximity matrix). The imputation is based on the `yaImpute` package. 
 
-##Input data
+## Input data
 
 ### ALS-derived forest attributes maps
 
-We load `elev_p95` and `elev_std` from `.tif` files and stack them in a RasterStack object `Y_vars` using `stack()` from `raster` package
+We load `elev_p95` and `cover` from `.tif` files and stack them in a RasterStack object `Y_vars` using `stack()` from `raster` package.
+
 ```{r}
-elev_p95 <- raster(system.file("extdata/inputs/lidar/p95_lines_small.tif",package="foster"))
-elev_std <- raster(system.file("extdata/inputs/lidar/std_lines_small.tif",package="foster"))
-Y_vars <- stack(elev_p95,elev_std)
-#Set up layers names
-names(Y_vars) <- c("p95","std")
+elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+Y_vars <- stack(elev_p95,cover)
+
+#Set layers names
+names(Y_vars) <- c("p95","cover")
 Y_vars
 plot(Y_vars)
 ```
 
-### Multispectral data
+### Multispectral data - Annual Landsat composites
 
-Multispectral data is derived from 25 years time-series (1984 - 2008) of Landsat surface reflectance composite images (30 m x 30 m resolution). We load the data from 1984 as an example: 
+Multispectral data is derived from a 3 year time-series (2006 - 2008) of Landsat surface reflectance composite images (30 m x 30 m resolution). We load the data from 2006 as an example: 
 
 ```{r}
-spectral_1984 <- stack(system.file("extdata/inputs/spectral/Mosaic_SRef_UTM10S_1984_proxy_v2.tif",package="foster"))
-names(spectral_1984) <- c("blue","green","red","nir","swir1","swir2")
-spectral_1984
-plot(spectral_1984)
+spectral_2006 <- stack(system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2006.tif",package="foster"))
+names(spectral_2006) <- c("blue","green","red","nir","swir1","swir2")
+
+spectral_2006
+plot(spectral_2006, col = grey.colors(255))
+
 ```
 
 ### Topographic data 
 
 Elevation (DEM) and terrain slope (DEM_slope) data are derived from the Advanced Spaceborne Thermal Emission and Reflection Radiometer (ASTER) global Digital Elevation Model (GDEM, v.2).Both DEM and DEM_slope were resampled to a 30 m spatial resolution and aligned with the multispectral data grid.
 
+```{r}
+dem <- raster(system.file("extdata/inputs/topo/DEM.tif",package="foster"))
+dem_slope <- raster(system.file("extdata/inputs/topo/DEM_slope.tif",package="foster"))
+
+plot(dem)
+plot(dem_slope)
+```
+
 ### Mask of forested areas
 
-A mask of forested areas was derived from a landcover dataset of 30 m spatial resolution and aligned with multispectral data grid. Non forested cells have a `NA` value.  
+A mask of forested areas was derived from a landcover dataset of 30 m spatial resolution and aligned with multispectral data grid. Cells have the value `1` if forested and `NA` otherwise.  
 
 ```{r}
-mask_forest <- raster(system.file("extdata/inputs/landcover/forested.tif",package="foster"))
+mask_forest <- raster(system.file("extdata/inputs/landcover/VLCE_forest_2008.tif",package="foster"))
 plot(mask_forest)
 ```
 
-##Data preparation
+## Data preparation
 
-The first step consists in resampling `Y.vars` in order to match the spatial resolution, CRS and origin of multispectral data
+In this example, the ALS metrics (20 x 20 m) and predictor variables (30 x 30 m) have different spatial resolutions. 
+
+In order to integrate the ALS metrics and predictor variables, the first step consists in resampling `Y_vars` in order to match the spatial resolution, CRS and origin of the Landsat data
 
 ```{r}
-Y_vars_resampled <- matchResolution(Y_vars,spectral_1984,method='bilinear',filename='')
+Y_vars_resampled <- matchResolution(x = Y_vars,
+                                    ref = spectral_2006,
+                                    method='bilinear')
 Y_vars_resampled
 ```
 
-The response variables have now a spatial resolution of 30 m x 30 m and are aligned on the multispectral images grid.
+The response variables have now a spatial resolution of 30 m x 30 m and are aligned on the Landsat images grid.
 
-In order to select only targets, we will need to mask reference cells (non NA values `Y_vars_resampled`) from predictor variables. Before, we need to match the extent of `Y_vars_resampled` with the study area corresponding to the extent of multispectral data. 
-
-```{r}
-#We use mask=F because we don't want to mask Y_vars_resampled with spectral_1984
-Y_vars_extend <- matchExtent(Y_vars_resampled,spectral_1984,mask=F)
-Y_vars_extend
-```
-Now we can see that `Y_vars_extend` has the same dimensions (133 rows and 134 columns) as the multispectral data 
-
-Smoothing response and predictor variables can help reducing noise and potential spatial errors between Landsat and ALS data and improve estimation accuracy. In this example, we smooth data by assigning to each cell the mean of its 3x3 neighbors. The function `focalMultiBand` requires a weight matrix that is used to define the size of the window and weights to apply to neighboring cells. Here we use a 3x3 weight matrix with weights set to 1. Next, we provide the function that is applied to the neighboring cells values (here `mean`). Using `na.rm = T` allows mean to be calculated even if NA values occur in the neighborhood. Using `pad=T` with `padValues = T` creates additional rows and columns of NA values around the borders of `Y_vars_extend` in order to keep the original raster extent. Finally, using `keepNA = T` is useful to assign back NA values to cells that had a NA value in `Y_vars_extent` but got assigned a non-NA value when applying the spatial filter. Multispectral data will be smoothed later on, after calculating spectral indices.
+Smoothing response and predictor variables can help reducing noise and potential spatial errors between Landsat and ALS data and improve estimation accuracy. In this example, we smooth data by assigning to each cell the mean of its 3x3 neighbors. The function `focalMultiBand` requires a weight matrix that is used to define the size of the window and weights to apply to neighboring cells. Here we use a 3x3 weight matrix with weights set to 1. Next, we provide the function that is applied to the neighboring cells values (here `mean`). Using `na.rm = T` allows mean to be calculated even if NA values occur in the neighborhood. Using `pad=T` with `padValues = NA` creates additional rows and columns of NA values around the borders of `Y_vars_resampled` in order to keep the original raster extent. Finally, using `keepNA = T` is useful to assign back NA values to cells that had a NA value in `Y_vars_resampled` but got assigned a non-NA value when applying the spatial filter. Multispectral data will be smoothed later on, after calculating spectral indices.
 
 ```{r}
 filt <- matrix(1,nrow=3,ncol=3)
-Y_vars_smooth <- focalMultiBand(Y_vars_extend,w=filt,fun=mean,pad=T,padValue=NA, na.rm=T, keepNA = T, filename='')
-plot(Y_vars_smooth[[1]])
+Y_vars_smooth <- focalMultiBand(Y_vars_resampled,
+                                w=filt,
+                                fun=mean,
+                                pad=T,
+                                padValue=NA, 
+                                na.rm=T, 
+                                keepNA = T)
+plot(Y_vars_smooth)
 ```
 
-We use the mask of forested cells to mask out cells of response variables that are not covered by forest. 
+From now, on we will focus only on cells that are classified as forests by the land cover map. In order to mask ALS metrics cells that are not forested we need to make sure that the ALS metrics and land cover maps have the same extent. This is taken care of internally by the function `matchExtent`
 
 ```{r, out.width="100%"}
-Y_vars_mask <- matchExtent(Y_vars_smooth,mask_forest,mask=T,maskValue = NA,filename='')
-plot(Y_vars_mask[[1]])
+Y_vars_mask <- matchExtent(Y_vars_smooth,
+                           mask_forest,
+                           mask=T,
+                           maskValue = NA)
+plot(Y_vars_mask)
+
+# We do the same with the DEM and slope
+
+dem_mask <- matchExtent(dem, 
+                        mask_forest, 
+                        mask = TRUE)
+
+dem_slope_mask <- matchExtent(dem_slope, 
+                        mask_forest, 
+                        mask = TRUE)
 ```
 
-Finally, we select targets cells corresponding to the cells of the study area that are not covered by the ALS acquisitions and that are forested. Therefore, we can select targets cells only by masking `spectral_1984` with `Y_vars_smooth` cells that have non-NA values (using `inverse = T` argument in `matchExtent`) and by keeping forested areas only. 
+## Temporal summary metrics of spectral indices time series
+
+### Spectral indices time series
+
+The function `calcIndices` is used to calculate spectral indices from multispectral data. The spectral indices calculation is based on the `RStoolbox` package. The list of supported spectral indices and their formula is described in the documentation of the `spectralIndices` function of the `RStoolbox` package ([available here](https://bleutner.github.io/RStoolbox/rstbx-docu/spectralIndices.html). The layer index corresponding to the `blue`, `green`, `red`, `nir`, `swir1`, `swir3` bands need to be provided depending on the indices calculated. 
+
+Tasseled Cap brightness (TCB), greenness (TCG) and wetness (TCW) can also be calculated. Calculation of tasseled cap indices is based on the function `tasseledCap` from the `RSToolbox` package. The name of the satellite that acquired the data has to be provided under `sat` and the bands have to be ordered in a specific order as explained in the [documentation](https://bleutner.github.io/RStoolbox/rstbx-docu/tasseledCap.html) of `RStoolbox::tasseledCap` (bands 1, 2, 3, 4, 5, 7 for Landsat5TM).
+
+For this example, we calculate the Tasseled Cap Brightness (TCB), Greenness (TCG), Wetness (TCW) and NDVI. NDVI requires `red` and `nir` bands only. 
 
 ```{r}
-spectral_trgs <- matchExtent(spectral_1984,Y_vars_smooth, mask=T, inverse = T, filename= '')
-spectral_trgs <- matchExtent(spectral_trgs, mask_forest, mask = T, maskValue = NA, filename = "")
-plot(spectral_trgs[["nir"]])
+indices_list <- c("NDVI","TCB","TCW","TCG")
+# Example for one year
+VI_2006 <- calcIndices(spectral_2006,
+                   indices = indices_list, 
+                   sat="Landsat5TM", 
+                   red=3, 
+                   nir=4)
+plot(VI_2006[["TCG"]])
 ```
 
-##Stratified random sampling
-Sample points need to be extracted from the ALS metrics maps in order to train and test the imputation model.To avoid selecting cells on forested edges or close to ALS extent boundaries we use `edges` to assign `NA` values to all cell located in a 3x3 neighborhood of any cells having a NA value. 
+To process multiple years at once, all RasterStack objects (one per year) can be placed in a list. 
 
 ```{r}
-Y_vars_edges <- edges(Y_vars_mask,w=3,filename='')
-plot(Y_vars_edges[[1]])
+# List all filenames in time-series order: 2006 to 2008
+spectral_ts_files <- list(system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2006.tif",package = "foster"), 
+                    system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2007.tif",package = "foster"), 
+                    system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2008.tif",package = "foster"))
+  
+# Open all Landsat images and place them in a list
+spectral_ts <- lapply(spectral_ts_files, stack)
+spectral_ts
 ```
 
-In FOSTER, stratification is performed using k-means algorithm which classifies the data in clusters based on the proximity between observations. We want to extract `nSamples = 230` sample points from `nClasses = 5` strata having a minimum distance between each others of at least ` mindist = 75 ` meters. Due to the small study area of this example we have to select a relatively low number of samples and set a low `mindist` requirement. However, it is advised to increase the number of sample points and use a larger mindist to reduce spatial autocorrelation within the samples. We use `norm = T` to normalize variables prior to k-means clustering. Since we use `xy = T` the output is a SpatialPointsDataFrame with x and y coordinates added as fields. 
 
 ```{r}
-nSamples = 230
-nClasses = 5
-mindist = 75
+VI_ts <- calcIndices(spectral_ts,
+                     indices = indices_list, 
+                     sat="Landsat5TM", 
+                     red=3, 
+                     nir=4)
 
-set.seed(1234) #For example reproducibility
-samples <- getSample(Y_vars_edges, layers = c("p95","std"), n = nSamples, strata = nClasses, mindist = mindist, norm = T,xy = T,sp=T)
-samples_points <- samples$samples
-samples_points
+# The output is a list with VI for each year
+VI_ts
 ```
 
-We can plot the clustered raster and `samples` to see where samples have been selected
+We can visualize the vegetation indices of the first year of the time series
 
 ```{r}
-plot(samples$cluster$map)
-plot(samples_points,add=T)
+plot(VI_ts[[1]])
 ```
 
-##Calculate spectral indices from multispectral data
-
-The function `calcIndices` is used to calculate spectral indices from either raster or point data. The user needs to provide the list of indices to calculate under `indices`. When tasseled cap indices are calculated, the name of the satellite that acquired the data has to be provided under `sat` and the bands have to be ordered in a specific order as explained in the documentation of `RStoolbox::tasseledCap` (bands 1, 2, 3, 4, 5, 7 for Landsat5TM). For other spectral indices, the index (layer number in the stack) of the bands corresponding to the `blue`, `green`, `red`, `nir`, `swir1`, `swir3` should be provided. 
-
-We calculate spectral indices on the entire study area from the multispectral data. NDVI requires `red` and `nir` only. 
+Once indices have been calculated we can smooth them with a 3 x 3 mean filter, as it was done with the resampled ALS metrics maps. 
 
 ```{r}
-ind_list <- c("TCB","TCW","TCG",'NDVI')
-ind <- calcIndices(spectral_trgs,indices = ind_list, sat="Landsat5TM", red=3, nir=4)
-plot(ind[["TCG"]])
+VI_ts_smooth <- focalMultiBand(VI_ts,
+                             w=filt,
+                             fun=mean,
+                             na.rm=T,
+                             pad = T,
+                             keepNA = T)
 ```
 
-Once indices have been calculated we can smooth them, assigning to each cell the mean of the neighboring 3x3 cells 
+We can visualize the smoothed vegetation indices of the first year of the time series
 
 ```{r}
-ind_smooth <- focalMultiBand(ind,w=filt,fun=mean,na.rm=T,pad = T,keepNA = T)
-plot(ind_smooth[["TCG"]])
+plot(VI_ts_smooth[[1]])
 ```
 
-##Summarize time series of spectral indices
+### Spectral indices temporal summary metrics
 
-`temporalMetrics` requires the name of a function that returns summary metrics of a numeric vector (e.g mean, standard deviation). The default function calculating used by `temporalMetrics` returns the median, IQR and Theil-Sen slope. However, the user can also define another function that returns metrics specific to its needs. For this example we create the function `funSummary` that returns the same metrics as the default function. When creating your own function don't forget to handle the cases where NA values might occur (by setting the `na.rm` argument to `TRUE` or `FALSE`). 
+We will now calculate temporal summary metrics of the vegetation indices time series. 
+
+The function `temporalMetrics` requires the name of a function that returns summary metrics of a numeric vector (e.g mean, standard deviation). The default function used by `temporalMetrics` returns the median, IQR and Theil-Sen slope. However, the user can also define another function that returns metrics specific to its needs. For illustration, we create the function `funSummary` that returns the same metrics as the default function. Ideally, gap-free composite multispectral images should be used but when creating your own function you can handle the cases where NA values might occur in the time series (by setting the `na.rm` argument to `TRUE` or `FALSE`). 
 
 ```{r}
 funSummary <- function(x){
@@ -286,122 +332,191 @@ funSummary <- function(x){
   c(
     median = median(x,na.rm=T),
     IQR = IQR(x,na.rm=T),
-    slope = as.numeric(wql::mannKen(x)[1])
+    slope = theilSen(x, na.rm = T)
   )
 }
 ```
 
-In order to calculate temporal summary metrics we provide the raster `NDVI_25years.tif` that contains 25 bands corresponding to 25 years of NDVI over the entire study area. 
+
+We can calculate the temporal summary of the 3 year time series of smoothed vegetation indices created above (`VI_ts_smooth`)
 
 ```{r}
-NDVI_series <- stack(system.file("extdata/inputs/indices_stack/all_NDVI_stack.tif",package="foster"))
-names(NDVI_series) <- paste0("NDVI_",as.character(seq(1984,2008,1)))
-NDVI_series
-
-ind_metrics <- temporalMetrics(NDVI_series,metrics='funSummary', prefix = "NDVI", filename = '')
-ind_metrics
-plot(ind_metrics[["NDVI_median"]])
+VI_ts_metrics <- temporalMetrics(VI_ts,
+                               metrics="funSummary")
 ```
-
-The functions `temporalMetrics` and `calcIndices` support both `raster` and `spatialPointsDataFrame` objects as inputs. We illustrate that with the function `temporalMetrics`: calculating temporal metrics on the entire study area and extracting the values at samples is equivalent to extracting multispectral data  at samples and calculating temporal metrics at samples only. When experimenting with different predictors during model development, it is recommended to use the second approach which is much faster. Wall-to-wall predictors only need to be calculated for the imputation at targets. 
+The output is a RasterStack where each band is a temporal summary metric of a vegetation index. In this example, there are 12 bands (4 vegetation indices, 3 temporal summary metrics). 
 
 ```{r}
-#Extract values of ind_metrics at samples
-ind_metrics_sample <- getSampleValues(ind_metrics,samples_points)
+VI_ts_metrics
 
-#Extract values of NDVI_series at samples and calculate temporal metrics at samples only
-NDVI_series_samples <- getSampleValues(NDVI_series, samples_points)
-NDVI_metrics_sample <- temporalMetrics(NDVI_series_samples,metrics="funSummary",filename='') 
-
-#Compare the two objects 
-head(ind_metrics_sample)
-head(NDVI_metrics_sample)
+plot(VI_ts_metrics[["NDVI_median"]])
 ```
 
-##Train a k-NN model
+## Stratified random sampling
 
-Once all predictor variables at samples have been calculated and response variables at samples extracted, we have all the data necessary to train a k-NN model using `findNN`. The response and the predictor variables need to be combined in the same table. To combine two `SpatialPointsDataFrame` with the same length and where each row corresponds to the same observation we can use `cbind` as for any `data.frame` object. Four separate shapefiles corresponding to the values of the response and predictor variables at samples are provided for this example. These shapefile were created using `getSampleValues`. 
+Sample points need to be extracted from the ALS metrics maps in order to train and test the imputation model.To avoid selecting cells on forested edges or close to ALS extent boundaries we use `edges` to assign `NA` values to all cell located in a 3x3 neighborhood of any cells having a NA value. 
 
 ```{r}
-Y_vars_samples <- rgdal::readOGR(system.file("extdata/inputs/ref_table/Y_vars_sample.shp",package = "foster"),verbose=F)
-ind_metrics_samples <- rgdal::readOGR(system.file("extdata/inputs/ref_table/ind_metrics_sample.shp",package = "foster"),verbose=F)
-dem_samples <- rgdal::readOGR(system.file("extdata/inputs/ref_table/dem_sample.shp",package = "foster"),verbose=F)
-slope_samples <- rgdal::readOGR(system.file("extdata/inputs/ref_table/slope_sample.shp",package = "foster"),verbose=F)
-
-samples_all <- cbind(Y_vars_samples,ind_metrics_samples,dem_samples,slope_samples)
-names(samples_all) <- c("p95","std","TCG_median","TCG_IQR","TCG_slope","TCW_median","TCW_IQR","TCW_slope","TCB_median","TCB_IQR","TCB_slope","NDVI_median","NDVI_IQR","NDVI_slope","DEM", "DEM_slope")
+Y_vars_edges <- edges(Y_vars_mask,
+                      w=3)
+plot(Y_vars_edges)
 ```
 
-From now on, we will work with regular `data.frame` object instead of `SpatialPointsDataFrame`. The function `spdf2df` easily converts a `SpatialPointsDataFrame` into a `data.frame`, giving the options to keep xy coordinates as variables. 
+In FOSTER, stratification is performed using k-means algorithm which classifies the data in k-means clusters based on the proximity between observations. Random sampling is then performed in each strata, with the number of sampled points in each strata proportional to the occurrence of those strata across the classified raster. For this example, we want to extract `nSamples = 230` sample points from `nClasses = 5` strata having a minimum distance between each others of at least ` mindist = 75 ` meters. Due to the small study area of this example we have to select a relatively low number of samples and set a low `mindist` requirement. However, it is advised to increase the number of sample points and use a larger `mindist` to reduce spatial autocorrelation within the samples. We use `norm = T` to normalize variables prior to k-means clustering. Since we use `xy = T` the output is a SpatialPointsDataFrame with x and y coordinates added as fields. 
+
+The k-means clustering is performed internally with the `RStoolbox` package. 
 
 ```{r}
-table_all <- spdf2df(samples_all,xy = F)
-head(table_all)
+nSamples = 230
+nClasses = 5
+mindist = 75
+
+set.seed(1234) #For example reproducibility
+sample_strata <- getSample(Y_vars_edges, 
+                     layers = c("p95","cover"), 
+                     n = nSamples, 
+                     strata = nClasses,
+                     mindist = mindist, 
+                     norm = T,
+                     xy = T)
 ```
-We need to keep a part of the samples apart for testing after the k-NN model has been trained. The function `partition` can be used for that purpose to split samples into training and testing sets. Three methods are implemented: `"random holdout"` where a percentage of the data randomly selected is left out for testing, `"group holdout` where the data is first grouped by quantiles and a percentage of the data within each group is left out for testing and `"kfold"` where k folds containing the same percentage of data left out for testing are created (cross-validation). 
+
+The returned `sample_strata` object is a list containing the sampled points (`SpatialPointsDataFrame`), the map of k-means strata (`RasterLayer`) and the k-means model. 
+
+```{r}
+# Sampled points
+sampleLoc <- sample_strata$sample
+
+# Map of strata
+strata_map <- sample_strata$clusterMap
+
+# k-NN model
+kmeans_model <- sample_strata$model
+```
+
+We can plot the sampled points on top of the map of strata: 
+
+```{r}
+plot(strata_map)
+plot(sampleLoc,add=T)
+```
+
+## Train a k-NN model
+
+Once all predictor variables response variables have been pre-processed and calculated and reference observations sampled, we have all the data needed to train a k-NN model using `trainNN`. 
+
+We start by putting all the response variables and predictor variables in a `RasterStack`
+
+```{r}
+# Predictor variables
+X_vars <- stack(VI_ts_metrics, 
+                dem_mask, 
+                dem_slope_mask)
+
+# Response variables
+
+Y_vars <- Y_vars_mask
+
+```
+
+Then, we extract the values of the predictor and response variables at the sampled reference observations
+
+```{r}
+
+# Extract values at sample
+X_vars_sample <- getSampleValues(X_vars, sampleLoc)
+Y_vars_sample <- getSampleValues(Y_vars, sampleLoc)
+
+X_vars_sample
+Y_vars_sample
+```
+
+In order to assess the accuracy of the kNN imputation, we will split the sampled points into training and validation sets.The function `partition` can be used for that purpose. Three methods are implemented: `"random holdout"` where a percentage of the data randomly selected is left out for testing, `"group holdout` where the data is first grouped by quantiles and a percentage of the data within each group is left out for testing and `"kfold"` where k folds containing the same percentage of data left out for testing are created (cross-validation). 
+
+In this example, we perform a k-fold cross validation with 5 folds. We also split the observations based on the k-means strata obtained from stratified random sampling. 
 
 ```{r}
 #Create data partition
 set.seed(1234) #for example reproducibility
-inTrain <- partition(samples_points$cluster,type="group holdout", p=0.75, groups=5,returnTrain = T)
-head(inTrain)
+train_idx <- partition(sampleLoc$cluster,
+                       type="kfold", 
+                       kfold = 5,
+                       returnTrain = TRUE)
+
+train_idx
 ```
 
-We can then train a random forest (RF) k-NN model specifying the method `randomForest` and optionally setting up the number of trees and the number of parameters `mtry` evaluated at each nodes of the RF trees. We consider only the nearest neighbor by setting up `k = 1`. If we supply samples that should go to training, `findNN` returns a data.frame with observed and predicted variables of observations that are not in training. 
+We can then train a random forest (RF) k-NN model specifying the method `randomForest` and optionally setting up the number of trees and the number of parameters `mtry` evaluated at each nodes of the RF trees. We consider only the nearest neighbor by setting up `k = 1`. If we supply samples that should go to training, `trainNN` returns a data.frame with observed and predicted variables of observations that are not in training. 
+
 ```{r}
-set.seed(1234)#for example reproducibility
-resp.vars <- c("p95","std")
-pred.vars <- setdiff(colnames(table_all),c(resp.vars))
-kNN <- findNN(x = table_all[,pred.vars],y=table_all[,resp.vars],inTrain = inTrain[,1], k = 1, method = "randomForest",ntree = 200)
+set.seed(1234) #for example reproducibility
+kNN <- trainNN(x = X_vars_sample,
+              y=Y_vars_sample,
+              inTrain = train_idx, 
+              k = 1, 
+              method = "randomForest",
+              ntree = 200)
 ```
+
+The output of `traiNN` is a list with an element `model`, which is the trained kNN model, and an element `preds` which is a data frame with predictions and observations of the sets used for validation. 
+
+```{r}
+kNN_model <- kNN$model
+
+kNN_preds <- kNN$preds
+head(kNN_preds, 10)
+```
+
 ## Accuracy assessment 
 
-We can use the function `accuracy` to compute a few accuracy metrics 
+We can use the function `accuracy` to compute a few accuracy summary metrics 
 
 ```{r}
-accuracy(reference = kNN$preds$obs, estimate = kNN$preds$preds, by = kNN$preds$variable)
+accuracy(obs = kNN_preds$obs, 
+         preds = kNN_preds$preds, 
+         vars = kNN_preds$variable, 
+         folds = kNN_preds$Fold)
 
 ```
 
-The function `scatter` can be used to create a scatterplot of the predicted against observed values of the testing set
+The function `scatter` can be used to create a scatterplot (`ggplot2` objects) of the predicted against observed values of the testing set
 
 ```{r}
-preds_p95 <- dplyr::filter(kNN$preds,variable=="p95")
-scatter(x=preds_p95$preds,y = preds_p95$obs)
+plots_scatter <- scatter(obs = kNN_preds$obs, 
+         preds = kNN_preds$preds, 
+         vars = kNN_preds$variable)
 
-preds_std <- dplyr::filter(kNN$preds,variable=="std")
-scatter(x=preds_std$preds,y = preds_std$obs)
+plots_scatter$cov
+
+plots_scatter$p95
 ```
 
 We can also get the most important variables of the RF-based kNN model and plot them in a boxplot or in a heatmap 
 
 ```{r}
-imp <- varImp(kNN$model,scaled=F,plot=TRUE,plotType="boxplot")
+imp <- varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
 imp$plot
 imp <- varImp(kNN$model,scaled=T,plot=TRUE,plotType="grid")
 imp$plot
 ```
 
-##Impute response variables at targets
+## Impute response variables at targets
 
-Once the k-NN model has been trained and all predictor variables have been calculated at targets, we can impute response variables at targets using `predictTrgs`. This function requires the trained model and a raster where each layer is one of the model predictor variable. Name of layers should exactly match the name of the predictor variables used during training. It returns one raster layer per response variable and another raster layer showing the nearest neighbor of each target cell (identified by the rownames of the `table_all` observations used for training). 
-
-The stacked raster composed of the predictor variables at targets is already given for this example
+Once the k-NN model has been trained and all predictor variables have been calculated at targets, we can impute response variables at targets using `predictTrgs`. This function requires the trained model and a raster where each layer is one of the model predictor variable. Name of layers should exactly match the name of the predictor variables used during training. It returns one raster layer per response variable and optionally the nearest neighbor ID and distance of each target cell (identified by the rownames of `Y_vars_sample` observations used for training the kNN model). 
 
 ```{r}
-X_trgs <- stack(system.file("extdata/inputs/X_trgs/X_trgs.tif",package="foster"))
-names(X_trgs) <- c("TCG_median","TCG_IQR","TCG_slope","TCW_median","TCW_IQR","TCW_slope","TCB_median","TCB_IQR","TCB_slope","NDVI_median","NDVI_IQR","NDVI_slope","DEM","DEM_slope")
-
-X_trgs
-
-Y_imputed <- predictTrgs(model=kNN$model,x=X_trgs,nrows = nrow(X_trgs))
+Y_imputed <- predictTrgs(model=kNN_model,
+                         x = X_vars, 
+                         nnID = TRUE, 
+                         nnDist = TRUE)
 Y_imputed
 ```
 
-A raster object with 3 layers is returned: the first layer corresponds to the imputed "elev_p95", the second layer to "elev_std" and the last one to the ID of each reference the response variables have been imputed from. 
+A raster object with 4 layers is returned: the first layer corresponds to the imputed `p95`, the second layer to `cover` and the third and fourth ones to the ID and NN distance of each reference observation the response variables have been imputed from. 
 
 ```{r}
 plot(Y_imputed$p95)
-plot(Y_imputed$std)
-plot(Y_imputed$nnID1,col=rainbow(length(unique(Y_imputed$nnID1)))) #There are 171 unique values corresponding to 171 training samples used for imputation 
+plot(Y_imputed$cover)
+plot(Y_imputed$nnID1,col=rainbow(length(unique(Y_imputed$nnID1))))
+plot(Y_imputed$nnDist1)
 ```
