@@ -2,43 +2,56 @@
 % Please edit documentation in R/focalMultiBand.R
 \name{focalMultiBand}
 \alias{focalMultiBand}
-\title{Apply a spatial filter to a Raster object}
+\title{Apply a spatial filter to a Raster* object}
 \usage{
-focalMultiBand(x, w, fun, filename = "", na.rm = TRUE, pad = FALSE,
-  padValue = NA, NAonly = FALSE, keepNA = TRUE, ...)
+focalMultiBand(
+  x,
+  w,
+  fun,
+  filename = "",
+  na.rm = FALSE,
+  pad = FALSE,
+  padValue = NA,
+  NAonly = FALSE,
+  keepNA = TRUE,
+  ...
+)
 }
 \arguments{
-\item{x}{A Raster* object}
+\item{x}{Raster* object or list of Raster* objects.}
 
 \item{w}{Matrix of weights (moving window). A 3x3 windows with weights of 1
 would be \code{w=matrix(1,nr=3,nc=3)} for example.}
 
-\item{fun}{function (optional). The function should accept a vector of values
+\item{fun}{Function (optional). The function should accept a vector of values
 and return a single number (e.g. mean). It should also accept a
 \code{na.rm} argument.}
 
-\item{filename}{Character (optional). Output filename including path to
-directory and eventually extension}
+\item{filename}{Character. Output file name including path to directory and
+eventually extension. If \code{x} is a list, \code{filename} must be a vector of characters with one file name for each element of x. Default is \code{""} (output not written to disk).}
 
-\item{na.rm}{logical. If TRUE (default), NA are removed from computation}
+\item{na.rm}{Logical. If TRUE (default), NAs are removed from computation}
 
-\item{pad}{logical. IF TRUE, rows and columns are added around \code{x} to
+\item{pad}{Logical. IF TRUE, rows and columns are added around \code{x} to
 avoid removing border cells.}
 
-\item{padValue}{numeric. Value of \code{pad} cells. Usually set to NA and
+\item{padValue}{Numeric. Value of \code{pad} cells. Usually set to NA and
 used in combination with \code{na.rm=TRUE}}
 
-\item{NAonly}{logical. If TRUE only cell values that are NA are replaced with
-the computed focal values}
+\item{NAonly}{Logical. If TRUE only cell values that are NA are replaced with
+the computed focal values.}
 
 \item{keepNA}{Logical. If TRUE (default), NA cells of \code{x} are unchanged}
 
 \item{...}{Additional arguments passed to \code{\link[raster]{writeRaster}}}
 }
+\value{
+Raster* object or list of Raster* objects.
+}
 \description{
 Apply a spatial filter to a RasterLayer or all layers of a RasterStack or
 RasterBrick object. The mathematical operation applied within the
-neighbourhood can be done by using a function (\code{fun}) or by setting
+neighborhood can be done by using a function (\code{fun}) or by setting
 the weights of the matrix \code{w}.
 }
 \details{
@@ -47,10 +60,34 @@ If x contains NA values and \code{na.rm = TRUE} is used , using \code{fun} or
  might not produce the same outputs (in that case using weights would give
  wrong results). See the documentation of \code{\link[raster]{focal}} for
  more information.
+
  Also, cells of x with NA values might get a non-NA value assigned when
- located in the neighbourhood of non-NA cells and \code{na.rm = TRUE} is used.
- In that case, setting \code{keepNA = TRUE} ensures that NA cells of x still
+ located in the neighborhood of non-NA cells and \code{na.rm = TRUE} is used.
+ In that case, setting \code{keepNA = TRUE} (default) ensures that NA cells of x still
  have NA values in the output raster.
+}
+\examples{
+\dontrun{
+# Load raster package
+library(raster)
+
+# Open and stack ALS metrics
+elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+Y_vars <- stack(elev_p95,cover)
+
+#Define 3x3 filter with weights of 1
+filt <- matrix(1, nrow = 3, ncol = 3)
+
+# Smoothing
+Y_vars_smooth <- focalMultiBand(x = Y_vars,
+w=filt,
+fun=mean,
+pad=T,
+padValue=NA,
+na.rm=T,
+keepNA = T)
+}
 }
 \seealso{
 \code{\link[raster]{focal}}

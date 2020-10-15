@@ -2,22 +2,34 @@
 % Please edit documentation in R/predictTrgs.R
 \name{predictTrgs}
 \alias{predictTrgs}
-\title{Return Y values at targets}
+\title{Impute response variables across the landscape}
 \usage{
-predictTrgs(model = NULL, x = NULL, nrows = 1, nnID = TRUE,
-  filename = "", par = F, threads = 2, progress = TRUE, ...)
+predictTrgs(
+  model = NULL,
+  x = NULL,
+  nrows = 200,
+  nnID = TRUE,
+  nnDist = TRUE,
+  filename = "",
+  par = F,
+  threads = 2,
+  progress = TRUE,
+  ...
+)
 }
 \arguments{
-\item{model}{\code{yai} object. A model trained at reference locations, usually created from \code{\link[foster]{findNN}}}
+\item{model}{A trained kNN model obtained from \code{\link[foster]{trainNN}}}
 
 \item{x}{Raster object where each layer corresponds to a predictor variable calculated at targets}
 
-\item{nrows}{number of rows processed at a time. Default is 1.}
+\item{nrows}{number of rows processed at a time. Default is 200 .}
 
 \item{nnID}{Logical. Should the ID of each target's nearest neighbor used for imputation be returned?}
 
-\item{filename}{Character (optional). Output filename including path to
-directory and eventually extension}
+\item{nnDist}{Logical. Should the distance to each target's nearest neighbor used for imputation be returned?}
+
+\item{filename}{Character. Output file name including path to directory and
+eventually extension.Default is \code{""} (output not written to disk).}
 
 \item{par}{Logical. Should imputation be performed on parallel threads?}
 
@@ -28,13 +40,28 @@ directory and eventually extension}
 \item{...}{Other arguments passed to \code{\link[raster]{writeRaster}}}
 }
 \value{
-A RasterStack object where the first layers correspond to the imputed response variables and the remaining layers to the nearest neighbor ID (if \code{nnID = TRUE})
+A RasterStack object where the first layers correspond to the imputed response variables and the remaining layers to the nearest neighbor(s) ID (if \code{nnID = TRUE}) and nearest neighbor(s) distance (if \code{nnDist = TRUE})
 }
 \description{
-This function finds the k-NN of target observations and imputes response variables. \code{X} is a raster object where each layer correspond to one of the predictor variable used to train the k-NN model \code{model}.
+This function finds the k-NN of target observations and imputes response variables. \code{X} is a raster object where each layer correspond to one of the predictor variable used to train the k-NN model \code{model} obtained from \code{\link[foster]{trainNN}}.
 }
 \details{
-By default, the data is processed row by row to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, processing data row by row slows down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process multiple rows at the same time and considerably reduce processing times.
+The method used to impute the NN is set from the kNN model trained by \code{\link[foster]{trainNN}}. If \code{k=1} the value of the single closest NN is imputed. If \code{k>1}, the closest, mean, median or weighted distance mean (default) of all k NN values is imputed. This is set using the \code{impute.cont} and \code{impute.fac} arguments of \code{\link[foster]{trainNN}}.
+
+The raster \code{x} is processed as blocks of \code{nrows} to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, low values of \code{nrows} slow down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process more rows at the same time and considerably reduce processing time.
+}
+\examples{
+\dontrun{
+
+# X_vars is a RasterStack where each layer is a predictor variable
+# kNN_model is the trained kNN model obtained from foster::trainNN
+
+Y_imputed <- predictTrgs(model=kNN_model,
+x = X_vars,
+nnID = TRUE,
+nnDist = TRUE)
+}
+
 }
 \seealso{
 \code{\link[yaImpute]{newtargets}}, \code{\link[yaImpute]{impute.yai}}

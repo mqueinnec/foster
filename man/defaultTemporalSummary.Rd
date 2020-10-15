@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{defaultTemporalSummary}
 \alias{defaultTemporalSummary}
-\title{Calculates median, IQR and Theil Sen slope}
+\title{Default temporal summary}
 \usage{
 defaultTemporalSummary(x)
 }
@@ -10,8 +10,18 @@ defaultTemporalSummary(x)
 \item{x}{Vector of numeric values}
 }
 \value{
-A list with median, IQR and slope
+Named vector with median, IQR and slope
 }
 \description{
+Calculates median, IQR and Theil Sen slope (\code{\link[trend]{sens.slope}}).
 This function is usually called within \code{\link[foster]{temporalMetrics}}
+}
+\examples{
+\dontrun{
+x <- rnorm(100)
+defaultTemporalSummary(x)
+}
+}
+\seealso{
+\code{\link[foster]{temporalMetrics}}, \code{\link[trend]{sens.slope}}
 }

@@ -4,14 +4,24 @@
 \alias{getSample}
 \title{Stratified random sampling}
 \usage{
-getSample(x, strata = 5, layers = names(x), norm = TRUE, n,
-  mindist = 0, maxIter = 30, xy = T, filename_cluster = "",
-  filename_samples = "", ...)
+getSample(
+  x,
+  strata = 5,
+  layers,
+  norm = TRUE,
+  n,
+  mindist = 0,
+  maxIter = 30,
+  xy = T,
+  filename_cluster = "",
+  filename_sample = "",
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{Raster*} object used to generate random sample}
 
-\item{strata}{Number of strata. Default is 5.}
+\item{strata}{Number of strata (kmeans clusters). Default is 5.}
 
 \item{layers}{Vector indicating the bands of \code{x} used in stratification
 (as integer or names). By default, all layers of x are used.}
@@ -29,15 +39,16 @@ clustering. This is useful if \code{layers} have different scales.}
 
 \item{filename_cluster}{Character. Output filename of the clustered \code{x} raster including path to directory and eventually extension}
 
-\item{filename_samples}{Character. Output filename of the sample points including path to directory. File will be automatically saved as an ESRI Shapefile and any extension in \code{filename_samples} will be overwritten}
+\item{filename_sample}{Character. Output filename of the sample points including path to directory. File will be automatically saved as an ESRI Shapefile and any extension in \code{filename_sample} will be overwritten}
 
 \item{...}{Further arguments passed to \code{\link[RStoolbox]{unsuperClass}}, \code{\link[raster]{writeRaster}} or \code{\link[rgdal]{writeOGR}} to control the kmeans algorithm or writing parameters}
 }
 \value{
 A list with the following objects:
    \describe{
-       \item{\code{samples}}{A \code{\link[sp]{SpatialPoints}} object containing sample points}
-       \item{\code{cluster}}{The clustered \code{x} raster, output of \code{\link[RStoolbox]{unsuperClass}}}
+       \item{\code{sample}}{A \code{\link[sp]{SpatialPoints}} object containing sampled points}
+       \item{\code{clusterMap}}{The clustered \code{x} raster, output of \code{\link[RStoolbox]{unsuperClass}}}
+       \item{\code{model}}{The kmeans model, output of \code{\link[RStoolbox]{unsuperClass}}}
    }
 }
 \description{
@@ -52,7 +63,7 @@ By default, clustering is performed on a random subset of \code{x} (10000 cells)
 with multiple starting configurations in order to find a convergent solution
 from the multiple starts. The parameters controlling the number of random
 samples used to perform kmeans clustering and the number of starting
-configurations can be provided under the \code{...} argument. More
+configurations can be provided as additional \code{...} arguments. More
 information on the behavior of the kmeans clustering can be found in
 \code{\link[RStoolbox]{unsuperClass}}. The default kmeans clustering method
 is Hartigan-Wong algorithm. The algorithm might not converge and output
@@ -62,6 +73,26 @@ possible to select enough samples per strata. In that case, the warning
 "Exceeded maximum number of runs for strata" is displayed. In that case
 you can decrease the number of samples \code{n} or increase \code{maxIter}
 to control the number of maximum iterations allowed until the required number of samples are selected.
+}
+\examples{
+\dontrun{
+# Load raster package
+library(raster)
+
+# Open and stack ALS metrics
+elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+Y_vars <- stack(elev_p95,cover)
+names(Y_vars) <- c("p95","cover")
+
+# Sample 230 cells in 5 strata (kmeans clusters). Sampled points should be at least 75 m apart.
+
+sample_strata <- getSample(Y_vars,
+layers = c("p95","cover"),
+n = 230,
+strata = 5,
+mindist = 75)
+}
 }
 \seealso{
 \code{\link[RStoolbox]{unsuperClass}}

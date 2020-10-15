@@ -2,38 +2,52 @@
 % Please edit documentation in R/matchResolution.R
 \name{matchResolution}
 \alias{matchResolution}
-\title{Match the resolution of two Raster objects}
+\title{Match the resolution of two Raster* objects}
 \usage{
 matchResolution(x, ref, method = "bilinear", filename = "", ...)
 }
 \arguments{
-\item{x}{\code{Raster*} object to resample}
+\item{x}{Raster* object or list of Raster* objects.}
 
-\item{ref}{Reference \code{Raster*} object with parameters that \code{x}
-should be resampled to.}
+\item{ref}{Reference Raster* object with parameters that \code{x} should be
+resampled to.}
 
 \item{method}{Character. Method used to compute values for the resampled
-raster. Can be \code{'bilinear'} for bilinear
-interpolation or \code{'ngb'} for nearest neighbor interpolation.}
+raster. Can be \code{'bilinear'} for bilinear interpolation or \code{'ngb'}
+for nearest neighbor interpolation. See \code{\link[raster]{resample}}.}
 
-\item{filename}{Character (optional). Output filename including path to directory and
-eventually extension}
+\item{filename}{Character. Output file name including path to directory and
+eventually extension. If \code{x} is a list, \code{filename} must be a vector of characters with one file name for each element of x. Default is \code{""} (output not written to disk).}
 
 \item{...}{Other arguments passed to \code{\link[raster]{writeRaster}}}
 }
 \value{
-A \code{Raster*} object
+Raster* object or list of Raster* objects.
 }
 \description{
-Successively projects and resamples a Raster coordinate system and spatial
-resolution to the reference
+Successively projects (if necessary) and resamples a raster coordinate system
+and spatial resolution to the reference
 }
 \details{
 \code{x} and \code{ref} must have defined CRS (can be assigned using
 \code{\link[raster]{projection}}). If the CRS don't match, \code{x} is
-projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherit
-the extent of \code{ref}.
+projected to \code{ref} CRS prior to resampling. \code{x} doesn't inherit the
+extent of \code{ref}.
+}
+\examples{
+\dontrun{
+# Load raster package
+library(raster)
+
+# Open ALS metric and Landsat BAP imagery
+elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+BAP_2006 <- stack(system.file("extdata/inputs/spectral/Landsat_BAP_2006.tif",package="foster"))
+
+# Match resolution
+p95_resampled <- matchResolution(x = elev_p95,ref = BAP_2006,method='bilinear')
+}
 }
 \seealso{
-\code{\link[raster]{resample}}, \code{\link[raster]{projectRaster}}, \code{\link[raster]{projection}}
+\code{\link[raster]{resample}}, \code{\link[raster]{projectRaster}},
+ \code{\link[raster]{projection}}
 }

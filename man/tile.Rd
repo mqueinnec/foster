@@ -7,14 +7,14 @@
 tile(x, nx, ny, filename = "", suffix = NULL, ...)
 }
 \arguments{
-\item{x}{Raster object to split}
+\item{x}{Raster* object to split}
 
 \item{nx}{Number of horizontal cells in the splitting grid}
 
 \item{ny}{Number of vertical cells in the splitting grid}
 
-\item{filename}{Character (optional). Output filename including path to
-directory and eventually extension}
+\item{filename}{Character. Output file name including path to directory and
+eventually extension.Default is \code{""} (output not written to disk).}
 
 \item{suffix}{Character appended to filename to differentiate tiles
 (must have length nx x ny). If left NULL, tiles will be numbered by columns
@@ -22,9 +22,20 @@ and rows}
 
 \item{...}{Additional parameters passed to \code{\link[raster]{writeRaster}}}
 }
+\value{
+A list of Raster* objects
+}
 \description{
 This function is used to split a raster into smaller tiles. The raster is
-split in a grid pattern with nx columns and ny rows.
+split in a grid pattern with \code{nx} columns and \code{ny} rows.
+}
+\examples{
+\dontrun{
+# X_vars is a RasterStack where each layer is a predictor variable
+
+# Split X_vars into a 5 x 5 grid
+tile(X_vars, nx = 5, ny = 5)
+}
 }
 \seealso{
 \code{\link[raster]{crop}}

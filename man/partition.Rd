@@ -4,25 +4,54 @@
 \alias{partition}
 \title{Split data into training and testing sets}
 \usage{
-partition(x, type = "group holdout", p = 0.75, groups = min(5,
-  length(x)), returnTrain = TRUE)
+partition(
+  x,
+  type = "group holdout",
+  p = 0.75,
+  kfold = 5,
+  groups = min(5, length(x)),
+  returnTrain = TRUE
+)
 }
 \arguments{
 \item{x}{A vector used for splitting data}
 
-\item{type}{Character. How should data be split? Valid values are "random holdout" , "group holdout" or "kfold"}
+\item{type}{Character. Type of partition. Valid values are \code{"random
+holdout"}, \code{"group holdout"} or \code{"kfold"}}
 
-\item{p}{percentage of data that goes to training set (holdout) or to each fold (1/k)}
+\item{p}{percentage of data that goes to training set (holdout). Only
+relevant if \code{type = "random holdout"} or \code{type = "group holdout"}}
 
-\item{groups}{For "group holdout" and when x is numeric, this is the number of breaks in the quantiles}
+\item{kfold}{Number of folds for cross-validation. Only relevant if  \code{type =
+"kfold"}.}
 
-\item{returnTrain}{Logical indicating whether training data or testing data should be returned}
+\item{groups}{For \code{"group holdout"} and when x is numeric, this is the number
+of breaks in the quantiles}
+
+\item{returnTrain}{Logical indicating whether training or validation indices
+should be returned. Default is TRUE.}
+}
+\value{
+List containing training or validation indices
 }
 \description{
-Returns the row indices of \code{x} that should go to training or testing.
+Returns the row indices of \code{x} that should go to training or validation.
 }
 \details{
-Three types of splits are currently implemented. "random holdout" randomly select \code{p} percents of \code{x} for the training set. 'group holdout" first groups \code{x} into \code{groups} quantiles and randomly samples within them. "kfold" creates k folds where p percent of the data is used for training in each fold. This function is a wrapper around two functions of \code{caret} package: \code{\link[caret]{createDataPartition}} and \code{\link[caret]{createDataPartition}}
+Three types of splits are currently implemented. \code{"random holdout"} randomly
+selects \code{p} percents of \code{x} for the training set. \code{"group holdout"}
+first groups \code{x} into \code{groups} quantiles and randomly samples
+within them (see \code{\link[caret]{createDataPartition}}) . \code{"kfold"}
+creates k folds where p percent of the data is used for training in each fold
+(see \code{createFolds}). This function is a wrapper around two functions of
+\code{caret} package: \code{\link[caret]{createDataPartition}} and
+\code{createFolds}
+}
+\examples{
+\dontrun{
+train_idx <- partition(sampleLoc$cluster,type="kfold", kfold = 5)
+}
+
 }
 \seealso{
 \code{\link[caret]{createDataPartition}}

@@ -2,30 +2,55 @@
 % Please edit documentation in R/accuracy.R
 \name{accuracy}
 \alias{accuracy}
-\title{Calculate accuracy metrics of two vectors}
+\title{Calculate accuracy metrics}
 \usage{
-accuracy(reference, estimate, by = NULL, noinfo = TRUE,
-  dist.normal = TRUE, short = FALSE)
+accuracy(obs, preds, vars = NULL, folds = NULL)
 }
 \arguments{
-\item{reference}{a vector of reference values}
+\item{obs}{A vector of observed values}
 
-\item{estimate}{a vector of estimated values}
+\item{preds}{A vector of predicted values}
 
-\item{by}{Optional grouping variable}
+\item{vars}{Optional vector indicating different variables}
 
-\item{noinfo}{Logical. Should the additional information on the calculations be displayed?}
-
-\item{dist.normal}{Logical. Is the distribution normal? If TRUE t-test and Pearson correlation is calculated. If FALSE, Wilcoxon paired test and Spearman correlation is calculated.}
-
-\item{short}{Logical. Calculate only a subset of summary statistics.}
+\item{folds}{Optional vector indicating the folds}
 }
 \value{
-summary statistics of the differences between \code{reference} and \code{estimate}.
+Data frame with following columns: \describe{
+  \item{\code{vars}}{Response variable}
+  \item{\code{R2}}{R2}
+  \item{\code{RMSE}}{RMSE}
+  \item{\code{RMSE_rel}}{Relative RMSE }
+  \item{\code{bias}}{bias}
+  \item{\code{bias_rel}}{Relative bias}
+  \item{\code{count}}{Number of observations}}
 }
 \description{
-This is a direct call to \code{\link[scatter]{calc.error}}. Calculate bias, RMSE, correlation etc of two vectors.
+Calculate coefficient of determination (R2), root-mean square error (RMSE) and bias between predictions and observations of continuous variables.
 }
-\references{
-\url{https://github.com/ptompalski/scatter}
+\details{
+R2 is calculated with the following formula:
+\deqn{R^{2} = 1 - \frac{\sum (y_{i} - \hat{y}_{i})^{2}}{\sum (y_{i} - \bar{y}_{i})^{2}}}
+
+RMSE is calculated with the following formula:
+\deqn{RMSE = \sqrt{\frac{1}{n} \sum (\hat{y}_{i} - y_{i})^{2}}}
+
+Bias is calculated with the following formula:
+\deqn{Bias = \frac{\sum (\hat{y}_{i} - y_{i})}{n}}
+
+Relative RMSE and bias are also calculated by dividing their value by the mean of observations.
+
+If accuracy assessment was performed using k-fold cross-validation the accuracy metrics are calculated for each fold separately. The mean value of the accuracy metrics across all folds is also returned.
+}
+\examples{
+\dontrun{
+
+# kNN_preds is a data frame obtained from foster::trainNN
+
+accuracy(obs = kNN_preds$obs,
+preds = kNN_preds$preds,
+vars = kNN_preds$variable,
+folds = kNN_preds$Fold)
+
+}
 }

@@ -2,56 +2,35 @@
 % Please edit documentation in R/accuracy.R
 \name{scatter}
 \alias{scatter}
-\title{scatterplot with information on the errors between x and y.}
+\title{Scatterplot with information on the errors between x and y.}
 \usage{
-scatter(x, y, R2 = T, axisorder = "OP", xlab = "Observed",
-  ylab = "Predicted", title = NULL, info = T, position = 0,
-  positionauto = T, lowerlimit = NA, upperlimit = NA, alpha = 1,
-  normality = T, add.reg.line = F, rug = F, label_text = c("n",
-  "bias", "bias\%", "RMSE", "RMSE\%", "p-value"))
+scatter(obs, preds, vars, info = TRUE)
 }
 \arguments{
-\item{x}{a vector of observed data.}
+\item{obs}{A vector of observed values}
 
-\item{y}{a vector of predicted data.}
+\item{preds}{A vector of predicted values}
 
-\item{R2}{Optional. Can be enabled or disabled by setting TRUE/FALSE. Can also be a value in cases where the R2 is calculated by other function.}
+\item{vars}{Optional vector indicating different variables}
 
-\item{axisorder}{Optional. Set to \code{PO} (predicted-observed) to plot predicted (\code{y}) on the y-axis (this is the default). Set to \code{OP} (observed-predicted) to plot observed (\code{x}) on the y-axis.}
-
-\item{xlab}{Optional. Title of the x-axis}
-
-\item{ylab}{Optional. Title of the y-axis}
-
-\item{info}{A logical value indicating whether information on count, bias and RMSE should be added to the plot.}
-
-\item{position}{Determines the position of the info box}
-
-\item{positionauto}{A logical value indicating whether the position of the info box should be optimized automatically.}
-
-\item{lowerlimit}{A value determining the lower limit of the x and y axis}
-
-\item{upperlimit}{A value determining the upper limit of the x and y axis}
-
-\item{alpha}{Define the transparency of the points. 0 - fully transparent, 1 - opaque.}
-
-\item{add.reg.line}{Logical. Should the regression line be added to the plot? Regression coefficients are calculated automatically.}
-
-\item{rug}{Logical. Add marginal rug to the plot.}
-
-\item{label_text}{A character vector of length=5 defining the names for the values in the info box.}
+\item{info}{A logical value indicating whether information on count, R2, bias and RMSE should be added to the plot}
 }
 \value{
-a scatterplot of \code{x} and \code{y}.
+A ggplot2 object or a list of ggplot2 objects (one per variable)
 }
 \description{
-This is a direct call to \code{\link[scatter]{scatter}}.This scatterplot is a wrapper function for a ggplot-based plot. It contains additional text panel that shows values calculated with \code{\link{calc.error}}
+Scatterplot between a vector of observed data and a vector of predicted data with information on the errors between them.
+}
+\details{
+Accuracy metrics are calculated from \code{\link[foster]{accuracy}}
 }
 \examples{
-x <- iris$Sepal.Length
-y <- predict(lm(data=iris,iris$Sepal.Length~iris$Petal.Width))
-scatter(x,y)
+\dontrun{
+scatter(obs = kNN_preds$obs,
+preds = kNN_preds$preds,
+vars = kNN_preds$variable)
 }
-\references{
-\url{https://github.com/ptompalski/scatter}
+}
+\seealso{
+\code{\link[foster]{accuracy}}
 }

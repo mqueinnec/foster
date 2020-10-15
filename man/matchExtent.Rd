@@ -2,42 +2,65 @@
 % Please edit documentation in R/matchExtent.R
 \name{matchExtent}
 \alias{matchExtent}
-\title{Match the extent of a reference Raster}
+\title{Match the extent of a reference raster}
 \usage{
-matchExtent(x, ref, mask = FALSE, inverse = FALSE, maskValue = NA,
-  filename = "", ...)
+matchExtent(
+  x,
+  ref,
+  mask = FALSE,
+  inverse = FALSE,
+  maskValue = NA,
+  filename = "",
+  ...
+)
 }
 \arguments{
-\item{x}{Raster* object}
+\item{x}{Raster* object or list of Raster* objects.}
 
-\item{ref}{Raster* object with extent that \code{x} should be cropped to}
+\item{ref}{Raster* object. \code{x} extent will be matched to \code{ref}
+extent.}
 
-\item{mask}{logical. Should x be masked by \code{ref} cells that have the
+\item{mask}{Logical. Should x be masked by \code{ref} cells that have the
 value \code{maskValue}}
 
-\item{inverse}{logical. If TRUE, cells of \code{ref} that are not
+\item{inverse}{Logical. If TRUE, cells of \code{ref} that are not
 \code{maskvalue} are masked}
 
-\item{maskValue}{Value of \code{ref} cells that should be masked in \code{x}}
+\item{maskValue}{Value of \code{ref} cells that should be masked in \code{x}.
+Default is \code{NA}.}
 
-\item{filename}{Character (optional). Output filename including path to
-directory and eventually extension}
+\item{filename}{Character. Output file name including path to directory and
+eventually extension. If \code{x} is a list, \code{filename} must be a vector of characters with one file name for each element of x. Default is \code{""} (output not written to disk).}
 
 \item{...}{Other arguments passed to \code{writeRaster}}
 }
 \value{
-A \code{Raster*} object
+Raster* object or list of Raster* objects.
 }
 \description{
-Crops or extends the extent of a raster to the extent of a reference. Some
-cells of the reference raster can optionally be masked based on their values.
+This function crops or extends the extent of a raster to the extent of a
+reference. Some cells of the reference raster can optionally be masked based
+on their values.
 }
 \details{
 \code{x} and \code{ref} need to have the same CRS, spatial resolution and
 origin. If this is not the case, you can use
-\code{\link[foster]{matchResolution}}.
+\code{\link[foster]{matchResolution}} before \code{matchExtent}.
+}
+\examples{
+\dontrun{
+# Load raster package
+library(raster)
+
+# Open dem and mask of forested areas as Raster objects
+dem <- raster(system.file("extdata/inputs/topo/DEM.tif",package="foster"))
+mask_forest <- raster(system.file("extdata/inputs/landcover/VLCE_forest_2008.tif",package="foster"))
+
+# Match extent and mask DEM NA values
+dem_forest <- matchExtent(dem, mask_forest, mask = TRUE)
+}
 }
 \seealso{
 \code{\link[raster]{crop}}, \code{\link[raster]{extend}},
-\code{\link[raster]{mask}}
+  \code{\link[raster]{mask}}
 }

@@ -28,6 +28,12 @@ When RF is used to find nearest neighbors, the importance of each variable in th
 \details{
 If \code{scaled = TRUE}, importance values are centered by subtracting their mean and scaled by dividing the centered importance by their standard deviation.
 }
+\examples{
+\dontrun{
+# kNN_model is the trained kNN model obtained from foster::trainNN
+varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
+}
+}
 \seealso{
 \code{\link[randomForest]{importance}}, \code{\link[yaImpute]{yaiVarImp}}
 }

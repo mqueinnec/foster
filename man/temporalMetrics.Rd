@@ -4,18 +4,26 @@
 \alias{temporalMetrics}
 \title{Calculate temporal summary metrics}
 \usage{
-temporalMetrics(s, metrics = "defaultTemporalSummary", prefix = NULL,
-  filename = "", par = F, threads = 2, progress = TRUE, m = 2,
-  ...)
+temporalMetrics(
+  x,
+  metrics = "defaultTemporalSummary",
+  filename = "",
+  stack = TRUE,
+  par = F,
+  threads = 2,
+  progress = TRUE,
+  m = 2,
+  ...
+)
 }
 \arguments{
-\item{s}{Input Raster or SpatialPointsDataFrame object containing a time series (may be generated with \code{\link[foster]{calcIndices}})}
+\item{x}{List of Raster* or SpatialPointsDataFrame objects.Input Raster or SpatialPointsDataFrame object containing a time series (may be generated with \code{\link[foster]{calcIndices}})}
 
 \item{metrics}{Name of a function  used to process the time series provided as a character.}
 
-\item{prefix}{Optional. Character that will be added to the names of the output layers}
+\item{filename}{Character. Single output filename including path to directory and eventually extension. Each spectral index is written separately and the name of the spectral index is automatically appended to the file name.}
 
-\item{filename}{Character. Output filename including path to directory and eventually extension}
+\item{stack}{Logical. Should the output be returned as a single RasterStack (TRUE) or as a list containing one Raster per vegetation index (FALSE)}
 
 \item{par}{Logical. Should the function be executed in parallel threads}
 
@@ -25,13 +33,17 @@ temporalMetrics(s, metrics = "defaultTemporalSummary", prefix = NULL,
 
 \item{m}{tuning parameter to determine how many blocks will be used (m blocks will be processed by each cluster)}
 
-\item{...}{Other arguments passed to \code{\link[raster]{writeRaster}}}
+\item{...}{Other arguments passed to \code{\link[raster]{writeRaster}} or \code{\link[rgdal]{writeOGR}}.}
 }
 \description{
-This function calculates a set of user-defined or default statistics from a variable time series. If \code{s} is a Raster object, each layer should be a year of the time series. If \code{s} is a SpatialPointsDataFrame object, each column should be a year of the time series. The argument \code{fun} defines which metrics will be calculated. It has to be the name of a function that takes a vector as input and returns a named vector corresponding to the summary metrics. The function \code{defaultTemporalSummary} is used by default and returns the median, IQR and Theil-Sen slope (calculated with \code{\link[wql]{mannKen}}) of the time series.
+This function calculates a set of user-defined or default statistics from spectral indices time series.
 }
 \details{
-If \code{s} is a Raster object, the processing can be parallelized using \code{\link[raster]{cluster}}. In that case the user has to set \code{par = TRUE} and provide the number of parallel threads \code{threads}.
+Spectral indices can be calculated with \code{\link[foster]{calcIndices}}.
+The input to \code{TemporalMetrics} is a list where each element is a Raster* or a SpatialPointsDataFrame object with layers or columns being spectral indices. Each element should be one step in the time series and elements should be ordered in the time series ascending order.
+The argument \code{fun} defines which metrics will be calculated. It has to be the name of a function that takes a vector as input and returns a named vector corresponding to the summary metrics. The function \code{defaultTemporalSummary} is used by default and returns the median, IQR and Theil-Sen slope of the time series.
+
+If \code{x} is a list of Raster* objects, the processing can be parallelized using \code{\link[raster]{cluster}}. In that case the user has to set \code{par = TRUE} and provide the number of parallel threads \code{threads}. You can control how many blocks will be processed by each thread by setting \code{m} (see \code{\link[raster]{cluster}}).
 }
 \examples{
 
@@ -44,7 +56,8 @@ funSummary <- function(x) {
   )
 }
 
-temporalMetrics(s, metrics = "funSummary")
+# VI_ts is a list of Raster* calculated from calcIndices
+temporalMetrics(VI_ts, metrics = "funSummary")
 }
 }
 \seealso{

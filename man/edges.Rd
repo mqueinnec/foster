@@ -2,7 +2,7 @@
 % Please edit documentation in R/edges.R
 \name{edges}
 \alias{edges}
-\title{Remove cells in the neighorhood of a boundary cell}
+\title{Assign NA values to the neighborhood of a boundary cell}
 \usage{
 edges(x, w, filename = "", ...)
 }
@@ -11,14 +11,33 @@ edges(x, w, filename = "", ...)
 
 \item{w}{Numeric. Size of the window around each cell. Must be an odd number.}
 
-\item{filename}{Character (optional). Output filename including path to
-directory and eventually extension}
+\item{filename}{Character. Output file name including path to directory and
+eventually extension. Default is \code{""} (output not written to disk).}
 
 \item{...}{Additional arguments passed to \code{\link[raster]{writeRaster}}}
 }
+\value{
+Raster* object
+}
 \description{
 Assigns NA value to all cells having a NA values within their \code{w x w}
-neighorhood.
+neighborhood.
+}
+\examples{
+\dontrun{
+# Load raster package
+library(raster)
+
+# Open and stack ALS metrics
+elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+Y_vars <- stack(elev_p95,cover)
+
+# Remove edges in a 3 x 3 neighborhood
+Y_vars_edges <- edges(Y_vars,
+w=3,
+filename='')
+}
 }
 \seealso{
 \code{\link[raster]{focal}}
