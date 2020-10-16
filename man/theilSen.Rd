@@ -4,12 +4,10 @@
 \alias{theilSen}
 \title{Theil-Sen slope}
 \usage{
-theilSen(x, na.rm = TRUE)
+theilSen(x)
 }
 \arguments{
 \item{x}{A numeric vector}
-
-\item{na.rm}{Logical. Should NA values be removed?}
 }
 \value{
 numeric; Theil-Sen slope

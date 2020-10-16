@@ -18,7 +18,7 @@ defaultTemporalSummary <- function(x) {
   c(
     median = stats::median(x, na.rm = T),
     IQR = stats::IQR(x, na.rm = T),
-    slope = theilSen(x, na.rm = T)
+    slope = theilSen(x)
   )
 }
 
