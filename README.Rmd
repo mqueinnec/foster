@@ -31,7 +31,7 @@ figure shows a diagram explaining the general processing flow a user might
 encounter when imputing forest attributes from selected predictors that may 
 include time series of multispectral satellite images and topographic variables. 
 
-![FOSTER workflow](https://github.com/mqueinnec/foster/blob/master/man/figures/FOSTER_workflow.png?raw=true)
+![FOSTER workflow](https://raw.githubusercontent.com/mqueinnec/storage/main/FOSTER/FOSTER_workflow.png)
 
 
 ## Installation

@@ -26,7 +26,7 @@ include time series of multispectral satellite images and topographic
 variables.
 
 ![FOSTER
-workflow](https://github.com/mqueinnec/foster/blob/master/man/figures/FOSTER_workflow.png?raw=true)
+workflow](https://raw.githubusercontent.com/mqueinnec/storage/main/FOSTER/FOSTER_workflow.png)
 
 ## Installation
 
