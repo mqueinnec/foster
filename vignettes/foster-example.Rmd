@@ -20,8 +20,6 @@ library(foster)
 library(ggplot2)
 library(raster)
 library(knitr)
-set.seed(1234)
-  
 ```
 
 ## Introduction 
@@ -108,36 +106,15 @@ raster_stack <- stack("path/to/raster_stack.tif")
 Elevation (DEM) and terrain slope (DEM_slope) data are derived from the Advanced Spaceborne Thermal Emission and Reflection Radiometer (ASTER) global Digital Elevation Model (GDEM, v.2).Both DEM and DEM_slope were resampled to a 30 m spatial resolution and aligned with the multispectral data grid.
 
 ```{r open-dem}
-tryCatch({
-  dem <- system.file("extdata/inputs/topo/DEM.tif",package="foster")
-  dem <- raster(dem)
-  plot(dem)
-}, 
-error = function(cond) {
-  message("System.file fail")
-})
+dem <- system.file("extdata/inputs/topo/DEM.tif",package="foster", mustWork = TRUE)
 ```
 
 ```{r open-slope}
-tryCatch({
-  dem_slope <- system.file("extdata/inputs/topo/DEM_slope.tif",package="foster")
-  dem_slope <- raster(dem_slope)
-  plot(dem_slope)
-}, 
-error = function(cond) {
-  message("System.file fail")
-})
+dem_slope <- system.file("extdata/inputs/topo/DEM_slope.tif",package="foster", mustWork = TRUE)
 ```
 
 ```{r open-BAP}
-tryCatch({
-  bap_2006 <- system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2006.tif",package="foster")
-  bap_2006 <- stack(bap_2006)
-  plot(bap_2006)
-}, 
-error = function(cond) {
-  message("System.file fail")
-})
+bap_2006 <- system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2006.tif",package="foster", mustWork = TRUE)
 ```
 
 
