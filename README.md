@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/mqueinnec/foster.svg?branch=master)](https://travis-ci.com/mqueinnec/foster)
 <!-- badges: end -->
 
 The goal of foster is to streamline the modeling of the relationship
