@@ -27,7 +27,6 @@ defaultTemporalSummary <- function(x) {
 #' Calculate the Theil-Sen slope from a time series. This is a wrapper around \code{\link[trend]{sens.slope}}
 #'
 #' @param x A numeric vector
-#' @param na.rm Logical. Should NA values be removed?
 #' @return numeric; Theil-Sen slope
 #' @seealso \code{\link[trend]{sens.slope}}
 #' @examples
@@ -38,9 +37,18 @@ defaultTemporalSummary <- function(x) {
 #'
 #' @export
 
-theilSen <- function(x, na.rm = TRUE) {
+theilSen <- function(x) {
 
-  as.numeric(trend::sens.slope(x[!is.na(x)])[1])
+  if (all(is.na(x))){
+    return(NA)
+  }else{
+    if (any(is.na(x))) {
+      warning("NA values in time series")
+      x <- x[!is.na(x)]
+    }
+    return(as.numeric(trend:: sens.slope(x)[1]))
+  }
+
 }
 
 #' Convert a SpatialPointsDataFrame to a data.frame
