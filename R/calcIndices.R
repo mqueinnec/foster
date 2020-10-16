@@ -107,6 +107,13 @@ calcIndices <- function(x,
                         m = 2,
                         progress = TRUE,
                         ...) {
+
+
+
+  if (!is.character(indices)) {
+    stop("indices must be a vector of characters")
+  }
+
   UseMethod("calcIndices", x)
 }
 
@@ -145,7 +152,6 @@ calcIndices.Raster <- function(x,
   TC.names <- c("TCG", "TCB", "TCW", "TCA", "TCD")
   if (any(indices %in% TC.names)) {
     doTC <- TRUE
-    message("Calculating Tasseled Cap indices. Make sure that bands are supplied in the order specified in the documentation of RStoolbox::tasseledCap")
   }else{
     doTC <- FALSE
   }
