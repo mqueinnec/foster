@@ -1,10 +1,12 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
+dist: trusty
 cache: packages
-repos:
-  CRAN: https://cran.rstudio.com
-  rforge: http://R-Forge.R-project.org
 
-before_install:
-  - R -e 'install.packages("rgdal", repos=c("http://R-Forge.R-project.org", "http://cran.rstudio.com"))'
+addons:
+  apt:
+    packages:
+      - gdal-bin
+      - libgdal-dev
+      - libproj-dev
