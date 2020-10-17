@@ -2,11 +2,20 @@ Package: foster
 Type: Package
 Title: Forest Structure Extrapolation with R
 Version: 0.0.0.9000
-Authors@R: c(
-  person("Martin","Queinnec",email="queinnec@mail.ubc.ca",role=c("cre","aut")), 
-  person("Piotr", "Tompalski", role = "aut"), 
-  person("Douglas", "Bolton", role = "aut"), 
-  person("Nicholas", "Coops", role = "aut"))
+Authors@R: 
+    c(person(given = "Martin",
+             family = "Queinnec",
+             role = c("cre", "aut"),
+             email = "queinnec@mail.ubc.ca"),
+      person(given = "Piotr",
+             family = "Tompalski",
+             role = "aut"),
+      person(given = "Douglas",
+             family = "Bolton",
+             role = "aut"),
+      person(given = "Nicholas",
+             family = "Coops",
+             role = "aut"))
 Maintainer: Martin Queinnec <queinnec@mail.ubc.ca>
 Description: Set of tools to streamline the modeling of the relationship between 
     satellite imagery time series or any other environmental information, 
@@ -38,3 +47,4 @@ Suggests:
 VignetteBuilder: knitr
 License: GPL-3
 Depends: R (>= 3.1.0)
+BugReports: https://github.com/mqueinnec/foster/issues
