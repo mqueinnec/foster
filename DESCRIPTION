@@ -16,7 +16,6 @@ Authors@R:
       person(given = "Nicholas",
              family = "Coops",
              role = "aut"))
-Maintainer: Martin Queinnec <queinnec@mail.ubc.ca>
 Description: Set of tools to streamline the modeling of the relationship between 
     satellite imagery time series or any other environmental information, 
     such as terrain elevation, with forest structural attributes derived from 
