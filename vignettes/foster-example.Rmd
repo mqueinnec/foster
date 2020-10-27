@@ -156,8 +156,8 @@ The imputation in FOSTER is based on a Random Forest k-NN model (measure of near
 We load `elev_p95` and `cover` from `.tif` files and stack them in a RasterStack object `Y_vars` using `stack()` from `raster` package.
 
 ```{r}
-elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+elev_p95 <- raster(system.file("extdata/vignette/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/vignette/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
 Y_vars <- stack(elev_p95,cover)
 
 #Set layers names
@@ -171,7 +171,7 @@ plot(Y_vars)
 Multispectral data is derived from a 3 year time-series (2006 - 2008) of Landsat surface reflectance composite images (30 m x 30 m resolution). We load the data from 2006 as an example: 
 
 ```{r}
-spectral_2006 <- stack(system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2006.tif",package="foster"))
+spectral_2006 <- stack(system.file("extdata/vignette/Landsat_BAP/Landsat_BAP_2006.tif",package="foster"))
 names(spectral_2006) <- c("blue","green","red","nir","swir1","swir2")
 
 spectral_2006
@@ -184,8 +184,8 @@ plot(spectral_2006, col = grey.colors(255))
 Elevation (DEM) and terrain slope (DEM_slope) data are derived from the Advanced Spaceborne Thermal Emission and Reflection Radiometer (ASTER) global Digital Elevation Model (GDEM, v.2).Both DEM and DEM_slope were resampled to a 30 m spatial resolution and aligned with the multispectral data grid.
 
 ```{r}
-dem <- raster(system.file("extdata/inputs/topo/DEM.tif",package="foster"))
-dem_slope <- raster(system.file("extdata/inputs/topo/DEM_slope.tif",package="foster"))
+dem <- raster(system.file("extdata/vignette/topo/DEM.tif",package="foster"))
+dem_slope <- raster(system.file("extdata/vignette/topo/DEM_slope.tif",package="foster"))
 
 plot(dem)
 plot(dem_slope)
@@ -196,7 +196,7 @@ plot(dem_slope)
 A mask of forested areas was derived from a landcover dataset of 30 m spatial resolution and aligned with multispectral data grid. Cells have the value `1` if forested and `NA` otherwise.  
 
 ```{r}
-mask_forest <- raster(system.file("extdata/inputs/landcover/VLCE_forest_2008.tif",package="foster"))
+mask_forest <- raster(system.file("extdata/vignette/landcover/VLCE_forest_2008.tif",package="foster"))
 plot(mask_forest)
 ```
 
@@ -274,9 +274,9 @@ To process multiple years at once, all RasterStack objects (one per year) can be
 
 ```{r}
 # List all filenames in time-series order: 2006 to 2008
-spectral_ts_files <- list(system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2006.tif",package = "foster"), 
-                    system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2007.tif",package = "foster"), 
-                    system.file("extdata/inputs/Landsat_BAP/Landsat_BAP_2008.tif",package = "foster"))
+spectral_ts_files <- list(system.file("extdata/vignette/Landsat_BAP/Landsat_BAP_2006.tif",package = "foster"), 
+                    system.file("extdata/vignette/Landsat_BAP/Landsat_BAP_2007.tif",package = "foster"), 
+                    system.file("extdata/vignette/Landsat_BAP/Landsat_BAP_2008.tif",package = "foster"))
   
 # Open all Landsat images and place them in a list
 spectral_ts <- lapply(spectral_ts_files, stack)
