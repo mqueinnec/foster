@@ -52,10 +52,10 @@
 #' Y_vars_smooth <- focalMultiBand(x = Y_vars,
 #'                                 w=filt,
 #'                                 fun=mean,
-#'                                 pad=T,
+#'                                 pad=TRUE,
 #'                                 padValue=NA,
-#'                                 na.rm=T,
-#'                                 keepNA = T)
+#'                                 na.rm=TRUE,
+#'                                 keepNA = TRUE)
 #' @export
 
 focalMultiBand <- function(x,

@@ -11,7 +11,7 @@ predictTrgs(
   nnID = TRUE,
   nnDist = TRUE,
   filename = "",
-  par = F,
+  par = FALSE,
   threads = 2,
   progress = TRUE,
   ...

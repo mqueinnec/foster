@@ -33,7 +33,7 @@ If \code{scaled = TRUE}, importance values are centered by subtracting their mea
 # kNN_model: trained kNN model (from trainNN)
 load(system.file("extdata/examples/example_predictTrgs.RData", package = "foster"))
 
-varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
+varImp(kNN_model,scaled=FALSE,plot=TRUE,plotType="boxplot")
 }
 \seealso{
 \code{\link[randomForest]{importance}}, \code{\link[yaImpute]{yaiVarImp}}

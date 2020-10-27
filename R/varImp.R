@@ -20,7 +20,7 @@
 #' # kNN_model: trained kNN model (from trainNN)
 #' load(system.file("extdata/examples/example_predictTrgs.RData", package = "foster"))
 #'
-#' varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
+#' varImp(kNN_model,scaled=FALSE,plot=TRUE,plotType="boxplot")
 #' @export
 
 varImp <- function(model,
@@ -59,7 +59,7 @@ varImp <- function(model,
   imp_combined$mean <- rowMeans(imp_combined[, names(imp)])
   imp_combined$variable <- rownames(imp_combined)
   imp_combined <- dplyr::arrange(imp_combined, mean)
-  imp_combined$variable <- factor(imp_combined$variable, ordered = T,
+  imp_combined$variable <- factor(imp_combined$variable, ordered = TRUE,
                                   levels = imp_combined$variable)
 
   if (plot) {

@@ -95,7 +95,7 @@ calcIndices <- function(x,
                           C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc = NULL
                         ),
                         filename = "",
-                        par = F,
+                        par = FALSE,
                         threads = 2,
                         m = 2,
                         progress = TRUE,
@@ -126,7 +126,7 @@ calcIndices.Raster <- function(x,
                                  C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc = NULL
                                ),
                                filename = "",
-                               par = F,
+                               par = FALSE,
                                threads = 2,
                                m = 2,
                                progress = TRUE,
@@ -254,7 +254,7 @@ calcIndices.SpatialPointsDataFrame <- function(x,
                                                  C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc = NULL
                                                ),
                                                filename = "",
-                                               par = F,
+                                               par = FALSE,
                                                threads = 2,
                                                m = 2,
                                                progress = TRUE,
@@ -278,7 +278,7 @@ calcIndices.SpatialPointsDataFrame <- function(x,
   }
 
   # We transform the spdf to a raster
-  x_df <- spdf2df(x, xy = T)
+  x_df <- spdf2df(x, xy = TRUE)
   # Store coordinates of x
   coords <- x_df[, sp::coordnames(x)]
   x_df <- x_df[, !(colnames(x_df) %in% sp::coordnames(x))]
@@ -320,7 +320,7 @@ calcIndices.SpatialPointsDataFrame <- function(x,
 
 
     # Transform back to spdf
-    out <- raster::rasterToPoints(out, spatial = F)
+    out <- raster::rasterToPoints(out, spatial = FALSE)
     out <- sp::SpatialPointsDataFrame(
       coords = coords,
       data = data.frame(out[, indices]), proj4string = raster::crs(x)
@@ -354,7 +354,7 @@ calcIndices.list <- function(x,
                                C2 = 7.5, s = 1, swir2ccc = NULL, swir2coc = NULL
                              ),
                              filename = "",
-                             par = F,
+                             par = FALSE,
                              threads = 2,
                              m = 2,
                              progress = TRUE,

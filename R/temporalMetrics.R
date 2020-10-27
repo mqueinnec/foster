@@ -14,7 +14,7 @@
 #' @param filename Character. Single output filename including path to directory and eventually extension. Each spectral index is written separately and the name of the spectral index is automatically appended to the file name.
 #' @param stack Logical. Should the output be returned as a single RasterStack (TRUE) or as a list containing one Raster per vegetation index (FALSE)
 #' @param par Logical. Should the function be executed in parallel threads
-#' @param threads Number of parallel threads used if par = T
+#' @param threads Number of parallel threads used if par = TRUE
 #' @param m tuning parameter to determine how many blocks will be used (m blocks will be processed by each cluster)
 #' @param progress Logical. If TRUE (default) a progress bar is displayed.
 #' @param ... Other arguments passed to \code{\link[raster]{writeRaster}} or \code{\link[rgdal]{writeOGR}}.
@@ -29,9 +29,9 @@
 #' # User-defined temporal summary metrics can also be used
 #' funSummary <- function(x) {
 #'   c(
-#'     mean = mean(x, na.rm = T),
-#'     median = median(x, na.rm = T),
-#'     std = sd(x, na.rm = T)
+#'     mean = mean(x, na.rm = TRUE),
+#'     median = median(x, na.rm = TRUE),
+#'     std = sd(x, na.rm = TRUE)
 #'   )
 #' }
 #' @export
@@ -41,7 +41,7 @@ temporalMetrics <- function(x,
                             metrics = "defaultTemporalSummary",
                             filename = "",
                             stack = TRUE,
-                            par = F,
+                            par = FALSE,
                             threads = 2,
                             progress = TRUE,
                             m = 2,

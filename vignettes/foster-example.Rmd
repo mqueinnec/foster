@@ -94,7 +94,7 @@ Two types of data are encountered when using FOSTER: raster data for wall-to-wal
 If the raster contains a single layer it can be read with `raster()` to create a `RasterLayer` object . However, if it is a raster with multiple layers, `stack()` (`RasterStack`) or `brick()` (`RasterBrick`) should be used. `RasterBrick` are usually more efficient to process but they can only point to a single file while `RasterStack` can be assembled of layers from different file sources. `RasterStack` objects can also be created from multiple `RasterLayer` objects. 
 The functions `raster`, `stack` and `brick` take the filename (full path to file or relative path from your current working directory) of the raster as an argument. Please refer to the documentation of these functions to learn more about the various options and file types supported by the raster package. 
 
-```{r, eval = F}
+```{r, eval = FALSE}
 #Read single layer raster
 raster_layer <- raster("path/to/raster_layer.tif")
 #Read multi-layer raster
@@ -105,7 +105,7 @@ raster_stack <- stack("path/to/raster_stack.tif")
 
 In order to read a shapefile from a file on disk we use `readOGR` from `rgdal` package, providing the directory where the file is located in `dsn` and the name of the layer without the `.shp` extension. Please refer to the documentation of rgdal for supported file type and other options. The data will be stored in a `SpatialPointsDataFrame` object. 
 
-```{r, eval = F}
+```{r, eval = FALSE}
 dem_samples <- rgdal::readOGR(dsn = "path/to/directory", 
                               layer = "layer_name")
 ```
@@ -116,15 +116,15 @@ dem_samples <- rgdal::readOGR(dsn = "path/to/directory",
 
 We can choose to process data in memory or write the output to disk. When dealing with small raster object, it is safe to process and save everything in memory. However, it is advised to write data to disk when processing large datasets. Writing raster data to disk can be done with the function `raster::writeRaster` taking as arguments at least the name of the raster object and its full output filename (including path and optionally extension type). Whenever calling a function of FOSTER returning a raster object, the `filename` can be provided directly in the function call and `writeRaster` will be automatically used to save the output to disk. The functions also usually supports `...` arguments where additional parameters controlling `writeRaster` can be provided (e.g. `overwrite` to overwrite existing files, `format` to specify the output file type if not given in filename, `bylayer` to write each layer of the raster object individually). 
 
-```{r, eval=F}
+```{r, eval=FALSE}
 #Example to write output of calcIndices to disk using different options
 ind <- calcIndices(x, indices = c("NDVI","TCG","TCW"),red = 3,nir=4,filename = "full/path/to/filename.tif")
-ind <- calcIndices(x, indices = c("NDVI","TCG","TCW"),red = 3,nir=4,filename = "full/path/to/filename", format="GTiff", overwrite=T, byLayer=T)
+ind <- calcIndices(x, indices = c("NDVI","TCG","TCW"),red = 3,nir=4,filename = "full/path/to/filename", format="GTiff", overwrite=TRUE, byLayer=TRUE)
 ```
 
 Whenever `filename` is kept to its default value `""` (empty character), the output raster will be processed and saved in memory if possible. If the file is too large to be processed in memory and no filename is provided, the `raster` package will automatically write the output to a temporary folder. The location of the temporary folder and the maximum size that can be processed in memory can be found (among other options) using `rasterOptions()`. It is possible to change the global options of the `raster` package by using `rasterOptions(optionName) <- optionValue`. It is for example recommended to change the default temp directory to easily access it and clear it if necessary. 
 
-```{r, eval=F}
+```{r, eval=FALSE}
 rasterOptions(tmpdir) <- "path/to/tempdir"
 ```
 
@@ -215,17 +215,17 @@ Y_vars_resampled
 
 The response variables have now a spatial resolution of 30 m x 30 m and are aligned on the Landsat images grid.
 
-Smoothing response and predictor variables can help reducing noise and potential spatial errors between Landsat and ALS data and improve estimation accuracy. In this example, we smooth data by assigning to each cell the mean of its 3x3 neighbors. The function `focalMultiBand` requires a weight matrix that is used to define the size of the window and weights to apply to neighboring cells. Here we use a 3x3 weight matrix with weights set to 1. Next, we provide the function that is applied to the neighboring cells values (here `mean`). Using `na.rm = T` allows mean to be calculated even if NA values occur in the neighborhood. Using `pad=T` with `padValues = NA` creates additional rows and columns of NA values around the borders of `Y_vars_resampled` in order to keep the original raster extent. Finally, using `keepNA = T` is useful to assign back NA values to cells that had a NA value in `Y_vars_resampled` but got assigned a non-NA value when applying the spatial filter. Multispectral data will be smoothed later on, after calculating spectral indices.
+Smoothing response and predictor variables can help reducing noise and potential spatial errors between Landsat and ALS data and improve estimation accuracy. In this example, we smooth data by assigning to each cell the mean of its 3x3 neighbors. The function `focalMultiBand` requires a weight matrix that is used to define the size of the window and weights to apply to neighboring cells. Here we use a 3x3 weight matrix with weights set to 1. Next, we provide the function that is applied to the neighboring cells values (here `mean`). Using `na.rm = TRUE` allows mean to be calculated even if NA values occur in the neighborhood. Using `pad=TRUE` with `padValues = NA` creates additional rows and columns of NA values around the borders of `Y_vars_resampled` in order to keep the original raster extent. Finally, using `keepNA = TRUE` is useful to assign back NA values to cells that had a NA value in `Y_vars_resampled` but got assigned a non-NA value when applying the spatial filter. Multispectral data will be smoothed later on, after calculating spectral indices.
 
 ```{r}
 filt <- matrix(1,nrow=3,ncol=3)
 Y_vars_smooth <- focalMultiBand(Y_vars_resampled,
                                 w=filt,
                                 fun=mean,
-                                pad=T,
+                                pad=TRUE,
                                 padValue=NA, 
-                                na.rm=T, 
-                                keepNA = T)
+                                na.rm=TRUE, 
+                                keepNA = TRUE)
 plot(Y_vars_smooth)
 ```
 
@@ -234,7 +234,7 @@ From now, on we will focus only on cells that are classified as forests by the l
 ```{r, out.width="100%"}
 Y_vars_mask <- matchExtent(Y_vars_smooth,
                            mask_forest,
-                           mask=T,
+                           mask=TRUE,
                            maskValue = NA)
 plot(Y_vars_mask)
 
@@ -307,9 +307,9 @@ Once indices have been calculated we can smooth them with a 3 x 3 mean filter, a
 VI_ts_smooth <- focalMultiBand(VI_ts,
                              w=filt,
                              fun=mean,
-                             na.rm=T,
-                             pad = T,
-                             keepNA = T)
+                             na.rm=TRUE,
+                             pad = TRUE,
+                             keepNA = TRUE)
 ```
 
 We can visualize the smoothed vegetation indices of the first year of the time series
@@ -328,8 +328,8 @@ The function `temporalMetrics` requires the name of a function that returns summ
 funSummary <- function(x){
   
   c(
-    median = median(x,na.rm=T),
-    IQR = IQR(x,na.rm=T),
+    median = median(x,na.rm=TRUE),
+    IQR = IQR(x,na.rm=TRUE),
     slope = theilSen(x)
   )
 }
@@ -360,7 +360,7 @@ Y_vars_edges <- edges(Y_vars_mask,
 plot(Y_vars_edges)
 ```
 
-In FOSTER, stratification is performed using k-means algorithm which classifies the data in k-means clusters based on the proximity between observations. Random sampling is then performed in each strata, with the number of sampled points in each strata proportional to the occurrence of those strata across the classified raster. For this example, we want to extract `nSamples = 230` sample points from `nClasses = 5` strata having a minimum distance between each others of at least ` mindist = 75 ` meters. Due to the small study area of this example we have to select a relatively low number of samples and set a low `mindist` requirement. However, it is advised to increase the number of sample points and use a larger `mindist` to reduce spatial autocorrelation within the samples. We use `norm = T` to normalize variables prior to k-means clustering. Since we use `xy = T` the output is a SpatialPointsDataFrame with x and y coordinates added as fields. 
+In FOSTER, stratification is performed using k-means algorithm which classifies the data in k-means clusters based on the proximity between observations. Random sampling is then performed in each strata, with the number of sampled points in each strata proportional to the occurrence of those strata across the classified raster. For this example, we want to extract `nSamples = 230` sample points from `nClasses = 5` strata having a minimum distance between each others of at least ` mindist = 75 ` meters. Due to the small study area of this example we have to select a relatively low number of samples and set a low `mindist` requirement. However, it is advised to increase the number of sample points and use a larger `mindist` to reduce spatial autocorrelation within the samples. We use `norm = TRUE` to normalize variables prior to k-means clustering. Since we use `xy = TRUE` the output is a SpatialPointsDataFrame with x and y coordinates added as fields. 
 
 The k-means clustering is performed internally with the `RStoolbox` package. 
 
@@ -375,8 +375,8 @@ sample_strata <- getSample(Y_vars_edges,
                      n = nSamples, 
                      strata = nClasses,
                      mindist = mindist, 
-                     norm = T,
-                     xy = T)
+                     norm = TRUE,
+                     xy = TRUE)
 ```
 
 The returned `sample_strata` object is a list containing the sampled points (`SpatialPointsDataFrame`), the map of k-means strata (`RasterLayer`) and the k-means model. 
@@ -396,7 +396,7 @@ We can plot the sampled points on top of the map of strata:
 
 ```{r}
 plot(strata_map)
-plot(sampleLoc,add=T)
+plot(sampleLoc,add=TRUE)
 ```
 
 ## Train a k-NN model
@@ -492,9 +492,9 @@ plots_scatter$p95
 We can also get the most important variables of the RF-based kNN model and plot them in a boxplot or in a heatmap 
 
 ```{r}
-imp <- varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
+imp <- varImp(kNN_model,scaled=FALSE,plot=TRUE,plotType="boxplot")
 imp$plot
-imp <- varImp(kNN$model,scaled=T,plot=TRUE,plotType="grid")
+imp <- varImp(kNN$model,scaled=TRUE,plot=TRUE,plotType="grid")
 imp$plot
 ```
 

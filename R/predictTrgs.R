@@ -37,7 +37,7 @@ predictTrgs <- function(model = NULL,
                         nnID = TRUE,
                         nnDist = TRUE,
                         filename = "",
-                        par = F,
+                        par = FALSE,
                         threads = 2,
                         progress = TRUE,
                         ...) {
@@ -155,16 +155,16 @@ predictTrgs <- function(model = NULL,
   # Set names of returned Raster
   if (nnID & !nnDist) {
     try(names(predrast) <- c(colnames(model$yRefs), paste0("nnID",
-                                    as.character(seq(1:model$k)))), silent = T)
+                                    as.character(seq(1:model$k)))), silent = TRUE)
   } else if (!nnID & nnDist) {
     try(names(predrast) <- c(colnames(model$yRefs), paste0("nnDist",
-                                                           as.character(seq(1:model$k)))), silent = T)
+                                                           as.character(seq(1:model$k)))), silent = TRUE)
   } else if (nnDist & nnDist) {
     try(names(predrast) <- c(colnames(model$yRefs),
                              paste0("nnID", as.character(seq(1:model$k))),
-                             paste0("nnDist", as.character(seq(1:model$k)))), silent = T)
+                             paste0("nnDist", as.character(seq(1:model$k)))), silent = TRUE)
   } else {
-    try(names(predrast) <- c(colnames(model$yRefs)), silent = T)
+    try(names(predrast) <- c(colnames(model$yRefs)), silent = TRUE)
   }
 
   return(predrast)
@@ -216,7 +216,7 @@ predFun.yai <- function(model, data, nnID, nnDist) {
     newtrgs <- yaImpute::newtargets(model, data_dropNA)
 
     trgs.imputed <- yaImpute::impute(newtrgs,
-                                     observed = F,
+                                     observed = FALSE,
                                      vars = colnames(newtrgs$yRefs),
                                      method = model$impute.cont,
                                      method.factor = model$impute.fac)
@@ -242,6 +242,6 @@ predFun.yai <- function(model, data, nnID, nnDist) {
 
   }
   #tranform to matrix
-  preds <- as.matrix(preds, rownames.force = F)
+  preds <- as.matrix(preds, rownames.force = FALSE)
   return(preds)
 }

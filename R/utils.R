@@ -14,8 +14,8 @@
 
 defaultTemporalSummary <- function(x) {
   c(
-    median = stats::median(x, na.rm = T),
-    IQR = stats::IQR(x, na.rm = T),
+    median = stats::median(x, na.rm = TRUE),
+    IQR = stats::IQR(x, na.rm = TRUE),
     slope = theilSen(x)
   )
 }
@@ -48,7 +48,7 @@ theilSen <- function(x) {
 
 #' Convert a SpatialPointsDataFrame to a data.frame
 #'
-#' Convert a SpatialPointsDataFrame to a data.frame. Coordinates of \code{x} can be added to the data.frame using \code{xy = T}
+#' Convert a SpatialPointsDataFrame to a data.frame. Coordinates of \code{x} can be added to the data.frame using \code{xy = TRUE}
 #'
 #' @param x A \code{\link[sp]{SpatialPoints}} object
 #' @param xy Logical. If TRUE, coordinates of \code{x} are added to data.frame
@@ -61,7 +61,7 @@ theilSen <- function(x) {
 #' sample_df <- foster:::spdf2df(sample_points)
 #' @noRd
 
-spdf2df <- function(x, xy = F) {
+spdf2df <- function(x, xy = FALSE) {
   out <- raster::as.data.frame(x)
   if (!xy) {
     coord.name <- sp::coordnames(x)

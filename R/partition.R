@@ -48,7 +48,7 @@ partition <- function(x,
     inTrain <- caret::createDataPartition(x, p = p, list = TRUE,
                                           groups = groups, times = 1)
   } else if (type == "kfold") {
-    inTrain <- caret::createFolds(x, k = kfold, list = T, returnTrain = TRUE)
+    inTrain <- caret::createFolds(x, k = kfold, list = TRUE, returnTrain = TRUE)
   }
 
   if (!returnTrain) {

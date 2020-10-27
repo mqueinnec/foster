@@ -82,10 +82,10 @@ filt <- matrix(1, nrow = 3, ncol = 3)
 Y_vars_smooth <- focalMultiBand(x = Y_vars,
                                 w=filt,
                                 fun=mean,
-                                pad=T,
+                                pad=TRUE,
                                 padValue=NA,
-                                na.rm=T,
-                                keepNA = T)
+                                na.rm=TRUE,
+                                keepNA = TRUE)
 }
 \seealso{
 \code{\link[raster]{focal}}

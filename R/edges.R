@@ -34,12 +34,12 @@ edges <- function(x,
 
 
   if (class(x)[1] == "RasterLayer") {
-    out <- raster::focal(x = x, w = filt, na.rm = F, pad = F, NAonly = F,
+    out <- raster::focal(x = x, w = filt, na.rm = FALSE, pad = FALSE, NAonly = FALSE,
                          filename = filename, ...)
   } else if (class(x)[1] %in% c("RasterStack", "RasterBrick")) {
     x.list <- raster::as.list(x)
-    out <- lapply(x.list, function(r) raster::focal(x = r, w = filt, na.rm = F,
-                                            pad = F, NAonly = F, filename = ""))
+    out <- lapply(x.list, function(r) raster::focal(x = r, w = filt, na.rm = FALSE,
+                                            pad = FALSE, NAonly = FALSE, filename = ""))
     out <- raster::stack(out)
 
     if (filename != "") {

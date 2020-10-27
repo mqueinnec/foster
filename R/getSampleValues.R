@@ -38,7 +38,7 @@ getSampleValues <- function(x,
     stop("s must be a SpatialPointsDataFrame object")
   }
 
-  values <- raster::extract(x, s, method = "simple", sp = T)
+  values <- raster::extract(x, s, method = "simple", sp = TRUE)
 
   if (!keepCols) {
     values <- values[, setdiff(names(values), names(s))]

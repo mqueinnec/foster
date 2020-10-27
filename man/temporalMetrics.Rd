@@ -9,7 +9,7 @@ temporalMetrics(
   metrics = "defaultTemporalSummary",
   filename = "",
   stack = TRUE,
-  par = F,
+  par = FALSE,
   threads = 2,
   progress = TRUE,
   m = 2,
@@ -27,7 +27,7 @@ temporalMetrics(
 
 \item{par}{Logical. Should the function be executed in parallel threads}
 
-\item{threads}{Number of parallel threads used if par = T}
+\item{threads}{Number of parallel threads used if par = TRUE}
 
 \item{progress}{Logical. If TRUE (default) a progress bar is displayed.}
 
@@ -55,9 +55,9 @@ temporalMetrics(VI_ts, metrics = "defaultTemporalSummary")
 # User-defined temporal summary metrics can also be used
 funSummary <- function(x) {
   c(
-    mean = mean(x, na.rm = T),
-    median = median(x, na.rm = T),
-    std = sd(x, na.rm = T)
+    mean = mean(x, na.rm = TRUE),
+    median = median(x, na.rm = TRUE),
+    std = sd(x, na.rm = TRUE)
   )
 }
 }

@@ -206,8 +206,8 @@ scatter <- function (obs,
                        "bias%", " = ", round(d$bias_rel, 2), "\n",
                        sep = "")
 
-        lowerlimit <- min(data[c("obs", "preds")], na.rm = T)
-        upperlimit <- max(data[c("obs", "preds")], na.rm = T)
+        lowerlimit <- min(data[c("obs", "preds")], na.rm = TRUE)
+        upperlimit <- max(data[c("obs", "preds")], na.rm = TRUE)
 
         if (is.finite(d$bias_rel) & d$bias_rel < -20) {
           ann_x <- lowerlimit
