@@ -68,22 +68,20 @@
 #'   \code{\link[yaImpute]{impute.yai}}, \code{\link[foster]{accuracy}}
 #'
 #' @examples
-#' \dontrun{
-#' # Extract variable values at sample. X_vars and Y_vars are RasterStack
-#' where each layer is a predictor (X) or response (Y)variable.
-#' X_vars_sample <- getSampleValues(X_vars, sampleLoc)
-#' Y_vars_sample <- getSampleValues(Y_vars, sampleLoc)
-#'
-#' # Train and assess accuracy of a random forest kNN model
-#' # train_idx is obtained from foster::partition
+#' # Load data in memory
+#' # X_vars_sample: Predictor variables at sample (from getSample)
+#' # Y_vars_sample: Response variables at sample (from getSample)
+#' # train_idx: Rows of X_vars_sample and Y_vars_sample that are used for
+#' # training (from (partition))
+#' load(system.file("extdata/examples/example_trainNN.RData",package="foster"))
 #'
 #' set.seed(1234) #for example reproducibility
 #' kNN <- trainNN(x = X_vars_sample,
-#' y=Y_vars_sample,
-#' inTrain = train_idx,
-#' k = 1,
-#' method = "randomForest",ntree = 200)
-#' }
+#'                y=Y_vars_sample,
+#'                inTrain = train_idx,
+#'                k = 1,
+#'                method = "randomForest",
+#'                ntree = 200)
 #' @export
 
 
@@ -156,6 +154,15 @@ trainNN <- function(x,
   # Number of folds is either 1 or the max number of folds in either test or training
   nfolds <- max(c(nfolds_train, nfolds_test))
 
+  # Set rules for imputation
+  if (k == 1) {
+    impute.cont <- "closest"
+    impute.fac <- "closest"
+  } else {
+    if (is.null(impute.cont)) impute.cont <- "dstWeighted"
+    if (is.null(impute.fac)) impute.fac <- impute.cont
+  }
+
   if (isTest) {
     # List storing all predictions and validation
     preds_out <- list()
@@ -203,21 +210,10 @@ trainNN <- function(x,
       # Find NN and impute at validation
       yai_newtrgs <- yaImpute::newtargets(yai_object, X_val)
 
-      if (k == 1) {
-        impute.cont <- "closest"
-        impute.fac <- "closest"
-        Y_val_predicted <- yaImpute::impute(yai_newtrgs,
-                                            method = impute.cont,
-                                            method.factor = impute.fac,
-                                            observed = FALSE)
-      } else {
-        if (is.null(impute.cont)) impute.cont <- "dstWeighted"
-        if (is.null(impute.fac)) impute.fac <- impute.cont
-        Y_val_predicted <- yaImpute::impute(yai_newtrgs,
-                                            method = impute.cont,
-                                            method.factot = impute.fac,
-                                            observed = FALSE)
-      }
+      Y_val_predicted <- yaImpute::impute(yai_newtrgs,
+                                          method = impute.cont,
+                                          method.factor = impute.fac,
+                                          observed = FALSE)
 
       Y_val_predicted <- Y_val_predicted[, colnames(Y_tr)]
       Y_val_predicted <- data.frame(ID = rownames(Y_val_predicted), Y_val_predicted)

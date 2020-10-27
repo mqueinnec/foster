@@ -16,10 +16,11 @@
 #' @seealso \code{\link[randomForest]{importance}}, \code{\link[yaImpute]{yaiVarImp}}
 #'
 #' @examples
-#' \dontrun{
-#' # kNN_model is the trained kNN model obtained from foster::trainNN
+#' # Load data
+#' # kNN_model: trained kNN model (from trainNN)
+#' load(system.file("extdata/examples/example_predictTrgs.RData", package = "foster"))
+#'
 #' varImp(kNN_model,scaled=F,plot=TRUE,plotType="boxplot")
-#' }
 #' @export
 
 varImp <- function(model,

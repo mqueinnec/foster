@@ -30,12 +30,13 @@ This function is used to split a raster into smaller tiles. The raster is
 split in a grid pattern with \code{nx} columns and \code{ny} rows.
 }
 \examples{
-\dontrun{
-# X_vars is a RasterStack where each layer is a predictor variable
+# Load raster package
+library(raster)
 
-# Split X_vars into a 5 x 5 grid
-tile(X_vars, nx = 5, ny = 5)
-}
+elev_p95 <- stack(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+
+# Split elev_p95 into a 1 x 2 grid
+tile(elev_p95, nx = 1, ny = 2)
 }
 \seealso{
 \code{\link[raster]{crop}}

@@ -17,10 +17,8 @@ Calculates median, IQR and Theil Sen slope (\code{\link[trend]{sens.slope}}).
 This function is usually called within \code{\link[foster]{temporalMetrics}}
 }
 \examples{
-\dontrun{
 x <- rnorm(100)
 defaultTemporalSummary(x)
-}
 }
 \seealso{
 \code{\link[foster]{temporalMetrics}}, \code{\link[trend]{sens.slope}}

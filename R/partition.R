@@ -28,10 +28,11 @@
 #' @return  List containing training or validation indices
 #'
 #' @examples
-#' \dontrun{
-#' train_idx <- partition(sampleLoc$cluster,type="kfold", kfold = 5)
-#' }
+#' # sample_points is a SpatialPointsDataFrame calculated and saved from getSample
+#' # Load it into memory
+#' load(system.file("extdata/examples/sample_points.RData",package="foster"))
 #'
+#' partition(sample_points$cluster, type = "kfold", kfold = 5)
 #' @export
 
 partition <- function(x,

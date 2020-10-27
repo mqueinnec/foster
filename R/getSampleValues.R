@@ -10,19 +10,20 @@
 #' @return SpatialPointsDataFrame object
 #' @seealso \code{\link[raster]{extract}}
 #' @examples
-#' \dontrun{
 #' # Load raster package
 #' library(raster)
 #'
 #' # Open and stack ALS metrics
-#' elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-#' cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+#' elev_p95 <- raster(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+#' cover <- raster(system.file("extdata/examples/ALS_metrics_cov_mean.tif",package="foster"))
 #' Y_vars <- stack(elev_p95,cover)
 #' names(Y_vars) <- c("p95","cover")
 #'
-#' # SampleLoc is a SpatialPointsDataFrame obtained from getSample
-#' Y_vars_sample <- getSampleValues(Y_vars, sampleLoc)
-#' }
+#' # sample_points is a SpatialPointsDataFrame calculated and saved from getSample
+#' # Load it into memory
+#' load(system.file("extdata/examples/sample_points.RData",package="foster"))
+#'
+#' getSampleValues(Y_vars, sample_points)
 #' @export
 
 getSampleValues <- function(x,

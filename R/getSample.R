@@ -43,24 +43,21 @@
 #'
 #' @seealso \code{\link[RStoolbox]{unsuperClass}}
 #' @examples
-#' \dontrun{
 #' # Load raster package
 #' library(raster)
 #'
 #' # Open and stack ALS metrics
-#' elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-#' cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+#' elev_p95 <- raster(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+#' cover <- raster(system.file("extdata/examples/ALS_metrics_cov_mean.tif",package="foster"))
 #' Y_vars <- stack(elev_p95,cover)
 #' names(Y_vars) <- c("p95","cover")
 #'
-#' # Sample 230 cells in 5 strata (kmeans clusters). Sampled points should be at least 75 m apart.
+#' # Sample 20 cells in 5 strata (kmeans clusters). Sampled points should be at least 30 m apart.
 #'
 #' sample_strata <- getSample(Y_vars,
-#' layers = c("p95","cover"),
-#' n = 230,
-#' strata = 5,
-#' mindist = 75)
-#' }
+#'                            n = 20,
+#'                            strata = 5,
+#'                            mindist =30)
 #' @export
 #' @importFrom dplyr %>%
 
@@ -71,7 +68,7 @@ getSample <- function(x,
                       n,
                       mindist = 0,
                       maxIter = 30,
-                      xy = T,
+                      xy = TRUE,
                       filename_cluster = "",
                       filename_sample = "",
                       ...) {
@@ -87,8 +84,22 @@ getSample <- function(x,
 
   x.layers <- raster::subset(x, layers, drop = TRUE)
 
-  x.clustered <- RStoolbox::unsuperClass(img = x.layers, nClasses = strata,
-                                  norm = norm, filename = filename_cluster, ...)
+  #Before sending to RSToolboox::unsuperClass, fix filename for cluster map
+  # wrArgs <- list(...)
+  # clusterMap <- ifelse("clusterMap" %in% names(wrArgs), clusterMap, TRUE)
+  # atMax <- ifelse("clusterMap" %in% names(wrArgs), clusterMap, 10000)
+  # FULL <- !clusterMap | atMax && raster::canProcessInMemory(x.layers, n = 4)
+
+  if (gsub(" ", "", filename_cluster) == "") {
+    x.clustered <- RStoolbox::unsuperClass(img = x.layers, nClasses = strata,
+                                           norm = norm, ...)
+  }else{
+    x.clustered <- RStoolbox::unsuperClass(img = x.layers, nClasses = strata,
+                                           norm = norm, filename = filename_cluster, ...)
+  }
+
+
+
 
   rr <- data.frame(raster::rasterToPoints(x.clustered$map, spatial = FALSE))
   colnames(rr) <- c("x", "y", "cluster")

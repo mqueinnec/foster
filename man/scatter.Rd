@@ -25,11 +25,13 @@ Scatterplot between a vector of observed data and a vector of predicted data wit
 Accuracy metrics are calculated from \code{\link[foster]{accuracy}}
 }
 \examples{
-\dontrun{
+# kNN_preds is a data frame obtained from foster::trainNN
+# It contains predictions and observations of the trained kNN model
+load(system.file("extdata/examples/kNN_preds.RData",package="foster"))
+
 scatter(obs = kNN_preds$obs,
-preds = kNN_preds$preds,
-vars = kNN_preds$variable)
-}
+        preds = kNN_preds$preds,
+        vars = kNN_preds$variable)
 }
 \seealso{
 \code{\link[foster]{accuracy}}

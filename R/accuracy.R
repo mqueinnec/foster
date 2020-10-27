@@ -29,16 +29,14 @@
 #'   \item{\code{bias_rel}}{Relative bias}
 #'   \item{\code{count}}{Number of observations}}
 #' @examples
-#' \dontrun{
-#'
 #' # kNN_preds is a data frame obtained from foster::trainNN
+#' # It contains predictions and observations of the trained kNN model
+#' load(system.file("extdata/examples/kNN_preds.RData",package="foster"))
 #'
 #' accuracy(obs = kNN_preds$obs,
-#' preds = kNN_preds$preds,
-#' vars = kNN_preds$variable,
-#' folds = kNN_preds$Fold)
-#'
-#' }
+#'          preds = kNN_preds$preds,
+#'          vars = kNN_preds$variable,
+#'          folds = kNN_preds$Fold)
 #'@export
 #'@importFrom dplyr %>%
 
@@ -160,11 +158,13 @@ accuracy <- function(obs,
 #' @return A ggplot2 object or a list of ggplot2 objects (one per variable)
 #' @seealso \code{\link[foster]{accuracy}}
 #' @examples
-#' \dontrun{
+#' # kNN_preds is a data frame obtained from foster::trainNN
+#' # It contains predictions and observations of the trained kNN model
+#' load(system.file("extdata/examples/kNN_preds.RData",package="foster"))
+#'
 #' scatter(obs = kNN_preds$obs,
-#' preds = kNN_preds$preds,
-#' vars = kNN_preds$variable)
-#' }
+#'         preds = kNN_preds$preds,
+#'         vars = kNN_preds$variable)
 #' @export
 scatter <- function (obs,
                      preds,

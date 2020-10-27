@@ -11,20 +11,16 @@
 #' @seealso \code{\link[raster]{focal}}
 #' @return Raster* object
 #' @examples
-#' \dontrun{
 #' # Load raster package
 #' library(raster)
 #'
 #' # Open and stack ALS metrics
-#' elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-#' cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+#' elev_p95 <- raster(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+#' cover <- raster(system.file("extdata/examples/ALS_metrics_cov_mean.tif",package="foster"))
 #' Y_vars <- stack(elev_p95,cover)
 #'
 #' # Remove edges in a 3 x 3 neighborhood
-#' Y_vars_edges <- edges(Y_vars,
-#' w=3,
-#' filename='')
-#' }
+#' Y_vars_edges <- edges(Y_vars, w=3)
 #' @export
 
 edges <- function(x,

@@ -12,7 +12,7 @@ getSample(
   n,
   mindist = 0,
   maxIter = 30,
-  xy = T,
+  xy = TRUE,
   filename_cluster = "",
   filename_sample = "",
   ...
@@ -75,24 +75,21 @@ you can decrease the number of samples \code{n} or increase \code{maxIter}
 to control the number of maximum iterations allowed until the required number of samples are selected.
 }
 \examples{
-\dontrun{
 # Load raster package
 library(raster)
 
 # Open and stack ALS metrics
-elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+elev_p95 <- raster(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/examples/ALS_metrics_cov_mean.tif",package="foster"))
 Y_vars <- stack(elev_p95,cover)
 names(Y_vars) <- c("p95","cover")
 
-# Sample 230 cells in 5 strata (kmeans clusters). Sampled points should be at least 75 m apart.
+# Sample 20 cells in 5 strata (kmeans clusters). Sampled points should be at least 30 m apart.
 
 sample_strata <- getSample(Y_vars,
-layers = c("p95","cover"),
-n = 230,
-strata = 5,
-mindist = 75)
-}
+                           n = 20,
+                           strata = 5,
+                           mindist =30)
 }
 \seealso{
 \code{\link[RStoolbox]{unsuperClass}}

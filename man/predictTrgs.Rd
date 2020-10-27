@@ -51,17 +51,14 @@ The method used to impute the NN is set from the kNN model trained by \code{\lin
 The raster \code{x} is processed as blocks of \code{nrows} to avoid creating very large objects (several Gb) that couldn't be stored in memory. However, low values of \code{nrows} slow down processing. Depending on the amount of RAM available on your computer and on the size of the area where k-NN need to be calculated, it is possible to process more rows at the same time and considerably reduce processing time.
 }
 \examples{
-\dontrun{
+# Load data
+# kNN_model: trained kNN model (from trainNN)
+# X_vars: RasterStack of predictor variables
+load(system.file("extdata/examples/example_predictTrgs.RData", package =
+"foster"))
 
-# X_vars is a RasterStack where each layer is a predictor variable
-# kNN_model is the trained kNN model obtained from foster::trainNN
-
-Y_imputed <- predictTrgs(model=kNN_model,
-x = X_vars,
-nnID = TRUE,
+Y_imputed <- predictTrgs(model=kNN_model, x = X_vars, nnID = TRUE,
 nnDist = TRUE)
-}
-
 }
 \seealso{
 \code{\link[yaImpute]{newtargets}}, \code{\link[yaImpute]{impute.yai}}

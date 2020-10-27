@@ -8,10 +8,8 @@
 #' @return Named vector with median, IQR and slope
 #' @seealso \code{\link[foster]{temporalMetrics}}, \code{\link[trend]{sens.slope}}
 #' @examples
-#' \dontrun{
 #' x <- rnorm(100)
 #' defaultTemporalSummary(x)
-#' }
 #' @export
 
 defaultTemporalSummary <- function(x) {
@@ -30,11 +28,8 @@ defaultTemporalSummary <- function(x) {
 #' @return numeric; Theil-Sen slope
 #' @seealso \code{\link[trend]{sens.slope}}
 #' @examples
-#' \dontrun{
 #' x <- rnorm(100)
 #' theilSen(x)
-#' }
-#'
 #' @export
 
 theilSen <- function(x) {
@@ -59,19 +54,11 @@ theilSen <- function(x) {
 #' @param xy Logical. If TRUE, coordinates of \code{x} are added to data.frame
 #' @return data.frame
 #' @examples
-#' \dontrun{
+#' # sample_points is a SpatialPointsDataFrame calculated and saved from getSample
+#' # Load it into memory
+#' load(system.file("extdata/examples/sample_points.RData",package="foster"))
 #'
-#' # Open and stack ALS metrics
-#' elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-#' cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
-#' Y_vars <- stack(elev_p95,cover)
-#' names(Y_vars) <- c("p95","cover")
-#'
-#' # SampleLoc is a SpatialPointsDataFrame obtained from getSample
-#' Y_vars_sample <- getSampleValues(Y_vars, sampleLoc)
-#'
-#' Y_vars_sample_df <- spdf2df(Y_vars_sample)
-#' }
+#' sample_df <- foster:::spdf2df(sample_points)
 #' @noRd
 
 spdf2df <- function(x, xy = F) {
@@ -97,11 +84,9 @@ spdf2df <- function(x, xy = F) {
 #'
 #' @return numeric
 #' @examples
-#' \dontrun{
-#' x <- rnorm(100)
-#' y = rnorm(100)
-#' R2(x, y)
-#' }
+#' x <- seq(1,100,1)*rnorm(100,mean = 1,sd = 0.1)
+#' y <- seq(1,100,1)*rnorm(100,mean = 1,sd = 0.1)
+#' foster:::R2(x, y)
 #' @noRd
 
 R2 <- function(obs,
@@ -126,11 +111,9 @@ R2 <- function(obs,
 #'
 #' @return numeric
 #' @examples
-#' \dontrun{
-#' x <- rnorm(100)
-#' y = rnorm(100)
-#' RMSE(x, y)
-#' }
+#' x <- seq(1,100,1)*rnorm(100,mean = 1,sd = 0.1)
+#' y <- seq(1,100,1)*rnorm(100,mean = 1,sd = 0.1)
+#' foster:::RMSE(x, y)
 #' @noRd
 
 RMSE <- function(obs,
@@ -151,11 +134,9 @@ RMSE <- function(obs,
 #'
 #' @return numeric
 #' @examples
-#' \dontrun{
-#' x <- rnorm(100)
-#' y = rnorm(100)
-#' bias(x, y)
-#' }
+#' x <- seq(1,100,1)*rnorm(100,mean = 1,sd = 0.1)
+#' y <- seq(1,100,1)*rnorm(100,mean = 1,sd = 0.1)
+#' foster:::bias(x, y)
 #' @noRd
 
 bias <- function(obs,

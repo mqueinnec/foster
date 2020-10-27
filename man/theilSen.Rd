@@ -16,11 +16,8 @@ numeric; Theil-Sen slope
 Calculate the Theil-Sen slope from a time series. This is a wrapper around \code{\link[trend]{sens.slope}}
 }
 \examples{
-\dontrun{
 x <- rnorm(100)
 theilSen(x)
-}
-
 }
 \seealso{
 \code{\link[trend]{sens.slope}}

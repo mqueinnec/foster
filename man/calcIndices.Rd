@@ -106,29 +106,22 @@ You can control how many blocks will be processed by each thread by setting
 \code{m} (see \code{\link[raster]{cluster}}).
 }
 \examples{
-\dontrun{
-# Load raster package
 library(raster)
 
-# List all filenames in time-series order: 2006 to 2008
-spectral_ts_files <-
-list(system.file("extdata/inputs/spectral/Landsat_BAP_2000.tif",package =
-"foster"),
-system.file("extdata/inputs/spectral/Landsat_BAP_2007.tif",package
-= "foster"),
-system.file("extdata/inputs/spectral/Landsat_BAP_2008.tif",package =
-"foster"))
+# List Landsat BAP images to include in the time series
+spectral_ts_files <- list(system.file("extdata/examples/Landsat_BAP_2006.tif",package =
+                                        "foster"),
+                          system.file("extdata/examples/Landsat_BAP_2007.tif",package
+                                      = "foster"))
 
 # Open all images and place them in a list
 spectral_ts <- lapply(spectral_ts_files, stack)
 
-# Calculate NDVI, TCB, TCW and TCG for each raster of the list
+# Calculate NDVI for each raster of the list
 VI_ts <- calcIndices(spectral_ts,
-indices = c("NDVI","TCB","TCW","TCG"),
-sat="Landsat5TM",
-red=3,
-nir=4)
-}
+                     indices = c("NDVI"),
+                     red=3,
+                     nir=4)
 }
 \seealso{
 \code{\link[RStoolbox]{spectralIndices}},

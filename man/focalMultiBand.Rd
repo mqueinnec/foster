@@ -67,13 +67,12 @@ If x contains NA values and \code{na.rm = TRUE} is used , using \code{fun} or
  have NA values in the output raster.
 }
 \examples{
-\dontrun{
 # Load raster package
 library(raster)
 
 # Open and stack ALS metrics
-elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-cover <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_cov_mean.tif",package="foster"))
+elev_p95 <- raster(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+cover <- raster(system.file("extdata/examples/ALS_metrics_cov_mean.tif",package="foster"))
 Y_vars <- stack(elev_p95,cover)
 
 #Define 3x3 filter with weights of 1
@@ -81,13 +80,12 @@ filt <- matrix(1, nrow = 3, ncol = 3)
 
 # Smoothing
 Y_vars_smooth <- focalMultiBand(x = Y_vars,
-w=filt,
-fun=mean,
-pad=T,
-padValue=NA,
-na.rm=T,
-keepNA = T)
-}
+                                w=filt,
+                                fun=mean,
+                                pad=T,
+                                padValue=NA,
+                                na.rm=T,
+                                keepNA = T)
 }
 \seealso{
 \code{\link[raster]{focal}}

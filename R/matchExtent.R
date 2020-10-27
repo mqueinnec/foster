@@ -24,17 +24,14 @@
 #' @seealso \code{\link[raster]{crop}}, \code{\link[raster]{extend}},
 #'   \code{\link[raster]{mask}}
 #' @examples
-#' \dontrun{
 #' # Load raster package
 #' library(raster)
 #'
-#' # Open dem and mask of forested areas as Raster objects
-#' dem <- raster(system.file("extdata/inputs/topo/DEM.tif",package="foster"))
-#' mask_forest <- raster(system.file("extdata/inputs/landcover/VLCE_forest_2008.tif",package="foster"))
+#' # Open ALS p95 and mask of forested areas as Raster objects
+#' BAP_2006 <- stack(system.file("extdata/examples/Landsat_BAP_2006.tif",package="foster"))
+#' mask_forest <- raster(system.file("extdata/examples/VLCE_forest_2008.tif",package="foster"))
 #'
-#' # Match extent and mask DEM NA values
-#' dem_forest <- matchExtent(dem, mask_forest, mask = TRUE)
-#' }
+#' matchExtent(BAP_2006, mask_forest, mask = TRUE)
 #' @export
 
 matchExtent <- function(x,

@@ -43,14 +43,12 @@ Relative RMSE and bias are also calculated by dividing their value by the mean o
 If accuracy assessment was performed using k-fold cross-validation the accuracy metrics are calculated for each fold separately. The mean value of the accuracy metrics across all folds is also returned.
 }
 \examples{
-\dontrun{
-
 # kNN_preds is a data frame obtained from foster::trainNN
+# It contains predictions and observations of the trained kNN model
+load(system.file("extdata/examples/kNN_preds.RData",package="foster"))
 
 accuracy(obs = kNN_preds$obs,
-preds = kNN_preds$preds,
-vars = kNN_preds$variable,
-folds = kNN_preds$Fold)
-
-}
+         preds = kNN_preds$preds,
+         vars = kNN_preds$variable,
+         folds = kNN_preds$Fold)
 }

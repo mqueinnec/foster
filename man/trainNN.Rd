@@ -99,22 +99,20 @@ The final model returned by \code{findNN} is trained from all observations of
 \code{x} and \code{y}.
 }
 \examples{
-\dontrun{
-# Extract variable values at sample. X_vars and Y_vars are RasterStack
-where each layer is a predictor (X) or response (Y)variable.
-X_vars_sample <- getSampleValues(X_vars, sampleLoc)
-Y_vars_sample <- getSampleValues(Y_vars, sampleLoc)
-
-# Train and assess accuracy of a random forest kNN model
-# train_idx is obtained from foster::partition
+# Load data in memory
+# X_vars_sample: Predictor variables at sample (from getSample)
+# Y_vars_sample: Response variables at sample (from getSample)
+# train_idx: Rows of X_vars_sample and Y_vars_sample that are used for
+# training (from (partition))
+load(system.file("extdata/examples/example_trainNN.RData",package="foster"))
 
 set.seed(1234) #for example reproducibility
 kNN <- trainNN(x = X_vars_sample,
-y=Y_vars_sample,
-inTrain = train_idx,
-k = 1,
-method = "randomForest",ntree = 200)
-}
+               y=Y_vars_sample,
+               inTrain = train_idx,
+               k = 1,
+               method = "randomForest",
+               ntree = 200)
 }
 \seealso{
 \code{\link[yaImpute]{yai}}, \code{\link[yaImpute]{newtargets}},

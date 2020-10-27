@@ -21,17 +21,14 @@
 #' @seealso \code{\link[yaImpute]{newtargets}}, \code{\link[yaImpute]{impute.yai}}
 #'
 #' @examples
-#' \dontrun{
+#' # Load data
+#' # kNN_model: trained kNN model (from trainNN)
+#' # X_vars: RasterStack of predictor variables
+#' load(system.file("extdata/examples/example_predictTrgs.RData", package =
+#' "foster"))
 #'
-#' # X_vars is a RasterStack where each layer is a predictor variable
-#' # kNN_model is the trained kNN model obtained from foster::trainNN
-#'
-#' Y_imputed <- predictTrgs(model=kNN_model,
-#' x = X_vars,
-#' nnID = TRUE,
+#' Y_imputed <- predictTrgs(model=kNN_model, x = X_vars, nnID = TRUE,
 #' nnDist = TRUE)
-#' }
-#'
 #' @export
 
 predictTrgs <- function(model = NULL,

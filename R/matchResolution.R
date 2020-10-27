@@ -21,17 +21,14 @@
 #'@seealso \code{\link[raster]{resample}}, \code{\link[raster]{projectRaster}},
 #'  \code{\link[raster]{projection}}
 #'@examples
-#' \dontrun{
 #' # Load raster package
 #' library(raster)
 #'
 #' # Open ALS metric and Landsat BAP imagery
-#' elev_p95 <- raster(system.file("extdata/inputs/ALS_metrics/ALS_metrics_p95.tif",package="foster"))
-#' BAP_2006 <- stack(system.file("extdata/inputs/spectral/Landsat_BAP_2006.tif",package="foster"))
+#' elev_p95 <- raster(system.file("extdata/examples/ALS_metrics_p95.tif",package="foster"))
+#' BAP_2006 <- stack(system.file("extdata/examples/Landsat_BAP_2006.tif",package="foster"))
 #'
-#' # Match resolution
-#' p95_resampled <- matchResolution(x = elev_p95,ref = BAP_2006,method='bilinear')
-#' }
+#' matchResolution(x = elev_p95,ref = BAP_2006,method='bilinear')
 #'@export
 
 matchResolution <- function(x,

@@ -46,18 +46,19 @@ The argument \code{fun} defines which metrics will be calculated. It has to be t
 If \code{x} is a list of Raster* objects, the processing can be parallelized using \code{\link[raster]{cluster}}. In that case the user has to set \code{par = TRUE} and provide the number of parallel threads \code{threads}. You can control how many blocks will be processed by each thread by setting \code{m} (see \code{\link[raster]{cluster}}).
 }
 \examples{
+# VI_ts is a list of Raster* calculated and saved from calcIndices
+# Load it into memory
+load(system.file("extdata/examples/VI_ts.RData",package="foster"))
 
-\dontrun{
+temporalMetrics(VI_ts, metrics = "defaultTemporalSummary")
+
+# User-defined temporal summary metrics can also be used
 funSummary <- function(x) {
   c(
     mean = mean(x, na.rm = T),
     median = median(x, na.rm = T),
-    std = std(x, na.rm = T)
+    std = sd(x, na.rm = T)
   )
-}
-
-# VI_ts is a list of Raster* calculated from calcIndices
-temporalMetrics(VI_ts, metrics = "funSummary")
 }
 }
 \seealso{

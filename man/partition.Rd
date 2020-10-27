@@ -48,10 +48,11 @@ creates k folds where p percent of the data is used for training in each fold
 \code{createFolds}
 }
 \examples{
-\dontrun{
-train_idx <- partition(sampleLoc$cluster,type="kfold", kfold = 5)
-}
+# sample_points is a SpatialPointsDataFrame calculated and saved from getSample
+# Load it into memory
+load(system.file("extdata/examples/sample_points.RData",package="foster"))
 
+partition(sample_points$cluster, type = "kfold", kfold = 5)
 }
 \seealso{
 \code{\link[caret]{createDataPartition}}
