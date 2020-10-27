@@ -62,21 +62,16 @@
 #'  SpatialPointsDataFrame objects.
 #'@examples
 #' library(raster)
-#'
-#' # List Landsat BAP images to include in the time series
-#' spectral_ts_files <- list(system.file("extdata/examples/Landsat_BAP_2006.tif",package =
-#'                                         "foster"),
-#'                           system.file("extdata/examples/Landsat_BAP_2007.tif",package
-#'                                       = "foster"))
-#'
-#' # Open all images and place them in a list
-#' spectral_ts <- lapply(spectral_ts_files, stack)
-#'
-#' # Calculate NDVI for each raster of the list
-#' VI_ts <- calcIndices(spectral_ts,
-#'                      indices = c("NDVI"),
-#'                      red=3,
-#'                      nir=4)
+#' 
+#' # Open Lndsat BAP image
+#' BAP_2006 <- stack(system.file("extdata/examples/Landsat_BAP_2006.tif",package =
+#'                                 "foster"))
+#' 
+#' # Calculate NDVI
+#' VI_2006 <- calcIndices(BAP_2006,
+#'                        indices = c("NDVI"),
+#'                        red=3,
+#'                        nir=4)
 #'@export
 #'
 
