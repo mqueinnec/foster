@@ -61,6 +61,7 @@
 #'@return Raster* or SpatialPointsDataFrame object or list of Raster* or
 #'  SpatialPointsDataFrame objects.
 #'@examples
+#'\donttest{
 #' library(raster)
 #' 
 #' # Open Landsat BAP image
@@ -69,9 +70,10 @@
 #' 
 #' # Calculate NDVI
 #' VI_2006 <- calcIndices(BAP_2006,
-#'                        indices = c("NDVI"),
+#'                        indices = "NDVI",
 #'                        red=3,
 #'                        nir=4)
+#'}
 #'@export
 
 calcIndices <- function(x,
