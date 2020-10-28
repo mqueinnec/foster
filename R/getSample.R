@@ -52,12 +52,12 @@
 #' Y_vars <- stack(elev_p95,cover)
 #' names(Y_vars) <- c("p95","cover")
 #'
-#' # Sample 20 cells in 5 strata (kmeans clusters). Sampled points should be at least 30 m apart.
-#'
+#' # Sample 5 cells in 3 strata (kmeans clusters). Sampled points should be at least 30 m apart.
+#' set.seed(1234) #for example reproducibility
 #' sample_strata <- getSample(Y_vars,
-#'                            n = 20,
-#'                            strata = 5,
-#'                            mindist =30)
+#'                            n = 5,
+#'                            strata = 3,
+#'                            mindist = 30)
 #' @export
 #' @importFrom dplyr %>%
 

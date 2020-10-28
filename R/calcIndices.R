@@ -63,7 +63,7 @@
 #'@examples
 #' library(raster)
 #' 
-#' # Open Lndsat BAP image
+#' # Open Landsat BAP image
 #' BAP_2006 <- stack(system.file("extdata/examples/Landsat_BAP_2006.tif",package =
 #'                                 "foster"))
 #' 
@@ -73,7 +73,6 @@
 #'                        red=3,
 #'                        nir=4)
 #'@export
-#'
 
 calcIndices <- function(x,
                         indices = "NDVI",

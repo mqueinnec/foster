@@ -108,7 +108,7 @@ You can control how many blocks will be processed by each thread by setting
 \examples{
 library(raster)
 
-# Open Lndsat BAP image
+# Open Landsat BAP image
 BAP_2006 <- stack(system.file("extdata/examples/Landsat_BAP_2006.tif",package =
                                 "foster"))
 
