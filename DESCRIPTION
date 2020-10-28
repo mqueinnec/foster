@@ -1,7 +1,7 @@
 Package: foster
 Type: Package
 Title: Forest Structure Extrapolation with R
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Martin",
              family = "Queinnec",
@@ -45,5 +45,5 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 License: GPL-3
-Depends: R (>= 3.1.0)
+Depends: R (>= 3.5.0)
 BugReports: https://github.com/mqueinnec/foster/issues
