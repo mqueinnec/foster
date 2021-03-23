@@ -142,7 +142,7 @@ getSample <- function(x,
       candidate <- current_rr[sample(nrow(current_rr), 1), ]
 
       # check if distance to existing samples is less than mindist
-      distances <- spatstat::crossdist(samples$x, samples$y, candidate$x,
+      distances <- spatstat.geom::crossdist(samples$x, samples$y, candidate$x,
                                        candidate$y)
       if (!any(as.numeric(distances) < mindist)) {
         samples <- rbind(samples, candidate)

@@ -1,7 +1,7 @@
 Package: foster
 Type: Package
 Title: Forest Structure Extrapolation with R
-Version: 0.1.0
+Version: 0.1.0.9999
 Authors@R: 
     c(person(given = "Martin",
              family = "Queinnec",
@@ -33,7 +33,8 @@ Imports:
     yaImpute,
     sp,
     tools,
-    spatstat,
+    spatstat.geom,
+    spatstat (>= 2.0-0),
     randomForest,
     rgdal,
     caret,
